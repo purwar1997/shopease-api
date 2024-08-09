@@ -40,9 +40,9 @@ router
   .get(validateQueryParams(ordersQuerySchema), getOrders)
   .post(
     validatePayload(orderSchema),
-    // validateProducts,
-    // validateCoupon,
-    // validateAddress,
+    validateProducts,
+    validateCoupon,
+    validateAddress,
     createOrder
   );
 

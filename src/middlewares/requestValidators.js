@@ -9,17 +9,11 @@ const joiValidator = (schema, type) =>
     });
 
     if (error) {
-      console.log(error);
-
-      const message = error.details.map(errorDetail => errorDetail.message).join('. ');
-
-      throw new CustomError(message, 400);
+      const errorMessage = error.details.map(errorDetail => errorDetail.message).join('. ');
+      throw new CustomError(errorMessage, 400);
     }
 
     req[type] = value;
-
-    console.log(req[type]);
-
     next();
   });
 
