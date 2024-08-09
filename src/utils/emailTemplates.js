@@ -1,3 +1,5 @@
+import { getDateString } from './helperFunctions.js';
+
 export const getPasswordResetEmail = passwordResetUrl => `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -69,7 +71,15 @@ export const getPasswordResetEmail = passwordResetUrl => `<!DOCTYPE html>
 </html>
 `;
 
-export const getOrderConfirmationEmail = order => `<!DOCTYPE html>
+export const getOrderConfirmationEmail = (customerName, order) => {
+  const { _id: orderNo, createdAt: orderDate, items, totalAmount, shippingAddress } = order;
+  const { line1, line2, city, state, country, postalCode } = shippingAddress;
+
+  const addressString = line2
+    ? `${line1}, ${line2}, ${city} - ${postalCode}, ${state}, ${country}`
+    : `${line1}, ${city} - ${postalCode}, ${state}, ${country} ${postalCode}`;
+
+  return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -111,7 +121,7 @@ export const getOrderConfirmationEmail = order => `<!DOCTYPE html>
         </div>
 
         <div style="margin-top: 20px">
-          <h2 style="margin: 0; font-size: 20px; font-weight: 500">Hello, Shubham Purwar</h2>
+          <h2 style="margin: 0; font-size: 20px; font-weight: 500">Hello, ${customerName}</h2>
           <p style="margin: 0; margin-top: 10px; font-size: 15px">
             Thank you for your order! We're excited to let you know that your order has been
             received and is being processed. Below are the details of your order:
@@ -120,9 +130,11 @@ export const getOrderConfirmationEmail = order => `<!DOCTYPE html>
 
         <div style="margin-top: 20px">
           <h3 style="margin: 0; font-size: 18px; font-weight: 500">
-            Order number: order_HKzW6C0cFJd5FP
+            Order number: ${orderNo}
           </h3>
-          <p style="margin: 0; margin-top: 10px; font-size: 15px">Placed on August 8, 2024</p>
+          <p style="margin: 0; margin-top: 10px; font-size: 15px">Placed on ${getDateString(
+            orderDate
+          )}</p>
 
           <table style="margin-top: 15px; width: 100%; border-collapse: collapse; font-size: 15px">
             <tr>
@@ -161,18 +173,21 @@ export const getOrderConfirmationEmail = order => `<!DOCTYPE html>
               </th>
             </tr>
 
-            <tr>
-              <td style="width: 40%; border: 1px solid #ddd; padding: 9px 12px">Adidas Shoes</td>
-              <td style="width: 30%; border: 1px solid #ddd; padding: 9px 12px">5</td>
-              <td style="width: 30%; border: 1px solid #ddd; padding: 9px 12px">₹900</td>
-            </tr>
+            ${items
+              .map(
+                item => `<tr>
+              <td style="width: 40%; border: 1px solid #ddd; padding: 9px 12px">${item.product.title}</td>
+              <td style="width: 30%; border: 1px solid #ddd; padding: 9px 12px">${item.quantity}</td>
+              <td style="width: 30%; border: 1px solid #ddd; padding: 9px 12px">₹${item.product.price}</td>
+            </tr>`
+              )
+              .join('')}
           </table>
 
           <div style="margin-top: 20px; font-size: 15px">
-            <p style="margin: 0"><strong style="font-weight: 500">Total Amount: </strong>₹4500</p>
+            <p style="margin: 0"><strong style="font-weight: 500">Total Amount: </strong>₹${totalAmount}</p>
             <p style="margin: 0; margin-top: 10px">
-              <strong style="font-weight: 500">Shipping Address: </strong>Zerodha Head Office, JP
-              Nagar, Bangalore, Karnataka, India 208901
+              <strong style="font-weight: 500">Shipping Address: </strong>${addressString}
             </p>
           </div>
         </div>
@@ -193,3 +208,4 @@ export const getOrderConfirmationEmail = order => `<!DOCTYPE html>
   </body>
 </html>
 `;
+};

@@ -22,6 +22,7 @@ import {
   ORDER_STATUS,
   DELIVERY_OPTIONS,
 } from '../constants/common.js';
+import { getOrderConfirmationEmail } from '../utils/emailTemplates.js';
 
 export const createOrder = handleAsync(async (req, res) => {
   const { items, deliveryMode } = req.body;
@@ -101,14 +102,26 @@ export const confirmOrder = handleAsync(async (req, res) => {
 
   const { SHIPPING_TIME } = DELIVERY_OPTIONS.find(option => option.TYPE === order.deliveryMode);
 
-  order.estimatedDeliveryDate = addDays(
-    new Date(),
-    Math.ceil((SHIPPING_TIME.MIN + SHIPPING_TIME.MAX) / 2)
-  );
-
-  order.isPaid = true;
-  order.paymentId = razorpayPaymentId;
-  await order.save();
+  const confirmedOrder = await Order.findByIdAndUpdate(
+    orderId,
+    {
+      isPaid: true,
+      paymentId: razorpayPaymentId,
+      estimatedDeliveryDate: addDays(
+        new Date(),
+        Math.ceil((SHIPPING_TIME.MIN + SHIPPING_TIME.MAX) / 2)
+      ),
+    },
+    {
+      runValidators: true,
+      new: true,
+    }
+  )
+    .populate({
+      path: 'items.product',
+      select: { title: 1, price: 1 },
+    })
+    .populate(shippingAddress);
 
   user.cart = [];
   await user.save();
@@ -126,11 +139,7 @@ export const confirmOrder = handleAsync(async (req, res) => {
     const options = {
       recepient: user.email,
       subject: 'Order confirmation email',
-      text: `Order #${
-        order._id
-      } has been placed successfully. Estimated delivery date is ${getDateString(
-        order.estimatedDeliveryDate
-      )}.`,
+      html: getOrderConfirmationEmail(user.firstname, confirmedOrder),
     };
 
     await sendEmail(options);
@@ -138,7 +147,7 @@ export const confirmOrder = handleAsync(async (req, res) => {
     throw new CustomError('Failed to send order confirmation email to the user', 500);
   }
 
-  sendResponse(res, 200, 'Order placed successfully', order);
+  sendResponse(res, 200, 'Order placed successfully', confirmedOrder);
 });
 
 export const getOrders = handleAsync(async (req, res) => {
