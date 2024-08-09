@@ -4,6 +4,7 @@ import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
 import sendEmail from '../services/sendEmail.js';
 import { setCookieOptions, clearCookieOptions } from '../utils/cookieOptions.js';
+import { getPasswordResetEmail, getOrderConfirmationEmail } from '../utils/emailTemplates.js';
 import { sendResponse } from '../utils/helperFunctions.js';
 
 export const signup = handleAsync(async (req, res) => {
@@ -103,8 +104,8 @@ export const forgotPassword = handleAsync(async (req, res) => {
   try {
     const options = {
       recipient: email,
-      subject: 'Password reset email',
-      text: `To reset password, copy paste this URL in browser and hit ENTER: ${resetPasswordUrl}`,
+      subject: 'Reset your password',
+      html: getPasswordResetEmail(resetPasswordUrl),
     };
 
     await sendEmail(options);
@@ -143,4 +144,20 @@ export const resetPassword = handleAsync(async (req, res) => {
   await user.save();
 
   sendResponse(res, 200, 'Password has been reset successfully');
+});
+
+export const testEmailDelivery = handleAsync(async (req, res) => {
+  const { email } = req.body;
+
+  const emailData = 'ndbs87dfncn93d';
+
+  const options = {
+    recipient: email,
+    subject: 'Testing email delivery',
+    html: getPasswordResetEmail(emailData),
+  };
+
+  await sendEmail(options);
+
+  sendResponse(res, 200, 'Email successfully sent');
 });
