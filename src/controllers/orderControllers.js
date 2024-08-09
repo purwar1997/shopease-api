@@ -15,6 +15,7 @@ import {
   generateHmacSha256,
   checkBoolean,
 } from '../utils/helperFunctions.js';
+import { getOrderConfirmationEmail, getOrderCancellationEmail } from '../utils/emailTemplates.js';
 import {
   GST,
   DISCOUNT_TYPES,
@@ -22,7 +23,6 @@ import {
   ORDER_STATUS,
   DELIVERY_OPTIONS,
 } from '../constants/common.js';
-import { getOrderConfirmationEmail } from '../utils/emailTemplates.js';
 
 export const createOrder = handleAsync(async (req, res) => {
   const { items, deliveryMode } = req.body;
@@ -138,7 +138,7 @@ export const confirmOrder = handleAsync(async (req, res) => {
   try {
     const options = {
       recepient: user.email,
-      subject: 'Order confirmation email',
+      subject: 'Order successfully placed',
       html: getOrderConfirmationEmail(user.firstname, confirmedOrder),
     };
 
@@ -205,6 +205,7 @@ export const getOrderById = handleAsync(async (req, res) => {
 
 export const cancelOrder = handleAsync(async (req, res) => {
   const { orderId } = req.params;
+  const { user } = req;
 
   const order = await Order.findOne({ _id: orderId, isPaid: true, isDeleted: false });
 
@@ -250,9 +251,9 @@ export const cancelOrder = handleAsync(async (req, res) => {
 
   try {
     const options = {
-      recipient: req.user.email,
-      subject: 'Order cancellation email',
-      text: `Order #${order._id} has been cancelled successfully. Order amount of ₹${order.totalAmount} will be refunded shortly.`,
+      recipient: user.email,
+      subject: 'Order successfully cancelled',
+      html: getOrderCancellationEmail(user.firstname, cancelledOrder, 'http://localhost:3000'),
     };
 
     await sendEmail(options);

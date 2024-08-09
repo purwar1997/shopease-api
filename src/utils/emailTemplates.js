@@ -209,3 +209,83 @@ export const getOrderConfirmationEmail = (customerName, order) => {
 </html>
 `;
 };
+
+export const getOrderCancellationEmail = (customerName, order, websiteUrl) => `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 15px;
+      background-color: #f4f4f4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    "
+  >
+    <div
+      style="
+        width: 100%;
+        max-width: 640px;
+        background-color: #ffffff;
+        padding: 25px;
+        margin: auto;
+        box-sizing: border-box;
+      "
+    >
+      <div style="text-align: center">
+        <img
+          src="https://res.cloudinary.com/dlqnx5pot/image/upload/v1723141332/shopease-logo_qj2gip.png"
+          alt="shopease-logo"
+          style="width: 200px"
+        />
+      </div>
+
+      <div style="margin-top: 20px">
+        <div style="padding-top: 25px; border-top: 1px solid #ddd; text-align: center">
+          <h1 style="margin: 0; font-size: 22px; font-weight: 500; color: #4f4f4f">
+            Order Cancellation Confirmation
+          </h1>
+        </div>
+
+        <div style="margin-top: 20px; font-size: 15px">
+          <p style="margin: 0">Dear ${customerName},</p>
+
+          <p style="margin: 0; margin-top: 15px; line-height: 1.5">
+            We wanted to let you know that your order #${order._id} has been successfully
+            cancelled as per your request. Order amount of ₹${order.totalAmount} will be refunded shortly.
+          </p>
+
+          <p style="margin: 0; margin-top: 15px; line-height: 1.5">
+            If you have any questions or need any further assistance, our support team is here to
+            help.
+          </p>
+
+          <p style="margin: 0; margin-top: 15px; line-height: 1.5">
+            Thank you for choosing us. We hope to have the pleasure of serving you again in the
+            future.
+          </p>
+        </div>
+
+        <div
+          style="
+            margin-top: 25px;
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid #ddd;
+            font-size: 14px;
+            color: #777;
+          "
+        >
+          <p style="margin: 0">Best regards,</p>
+          <p style="margin: 0; margin-top: 10px">Shopease</p>
+           <p style="margin: 0; margin-top: 10px">
+            <a href="#" target="_blank">Visit our website</a>
+          </p>    
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
+`;
