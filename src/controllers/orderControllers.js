@@ -11,11 +11,14 @@ import { orderSortRules } from '../utils/sortRules.js';
 import {
   sendResponse,
   getCurrentDateMilliSec,
-  getDateString,
   generateHmacSha256,
   checkBoolean,
 } from '../utils/helperFunctions.js';
-import { getOrderConfirmationEmail, getOrderCancellationEmail } from '../utils/emailTemplates.js';
+import {
+  getOrderConfirmationEmail,
+  getOrderCancellationEmail,
+  getOrderDeletionEmail,
+} from '../utils/emailTemplates.js';
 import {
   GST,
   DISCOUNT_TYPES,
@@ -253,7 +256,7 @@ export const cancelOrder = handleAsync(async (req, res) => {
     const options = {
       recipient: user.email,
       subject: 'Order successfully cancelled',
-      html: getOrderCancellationEmail(user.firstname, cancelledOrder, 'http://localhost:3000'),
+      html: getOrderCancellationEmail(user.firstname, cancelledOrder),
     };
 
     await sendEmail(options);
@@ -384,7 +387,7 @@ export const deleteOrder = handleAsync(async (req, res) => {
     { runValidators: true }
   ).populate({
     path: 'user',
-    select: { fullname: 1, email: 1 },
+    select: { firstname: 1, email: 1 },
   });
 
   if (!order) {
@@ -414,10 +417,8 @@ export const deleteOrder = handleAsync(async (req, res) => {
     try {
       const options = {
         recipient: order.user.email,
-        subject: 'Order deletion email',
-        text: `Dear ${fullname}, we regret to inform you that your order #${orderId} placed on ${getDateString(
-          order.createdAt
-        )}, has been deleted. Order amount of ₹${order.totalAmount} will be refunded shortly.`,
+        subject: 'Order deletion notification',
+        html: getOrderDeletionEmail(order.user.firstname, order),
       };
 
       await sendEmail(options);

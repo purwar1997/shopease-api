@@ -133,3 +133,12 @@ export const DELIVERY_OPTIONS = deepFreeze([
 export const CRON_OPTIONS = Object.freeze({
   TIMEZONE: 'Asia/Kolkata',
 });
+
+export const BUSINESS_INFO = Object.freeze({
+  NAME: 'Shopease',
+  LOGO_URL:
+    'https://res.cloudinary.com/dlqnx5pot/image/upload/v1723141332/shopease-logo_qj2gip.png',
+  WEBSITE_URL: 'http://localhost:3000',
+  CONTACT_EMAIL: 'shubhampurwar35@gmail.com',
+  CONTACT_PHONE: '9897887871',
+});
