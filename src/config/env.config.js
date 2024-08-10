@@ -6,9 +6,6 @@ const config = {
   server: {
     port: process.env.SERVER_PORT || 8000,
   },
-  cron: {
-    port: process.env.CRON_PORT || 5000,
-  },
   database: {
     url: process.env.MONGODB_URL,
   },
@@ -36,7 +33,6 @@ const config = {
 
 const requiredConfig = [
   'server.port',
-  'cron.port',
   'database.url',
   'auth.jwtSecretKey',
   'gmail.username',

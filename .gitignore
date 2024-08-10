@@ -1,6 +1,14 @@
+# dependencies
 node_modules/
-src/uploads/
-src/log/
-.env
-.vercel
+
+# config files
 nodemon.json
+
+# file uploads
+src/uploads/
+
+# logs
+src/log/
+
+# misc
+.env
