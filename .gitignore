@@ -1,14 +1,6 @@
-# NPM Packages
 node_modules/
-
-# Config files
-nodemon.json
-
-# Environment variables
-.env
-
-# Log files
-src/log/
-
-# File uploads
 src/uploads/
+src/log/
+.env
+.vercel
+nodemon.json
