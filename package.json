@@ -5,11 +5,18 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "start:cron": "node src/cron/scheduler.js",
-    "dev:cron": "nodemon src/cron/scheduler.js",
-    "test": "jest"
+    "start": "pm2 start process.config.json",
+    "restart": "pm2 restart process.config.json",
+    "stop": "pm2 stop all",
+    "delete": "pm2 delete all",
+    "process-start": "pm2 start process.config.json --only",
+    "process-restart": "pm2 restart process.config.json --only",
+    "process-stop": "pm2 stop",
+    "process-delete": "pm2 delete",
+    "process-info": "pm2 describe",
+    "logs": "pm2 logs",
+    "status": "pm2 status",
+    "kill": "pm2 kill"
   },
   "author": "Shubham Purwar",
   "license": "ISC",
