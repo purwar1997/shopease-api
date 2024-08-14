@@ -13,7 +13,7 @@ export const checkCouponExpiry = async () => {
       }
     );
   } catch (error) {
-    console.log('Error checking expiry date of coupons');
-    console.error(error);
+    console.log('Failed to check expiry date of coupons');
+    console.error('ERROR:', error);
   }
 };
