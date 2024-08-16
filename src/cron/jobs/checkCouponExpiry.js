@@ -4,7 +4,7 @@ import { COUPON_STATUS } from '../../constants/common.js';
 
 export const checkCouponExpiry = async () => {
   try {
-    connectToDB();
+    await connectToDB();
 
     await Coupon.updateMany(
       {

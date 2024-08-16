@@ -27,7 +27,6 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
-    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "formidable": "^3.5.1",
     "joi": "^17.13.1",
@@ -38,10 +37,6 @@
     "nodemailer": "^6.9.13",
     "pluralize": "^8.0.0",
     "razorpay": "^2.9.4",
-    "rotating-file-stream": "^3.2.3",
     "uuid": "^10.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.0"
   }
 }

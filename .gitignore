@@ -2,14 +2,10 @@
 node_modules/
 
 # config files
-nodemon.json
 process.config.json
 
 # file uploads
 src/uploads/
 
 # logs
-src/log/
-
-# misc
-.env
+src/logs/
