@@ -44,10 +44,10 @@ export const COUPON_STATES = Object.freeze({
 });
 
 export const UPLOAD_FOLDERS = Object.freeze({
-  USER_AVATARS: 'user_avatars',
-  CATEGORY_IMAGES: 'category_images',
-  BRAND_LOGOS: 'brand_logos',
-  PRODUCT_IMAGES: 'product_images',
+  USER_AVATARS: 'user-avatars',
+  CATEGORY_IMAGES: 'category-images',
+  BRAND_LOGOS: 'brand-logos',
+  PRODUCT_IMAGES: 'product-images',
 });
 
 export const UPLOAD_FILES = Object.freeze({
