@@ -7,16 +7,13 @@
   "scripts": {
     "start": "pm2 start process.config.json",
     "restart": "pm2 restart process.config.json",
-    "stop": "pm2 stop all",
-    "delete": "pm2 delete all",
+    "stop": "pm2 stop process.config.json",
+    "delete": "pm2 delete process.config.json",
     "process-start": "pm2 start process.config.json --only",
     "process-restart": "pm2 restart process.config.json --only",
-    "process-stop": "pm2 stop",
-    "process-delete": "pm2 delete",
-    "process-info": "pm2 describe",
-    "logs": "pm2 logs",
-    "status": "pm2 status",
-    "kill": "pm2 kill"
+    "process-stop": "pm2 stop process.config.json --only",
+    "process-delete": "pm2 delete process.config.json --only",
+    "process-info": "pm2 describe"
   },
   "author": "Shubham Purwar",
   "license": "ISC",
