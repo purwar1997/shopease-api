@@ -57,7 +57,7 @@ export const addNewCategory = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Category added successfully', newCategory);
 });
 
-// Allows an admin to edit category 
+// Allows an admin to update category details
 export const updateCategory = handleAsync(async (req, res) => {
   const { categoryId } = req.params;
   const { title } = req.body;

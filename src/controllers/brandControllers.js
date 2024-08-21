@@ -57,7 +57,7 @@ export const addNewBrand = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Brand added successfully', newBrand);
 });
 
-// Allows an admin to edit brand
+// Allows an admin to update brand details
 export const updateBrand = handleAsync(async (req, res) => {
   const { brandId } = req.params;
   const { name } = req.body;
