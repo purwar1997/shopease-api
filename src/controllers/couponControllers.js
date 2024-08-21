@@ -5,6 +5,7 @@ import { sendResponse, getCurrentDateMilliSec } from '../utils/helperFunctions.j
 import { couponSortRules } from '../utils/sortRules.js';
 import { PAGINATION, DISCOUNT_TYPES, COUPON_STATUS, COUPON_STATES } from '../constants/common.js';
 
+// Fetches a list of all valid coupons
 export const getValidCoupons = handleAsync(async (_req, res) => {
   const coupons = await Coupon.find({
     expiryDate: { $gt: new Date() },
@@ -14,6 +15,7 @@ export const getValidCoupons = handleAsync(async (_req, res) => {
   sendResponse(res, 200, 'Valid coupons fetched successfully', coupons);
 });
 
+// Allows a logged-in user to check validity of a coupon
 export const checkCouponValidity = handleAsync(async (req, res) => {
   const { couponCode } = req.query;
 
@@ -34,6 +36,7 @@ export const checkCouponValidity = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Provided coupon is valid', { valid: true, coupon });
 });
 
+// Allows an admin to fetch a paginated list of coupons
 export const getCoupons = handleAsync(async (req, res) => {
   const { duration, discountType, status, sort, page } = req.query;
 
@@ -61,6 +64,7 @@ export const getCoupons = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Coupons fetched successfully', coupons);
 });
 
+// Allows an admin to create new coupon
 export const createCoupon = handleAsync(async (req, res) => {
   const { code } = req.body;
 
@@ -78,7 +82,8 @@ export const createCoupon = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Coupon created successfully', newCoupon);
 });
 
-export const getCouponById = handleAsync(async (req, res) => {
+// Allows an admin to fetch a coupon by ID
+export const getCouponById = handleAsync(async (req, res) => {I
   const { couponId } = req.params;
 
   const coupon = await Coupon.findById(couponId);
@@ -90,6 +95,7 @@ export const getCouponById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Coupon fetched by ID successfully', coupon);
 });
 
+// Allows an admin to update coupon details
 export const updateCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
   const { code, discountType, expiryDate } = req.body;
@@ -127,6 +133,7 @@ export const updateCoupon = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Coupon updated successfully', updatedCoupon);
 });
 
+// Allows an admin to delete a coupon
 export const deleteCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
 
@@ -139,6 +146,7 @@ export const deleteCoupon = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Coupon deleted successfully', couponId);
 });
 
+// Allows an admin to activate or deactivate a coupon
 export const changeCouponState = handleAsync(async (req, res) => {
   const { couponId } = req.params;
   const { state } = req.body;

@@ -7,6 +7,7 @@ import { setCookieOptions, clearCookieOptions } from '../utils/cookieOptions.js'
 import { getPasswordResetEmail } from '../utils/emailTemplates.js';
 import { sendResponse } from '../utils/helperFunctions.js';
 
+// Allows users to create an account or restore a deleted one
 export const signup = handleAsync(async (req, res) => {
   const { firstname, lastname, email, phone, password } = req.body;
 
@@ -59,6 +60,7 @@ export const signup = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'User signed up successfully', newUser);
 });
 
+// Allows users to login using their email address and password
 export const login = handleAsync(async (req, res) => {
   const { email, password } = req.body;
 
@@ -81,12 +83,14 @@ export const login = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'User logged in successfully');
 });
 
+// Allows users to log out of the application
 export const logout = handleAsync(async (_req, res) => {
   res.clearCookie('token', clearCookieOptions);
 
   sendResponse(res, 200, 'User logged out successfully');
 });
 
+// Receives email address from the user and sends a reset password email
 export const forgotPassword = handleAsync(async (req, res) => {
   const { email } = req.body;
 
@@ -119,6 +123,7 @@ export const forgotPassword = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Password reset email sent successfully');
 });
 
+// Allows users to reset their account password
 export const resetPassword = handleAsync(async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;

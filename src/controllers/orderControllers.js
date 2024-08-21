@@ -27,6 +27,7 @@ import {
   DELIVERY_OPTIONS,
 } from '../constants/common.js';
 
+// Allows a logged-in user to place an order
 export const createOrder = handleAsync(async (req, res) => {
   const { items, deliveryMode } = req.body;
   const { user, coupon } = req;
@@ -79,6 +80,7 @@ export const createOrder = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Order created successfully', order);
 });
 
+// Confirm a placed order upon payment success
 export const confirmOrder = handleAsync(async (req, res) => {
   const { orderId } = req.params;
   const { razorpayPaymentId, razorpaySignature } = req.body;
@@ -153,6 +155,7 @@ export const confirmOrder = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order placed successfully', confirmedOrder);
 });
 
+// Allows a logged-in user to fetch a paginated list of their orders
 export const getOrders = handleAsync(async (req, res) => {
   const { duration, page } = req.query;
 
@@ -185,6 +188,7 @@ export const getOrders = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Orders fetched successfully', orders);
 });
 
+// Allows a logged-in to fetch an order by ID 
 export const getOrderById = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 
@@ -206,6 +210,7 @@ export const getOrderById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order fetched by ID successfully', order);
 });
 
+// Allows a logged-in user to cancel their order
 export const cancelOrder = handleAsync(async (req, res) => {
   const { orderId } = req.params;
   const { user } = req;
@@ -267,6 +272,7 @@ export const cancelOrder = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order cancelled successfully', cancelledOrder);
 });
 
+// Allows an admin to fetch a paginated list of orders
 export const adminGetOrders = handleAsync(async (req, res) => {
   const { duration, status, paid, sort, page } = req.query;
 
@@ -303,6 +309,7 @@ export const adminGetOrders = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Orders fetched successfully', orders);
 });
 
+// Allows an admin to fetch an order by ID
 export const adminGetOrderById = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 
@@ -320,6 +327,7 @@ export const adminGetOrderById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order fetched by ID successfully', order);
 });
 
+// Allows an admin to update order status
 export const updateOrderStatus = handleAsync(async (req, res) => {
   const { orderId } = req.params;
   const { status } = req.body;
@@ -378,6 +386,7 @@ export const updateOrderStatus = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order status updated successfully', updatedOrder);
 });
 
+// Allows an admin to delete an order
 export const deleteOrder = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 

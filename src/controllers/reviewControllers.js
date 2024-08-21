@@ -7,6 +7,7 @@ import { sendResponse } from '../utils/helperFunctions.js';
 import { reviewSortRules } from '../utils/sortRules.js';
 import { PAGINATION, ORDER_STATUS } from '../constants/common.js';
 
+// Fetches a paginated list of product reviews
 export const getProductReviews = handleAsync(async (req, res) => {
   const { productId } = req.params;
   const { sort, page } = req.query;
@@ -33,6 +34,7 @@ export const getProductReviews = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Reviews fetched successfully', reviews);
 });
 
+// Allows a logged-in user to review a purchased product
 export const addProductReview = handleAsync(async (req, res) => {
   const { productId } = req.params;
   const userId = req.user._id;
@@ -79,6 +81,7 @@ export const addProductReview = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Review added successfully', addedReview);
 });
 
+// Allows a logged-in user to fetch one of their reviews by ID
 export const getProductReviewById = handleAsync(async (req, res) => {
   const { reviewId } = req.params;
 
@@ -95,6 +98,7 @@ export const getProductReviewById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Review fetched by ID successfully', review);
 });
 
+// Allows a logged-in user to edit their review
 export const updateProductReview = handleAsync(async (req, res) => {
   const { reviewId } = req.params;
   const updates = req.body;
