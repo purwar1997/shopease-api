@@ -32,14 +32,14 @@ export const getPasswordResetEmail = passwordResetUrl => `<!DOCTYPE html>
     >
       <div style="text-align: center">
         <img
-          src=${BUSINESS_INFO.LOGO_URL}
+          src=${BUSINESS_INFO.WEBSITE_LOGO}
           alt="business-logo"
           style="width: 200px"
         />
       </div>
 
       <div style="margin-top: 25px; text-align: center">
-        <h2 style="margin: 0; font-size: 24px; font-weight: 700; color: #6366f1">
+        <h2 style="margin: 0; font-size: 25px; font-weight: 700; color: #6366f1">
           Reset Your Password
         </h2>
 
@@ -112,7 +112,7 @@ export const getOrderConfirmationEmail = (customerName, order) => {
     >
       <div style="text-align: center">
        <img
-          src=${BUSINESS_INFO.LOGO_URL}
+          src=${BUSINESS_INFO.WEBSITE_LOGO}
           alt="business-logo"
           style="width: 200px"
         />
@@ -253,7 +253,7 @@ export const getOrderCancellationEmail = (customerName, order) => `<!DOCTYPE htm
     >
       <div style="text-align: center">
         <img
-          src=${BUSINESS_INFO.LOGO_URL}
+          src=${BUSINESS_INFO.WEBSITE_LOGO}
           alt="business-logo"
           style="width: 200px"
         />
@@ -336,7 +336,7 @@ export const getOrderDeletionEmail = (customerName, order) => `<!DOCTYPE html>
     >
       <div style="text-align: center">
         <img
-          src=${BUSINESS_INFO.LOGO_URL}
+          src=${BUSINESS_INFO.WEBSITE_LOGO}
           alt="business-logo"
           style="width: 200px"
         />
