@@ -11,22 +11,23 @@
 
 ## 1. Overview
 
-A RESTful API server to mange interactions on an ecommerce platform called Shopease. It is built using `Express.js` and uses `MongoDB` to store data.
+A RESTful API server to manage interactions on an ecommerce platform called Shopease. It is built using `Express.js` and uses `MongoDB` as a database.
 
 ## 2. Main Features
 
 - JWT Authentication
-- Database modelling using mongoose schemas
-- Centralized error handling using express middleware
+- Database modelling using Mongoose schemas
+- Centralized error handling using Express middlewares
 - Validation of request payload using Joi
-- Routing using express middlewares
+- Routing using Express middlewares
 - Ability to parse multipart/form-data using Formidable
 - Cloudinary APIs to upload and delete images
 - Ability to send emails using Nodemailer
 - Payment gateway integration using Razorpay
 - Logs information about HTTP requests using Morgan
 - Cron jobs scheduled using node-cron library
-- pm2 configured to manage express server and cron jobs 
+- pm2 configured to manage Express server and cron jobs
+- Hosted on DigitalOcean droplet using Nginx as a web server
 
 ## 3. Deployed Link
 
