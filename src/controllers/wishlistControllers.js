@@ -27,7 +27,7 @@ export const addItemToWishlist = handleAsync(async (req, res) => {
     throw new CustomError('Product not found', 404);
   }
 
-  const wishlistItem = user.wishlist.find(wishlistItem.toString() === productId);
+  const wishlistItem = user.wishlist.find(item => item.toString() === productId);
 
   if (wishlistItem) {
     throw new CustomError('Item already exists in wishlist', 409);
@@ -44,13 +44,13 @@ export const removeItemFromWishlist = handleAsync(async (req, res) => {
   const { productId } = req.body;
   const { user } = req;
 
-  const wishlistItem = user.wishlist.find(wishlistItem.toString() === productId);
+  const wishlistItem = user.wishlist.find(item => item.toString() === productId);
 
   if (!wishlistItem) {
     throw new CustomError('Item not found in wishlist', 404);
   }
 
-  user.wishlist = user.wishlist.filter(wishlistItem => wishlistItem.toString() !== productId);
+  user.wishlist = user.wishlist.filter(item => item.toString() !== productId);
   await user.save();
 
   sendResponse(res, 200, 'Item removed from wishlist successfully', productId);
@@ -67,7 +67,7 @@ export const moveItemToCart = handleAsync(async (req, res) => {
     throw new CustomError('Product not found', 404);
   }
 
-  const wishlistItem = user.wishlist.find(wishlistItem.toString() === productId);
+  const wishlistItem = user.wishlist.find(item => item.toString() === productId);
 
   if (!wishlistItem) {
     throw new CustomError('Item not found in wishlist', 404);
@@ -77,8 +77,8 @@ export const moveItemToCart = handleAsync(async (req, res) => {
     throw new CustomError('Item is out of stock and cannot be moved to the cart', 409);
   }
 
-  user.wishlist = user.wishlist.filter(wishlistItem => wishlistItem.toString() !== productId);
-  const cartItem = user.cart.find(cartItem => cartItem.product.toString() === productId);
+  user.wishlist = user.wishlist.filter(item => item.toString() !== productId);
+  const cartItem = user.cart.find(item => item.product.toString() === productId);
 
   if (!cartItem) {
     user.cart.push({ product: productId, quantity: 1 });

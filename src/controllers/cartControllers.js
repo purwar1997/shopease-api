@@ -33,7 +33,7 @@ export const addItemToCart = handleAsync(async (req, res) => {
     throw new CustomError('Item is out of stock and cannot be added to the cart', 409);
   }
 
-  const cartItem = user.cart.find(cartItem => cartItem.product.toString() === productId);
+  const cartItem = user.cart.find(item => item.product.toString() === productId);
 
   if (cartItem) {
     if (cartItem.quantity >= QUANTITY.MAX) {
@@ -51,7 +51,7 @@ export const addItemToCart = handleAsync(async (req, res) => {
     }
 
     cartItem.quantity = cartItem.quantity + 1;
-    const index = user.cart.findIndex(cartItem => cartItem.product.toString() === productId);
+    const index = user.cart.findIndex(item => item.product.toString() === productId);
     user.cart.splice(index, 1, cartItem);
   } else {
     user.cart.push({ product: productId, quantity: 1 });
@@ -59,12 +59,12 @@ export const addItemToCart = handleAsync(async (req, res) => {
 
   await user.save();
 
-  const data = {
+  const result = {
     product,
     quantity: cartItem ? cartItem.quantity : 1,
   };
 
-  sendResponse(res, 200, 'Item added to cart successfully', data);
+  sendResponse(res, 200, 'Item added to cart successfully', result);
 });
 
 // Allows a logged-in user to remove an item from their cart
@@ -72,13 +72,13 @@ export const removeItemFromCart = handleAsync(async (req, res) => {
   const { productId } = req.body;
   const { user } = req;
 
-  const cartItem = user.cart.find(cartItem => cartItem.product.toString() === productId);
+  const cartItem = user.cart.find(item => item.product.toString() === productId);
 
   if (!cartItem) {
     throw new CustomError('Item not found in cart', 404);
   }
 
-  user.cart = user.cart.filter(cartItem => cartItem.product.toString() !== productId);
+  user.cart = user.cart.filter(item => item.product.toString() !== productId);
   await user.save();
 
   sendResponse(res, 200, 'Item removed from cart successfully', productId);
@@ -95,10 +95,17 @@ export const updateItemQuantity = handleAsync(async (req, res) => {
     throw new CustomError('Product not found', 404);
   }
 
-  const cartItem = user.cart.find(cartItem => cartItem.product.toString() === productId);
+  const cartItem = user.cart.find(item => item.product.toString() === productId);
 
   if (!cartItem) {
     throw new CustomError('Item not found in cart', 404);
+  }
+
+  if (quantity > QUANTITY.MAX) {
+    throw new CustomError(
+      `You cannot purchase more than ${QUANTITY.MAX} units of a specific item`,
+      403
+    );
   }
 
   if (quantity > product.stock) {
@@ -109,13 +116,13 @@ export const updateItemQuantity = handleAsync(async (req, res) => {
   }
 
   cartItem.quantity = quantity;
-  const index = user.cart.findIndex(cartItem => cartItem.product.toString() === productId);
+  const index = user.cart.findIndex(item => item.product.toString() === productId);
   user.cart.splice(index, 1, cartItem);
   await user.save();
 
-  const data = { product, quantity };
+  const result = { product, quantity };
 
-  sendResponse(res, 200, 'Item quantity updated successfully', data);
+  sendResponse(res, 200, 'Item quantity updated successfully', result);
 });
 
 // Allows a logged-in user to move an item from their cart to wishlist
@@ -129,14 +136,14 @@ export const moveItemToWishlist = handleAsync(async (req, res) => {
     throw new CustomError('Product not found', 404);
   }
 
-  const cartItem = user.cart.find(cartItem => cartItem.product.toString() === productId);
+  const cartItem = user.cart.find(item => item.product.toString() === productId);
 
   if (!cartItem) {
     throw new CustomError('Item not found in cart', 404);
   }
 
-  user.cart = user.cart.filter(cartItem => cartItem.product.toString() !== productId);
-  const wishlistItem = user.wishlist.find(wishlistItem.toString() === productId);
+  user.cart = user.cart.filter(item => item.product.toString() !== productId);
+  const wishlistItem = user.wishlist.find(item => item.toString() === productId);
 
   if (!wishlistItem) {
     user.wishlist.push(productId);
