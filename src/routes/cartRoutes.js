@@ -21,7 +21,7 @@ router
   .put(isAuthenticated, validatePayload(productIdSchema), removeItemFromCart);
 
 router
-  .route('/cart/update/quantity')
+  .route('/cart/update')
   .put(isAuthenticated, validatePayload(updateQuantitySchema), updateItemQuantity);
 
 router

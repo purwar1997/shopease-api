@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  getBrands,
+  getAllBrands,
   getBrandById,
   addNewBrand,
   updateBrand,
@@ -14,7 +14,7 @@ import { ROLES, UPLOAD_FOLDERS, UPLOAD_FILES } from '../constants/common.js';
 
 const router = express.Router();
 
-router.route('/brands').get(getBrands);
+router.route('/brands').get(getAllBrands);
 router.route('/brands/:brandId').get(validatePathParams(brandIdSchema), getBrandById);
 
 router

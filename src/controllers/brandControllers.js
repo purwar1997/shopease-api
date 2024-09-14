@@ -8,7 +8,7 @@ import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { UPLOAD_FOLDERS } from '../constants/common.js';
 
 // Fetches a list of all brands
-export const getBrands = handleAsync(async (_req, res) => {
+export const getAllBrands = handleAsync(async (_req, res) => {
   const brands = await Brand.find();
 
   sendResponse(res, 200, 'Brands fetched successfully', brands);
