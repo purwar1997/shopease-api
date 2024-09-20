@@ -7,12 +7,14 @@ import { sendResponse, removeDuplicateItems } from '../utils/helperFunctions.js'
 import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { UPLOAD_FOLDERS } from '../constants/common.js';
 
+// Fetches a list of all categories 
 export const getAllCategories = handleAsync(async (_req, res) => {
   const categories = await Category.find();
 
   sendResponse(res, 200, 'Categories fetched successfully', categories);
 });
 
+// Fetches a category by ID
 export const getCategoryById = handleAsync(async (req, res) => {
   const { categoryId } = req.params;
 
@@ -25,6 +27,7 @@ export const getCategoryById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Category fetched by ID successfully', category);
 });
 
+// Allows an admin to add new category
 export const addNewCategory = handleAsync(async (req, res) => {
   const { title } = req.body;
 
@@ -54,6 +57,7 @@ export const addNewCategory = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Category added successfully', newCategory);
 });
 
+// Allows an admin to update category details
 export const updateCategory = handleAsync(async (req, res) => {
   const { categoryId } = req.params;
   const { title } = req.body;
@@ -93,6 +97,7 @@ export const updateCategory = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Category updated successfully', updatedCategory);
 });
 
+// Fetches a list of those categories under which products have been listed
 export const getProductCategories = handleAsync(async (_req, res) => {
   const products = await Product.find({ isDeleted: false }).select('category').populate('category');
 

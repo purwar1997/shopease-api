@@ -3,12 +3,14 @@ import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
 import { sendResponse } from '../utils/helperFunctions.js';
 
+// Fetches saved addresses of a logged-in user
 export const getAddresses = handleAsync(async (req, res) => {
   const addresses = await Address.find({ user: req.user._id, isDeleted: false });
 
   sendResponse(res, 200, 'Addresses fetched successfully', addresses);
 });
 
+// Allows a logged-in user to fetch one of their addresses by ID
 export const getAddressById = handleAsync(async (req, res) => {
   const { addressId } = req.params;
 
@@ -25,6 +27,7 @@ export const getAddressById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Address fetched by ID successfully', address);
 });
 
+// Allows a logged-in user to add new address
 export const addNewAddress = handleAsync(async (req, res) => {
   const address = req.body;
   const userId = req.user._id;
@@ -48,6 +51,7 @@ export const addNewAddress = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Address created successfully', newAddress);
 });
 
+// Allows a logged-in user to edit their address
 export const updateAddress = handleAsync(async (req, res) => {
   const { addressId } = req.params;
   const updates = req.body;
@@ -92,6 +96,7 @@ export const updateAddress = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Address updated successfully', updatedAddress);
 });
 
+// Allows a logged-in user to delete their address
 export const deleteAddress = handleAsync(async (req, res) => {
   const { addressId } = req.params;
 
@@ -118,6 +123,7 @@ export const deleteAddress = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Address deleted successfully', addressId);
 });
 
+// Allows a logged-in user to set one of their addresses as the default
 export const setDefaultAddress = handleAsync(async (req, res) => {
   const { addressId } = req.params;
 

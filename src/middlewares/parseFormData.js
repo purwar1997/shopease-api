@@ -85,7 +85,7 @@ export const parseFormData = (folder, filename) =>
 
     if (!files[filename]) {
       throw new CustomError(
-        `${capitalizeFirstLetter(singularize(folder).replace(/_/g, ' '))} is required`,
+        `${capitalizeFirstLetter(singularize(folder)).replace(/-/g, ' ')} is required`,
         400
       );
     }

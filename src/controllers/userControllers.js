@@ -7,12 +7,14 @@ import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { userSortRules } from '../utils/sortRules.js';
 import { UPLOAD_FOLDERS, PAGINATION } from '../constants/common.js';
 
+// Allows a logged-in user to fetch their profile
 export const getProfile = handleAsync(async (req, res) => {
   const { user } = req;
 
   sendResponse(res, 200, 'Profile fetched successfully', user);
 });
 
+// Allows a logged-in user to update their profile
 export const updateProfile = handleAsync(async (req, res) => {
   const updates = req.body;
 
@@ -37,6 +39,7 @@ export const updateProfile = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Profile updated successfully', updatedUser);
 });
 
+// Allows a logged-in user to delete their account
 export const deleteAccount = handleAsync(async (req, res) => {
   const userId = req.user._id;
 
@@ -51,6 +54,7 @@ export const deleteAccount = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Account deleted successfully');
 });
 
+// Allows a logged-in user to set their profile photo
 export const addProfilePhoto = handleAsync(async (req, res) => {
   const { user } = req;
 
@@ -64,6 +68,7 @@ export const addProfilePhoto = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Profile photo added successfully', updatedUser);
 });
 
+// Allows a logged-in user to change their profile photo
 export const updateProfilePhoto = handleAsync(async (req, res) => {
   const { user } = req;
 
@@ -81,6 +86,7 @@ export const updateProfilePhoto = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Profile photo updated successfully', updatedUser);
 });
 
+// Allows a logged-in user to remove their profile photo
 export const removeProfilePhoto = handleAsync(async (req, res) => {
   const { user } = req;
 
@@ -97,6 +103,7 @@ export const removeProfilePhoto = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Profile photo removed successfully', updatedUser);
 });
 
+// Allows an admin to fetch a paginated list of users
 export const getUsers = handleAsync(async (req, res) => {
   const { roles, sort, page } = req.query;
   const filters = { isDeleted: false };
@@ -117,6 +124,7 @@ export const getUsers = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Users fetched successfully', users);
 });
 
+// Allows an admin to fetch a user by ID
 export const getUserById = handleAsync(async (req, res) => {
   const { userId } = req.params;
 
@@ -129,6 +137,7 @@ export const getUserById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'User fetched by ID successfully', user);
 });
 
+// Allows an admin to update role of a user
 export const updateUserRole = handleAsync(async (req, res) => {
   const { userId } = req.params;
   const { role } = req.body;
@@ -146,6 +155,7 @@ export const updateUserRole = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'User role updated successfully', user);
 });
 
+// Allows an admin to delete a user
 export const deleteUser = handleAsync(async (req, res) => {
   const { userId } = req.params;
 
@@ -162,6 +172,7 @@ export const deleteUser = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'User deleted successfully', userId);
 });
 
+// Allows an admin to fetch a list of other admins
 export const getOtherAdmins = handleAsync(async (req, res) => {
   const otherAdmins = await User.find({
     role: 'admin',
@@ -172,6 +183,7 @@ export const getOtherAdmins = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Admins other than current admin fetched successfully', otherAdmins);
 });
 
+// Allows an admin to demote themselves to the role of a user
 export const adminSelfDemote = handleAsync(async (req, res) => {
   const userId = req.user._id;
 
@@ -197,6 +209,7 @@ export const adminSelfDemote = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Admin role demoted to user successfully', demotedAdmin);
 });
 
+// Allows an admin to delete their account
 export const adminSelfDelete = handleAsync(async (req, res) => {
   const userId = req.user._id;
 

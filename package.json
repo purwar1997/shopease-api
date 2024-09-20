@@ -1,15 +1,19 @@
 {
-  "name": "shopease-api-server",
+  "name": "shopease-api",
   "version": "1.0.0",
-  "description": "A RESTful API server for managing interactions on ecommerce platform",
+  "description": "A RESTful API for an ecommerce platform",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "start:cron": "node src/cron/scheduler.js",
-    "dev:cron": "nodemon src/cron/scheduler.js",
-    "test": "jest"
+    "start": "pm2 start process.config.json",
+    "restart": "pm2 restart process.config.json",
+    "stop": "pm2 stop process.config.json",
+    "delete": "pm2 delete process.config.json",
+    "process-start": "pm2 start process.config.json --only",
+    "process-restart": "pm2 restart process.config.json --only",
+    "process-stop": "pm2 stop process.config.json --only",
+    "process-delete": "pm2 delete process.config.json --only",
+    "process-info": "pm2 describe"
   },
   "author": "Shubham Purwar",
   "license": "ISC",
@@ -20,7 +24,6 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
-    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "formidable": "^3.5.1",
     "joi": "^17.13.1",
@@ -31,10 +34,6 @@
     "nodemailer": "^6.9.13",
     "pluralize": "^8.0.0",
     "razorpay": "^2.9.4",
-    "rotating-file-stream": "^3.2.3",
     "uuid": "^10.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.0"
   }
 }

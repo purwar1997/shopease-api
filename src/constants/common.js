@@ -44,10 +44,10 @@ export const COUPON_STATES = Object.freeze({
 });
 
 export const UPLOAD_FOLDERS = Object.freeze({
-  USER_AVATARS: 'user_avatars',
-  CATEGORY_IMAGES: 'category_images',
-  BRAND_LOGOS: 'brand_logos',
-  PRODUCT_IMAGES: 'product_images',
+  USER_AVATARS: 'user-avatars',
+  CATEGORY_IMAGES: 'category-images',
+  BRAND_LOGOS: 'brand-logos',
+  PRODUCT_IMAGES: 'product-images',
 });
 
 export const UPLOAD_FILES = Object.freeze({
@@ -136,9 +136,9 @@ export const CRON_OPTIONS = Object.freeze({
 
 export const BUSINESS_INFO = Object.freeze({
   NAME: 'Shopease',
-  LOGO_URL:
-    'https://res.cloudinary.com/dlqnx5pot/image/upload/v1723141332/shopease-logo_qj2gip.png',
-  WEBSITE_URL: 'http://localhost:3000',
+  WEBSITE_LOGO:
+    'https://res.cloudinary.com/dlqnx5pot/image/upload/v1724768966/shopease-logo_a9ayl7.svg',
+  WEBSITE_URL: 'http://shopease.shubhampurwar.in',
   CONTACT_EMAIL: 'shubhampurwar35@gmail.com',
   CONTACT_PHONE: '9897887871',
 });

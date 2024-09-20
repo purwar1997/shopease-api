@@ -7,12 +7,14 @@ import { removeDuplicateItems, sendResponse } from '../utils/helperFunctions.js'
 import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { UPLOAD_FOLDERS } from '../constants/common.js';
 
-export const getBrands = handleAsync(async (_req, res) => {
+// Fetches a list of all brands
+export const getAllBrands = handleAsync(async (_req, res) => {
   const brands = await Brand.find();
 
   sendResponse(res, 200, 'Brands fetched successfully', brands);
 });
 
+// Fetches a brand by ID
 export const getBrandById = handleAsync(async (req, res) => {
   const { brandId } = req.params;
 
@@ -25,6 +27,7 @@ export const getBrandById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Brand fetched by ID successfully', brand);
 });
 
+// Allows an admin to add new brand
 export const addNewBrand = handleAsync(async (req, res) => {
   const { name } = req.body;
 
@@ -54,6 +57,7 @@ export const addNewBrand = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Brand added successfully', newBrand);
 });
 
+// Allows an admin to update brand details
 export const updateBrand = handleAsync(async (req, res) => {
   const { brandId } = req.params;
   const { name } = req.body;
@@ -93,6 +97,7 @@ export const updateBrand = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Brand updated successfully', updatedBrand);
 });
 
+// Fetches a list of those brands under which products have been listed
 export const getProductBrands = handleAsync(async (_req, res) => {
   const products = await Product.find({ isDeleted: false }).select('brand').populate('brand');
 
