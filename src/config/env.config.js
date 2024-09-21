@@ -1,6 +1,10 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const config = {
   server: {
-    port: process.env.SERVER_PORT || 8000,
+    port: process.env.SERVER_PORT || 8080,
   },
   database: {
     url: process.env.MONGODB_URL,
