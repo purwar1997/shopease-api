@@ -143,6 +143,11 @@ const orderSchema = new Schema(
     timestamps: true,
     toObject: {
       versionKey: false,
+      transform: function (_doc, res) {
+        res.id = res._id;
+        delete res._id;
+        return res;
+      },
     },
   }
 );

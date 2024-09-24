@@ -103,7 +103,8 @@ const userSchema = new Schema(
       versionKey: false,
       virtuals: true,
       transform: function (_doc, res) {
-        delete res.id;
+        res.id = res._id;
+        delete res._id;
         return res;
       },
     },
