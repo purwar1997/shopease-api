@@ -29,7 +29,9 @@
     "pluralize": "^8.0.0",
     "razorpay": "^2.9.4",
     "rotating-file-stream": "^3.2.5",
-    "uuid": "^10.0.0"
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^10.0.0",
+    "yaml": "^2.5.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"

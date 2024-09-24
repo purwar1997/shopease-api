@@ -1,0 +1,124 @@
+openapi: 3.0.0
+
+info: 
+  title: Shopease
+  description: The API collection for Shopease
+  version: 1.0.0
+
+servers: 
+  - url: http://localhost:9000/api/v1
+    description: Shopease Development Server
+  - url: http://api.shopease.shubhampurwar.in/api/v1
+    description: Shopease Production Server
+
+tags: 
+  - name: Authentication
+    description: Authentication API
+  - name: Users
+    description: Users API
+  - name: Addresses
+    description: Addresses API
+  - name: Cart
+    description: Cart API
+  - name: Wishlist
+    description: Wishlist API
+  - name: Products
+    description: Products API
+  - name: Categories
+    description: Categories API
+  - name: Brands
+    description: Brands API
+  - name: Coupons
+    description: Coupons API
+  - name: Orders
+    description: Orders API
+  - name: Reviews
+    description: Reviews API
+    
+paths: 
+  /auth/signup:
+    post: 
+      tags: 
+        - Authentication
+      description: Creates an account or restores a deleted one
+      operationId: signup
+      requestBody: 
+        description: A JSON object containing signup information
+        required: true
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties: 
+                firstname: 
+                  type: string
+                lastname:
+                  type: string
+                email:
+                  type: string
+                phone: 
+                  type: string
+                password: 
+                  type: string
+                confirmPassword: 
+                  type: string
+      responses: 
+        '200': 
+          description: Deleted account restored successfully
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Response'
+                # type: object
+                # properties: 
+                #   success:
+                #     type: boolean
+                #     default: true
+                #   message: 
+                #     type: string
+                #   data:
+                #     $ref: '#/components/schemas/User'
+        '201':
+          description: New account created successfully
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  success: 
+                    type: boolean
+                    default: true
+                  message: 
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
+
+components:
+  schemas:
+    Response:
+      type: object
+      properties: 
+        success:
+          type: boolean
+          default: true
+        message: 
+          type: string
+        data:
+          $ref:
+
+    User: 
+      type: object
+      properties: 
+        id: 
+          type: string
+        firstname: 
+          type: string
+        lastname: 
+          type: string
+        fullname:
+          type: string
+        email:
+          type: string
+        phone: 
+          type: string
+        
