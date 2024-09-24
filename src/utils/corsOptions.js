@@ -1,4 +1,4 @@
-const whitelist = ['http://localhost:3000'];
+const whitelist = ['http://localhost:9000', 'http://api.shopease.shubhampurwar.in'];
 
 const corsOptions = {
   origin: function (origin, callback) {
