@@ -114,6 +114,18 @@ export const adminGetProductById = handleAsync(async (req, res) => {
 export const addNewProduct = handleAsync(async (req, res) => {
   const { title, brand, category } = req.body;
 
+  const existingBrand = await Brand.findById(brand);
+
+  if (!existingBrand) {
+    throw new CustomError('Provided brand does not exist', 404);
+  }
+
+  const existingCategory = await Category.findById(category);
+
+  if (!existingCategory) {
+    throw new CustomError('Provided category does not exist', 404);
+  }
+
   const existingProduct = await Product.findOne({ title, brand, category });
 
   if (existingProduct) {
@@ -149,6 +161,18 @@ export const updateProduct = handleAsync(async (req, res) => {
 
   if (!product) {
     throw new CustomError('Product not found', 404);
+  }
+
+  const existingBrand = await Brand.findById(brand);
+
+  if (!existingBrand) {
+    throw new CustomError('Provided brand does not exist', 404);
+  }
+
+  const existingCategory = await Category.findById(category);
+
+  if (!existingCategory) {
+    throw new CustomError('Provided category does not exist', 404);
   }
 
   const existingProduct = await Product.findOne({
