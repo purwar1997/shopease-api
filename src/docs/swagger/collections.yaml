@@ -64,22 +64,20 @@ paths:
                   type: string
       responses: 
         '200': 
-          description: Deleted account restored successfully
+          description: Restored account
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/Response'
-                # type: object
-                # properties: 
-                #   success:
-                #     type: boolean
-                #     default: true
-                #   message: 
-                #     type: string
-                #   data:
-                #     $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
         '201':
-          description: New account created successfully
+          description: Newly created account
           content: 
             application/json:
               schema: 
@@ -87,24 +85,116 @@ paths:
                 properties: 
                   success: 
                     type: boolean
-                    default: true
                   message: 
                     type: string
                   data:
                     $ref: '#/components/schemas/User'
+  /auth/login: 
+    post:
+      tags:
+        - Authentication
+      description: Allows users to login using their email address and password
+      operationId: login
+      requestBody:
+        description: A JSON object containing login information
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password: 
+                  type: string
+      responses:
+        '200': 
+          description: Login success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      description: Allows users to log out
+      operationId: logout
+      responses:
+        '200':
+          description: Logout success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+  
+  /auth/password/forgot:
+    post:
+      tags:
+        - Authentication
+      description: Sends an email to the user with reset password link
+      operationId: forgotPassword
+      requestBody:
+        description: A JSON object containing an email address
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Password reset email sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+
+  /auth/password/reset/{token}:
+    put:
+      tags: 
+        - Authentication
+      description: Allows users to reset their account password
+      operationId: resetPassword
+      parameters:
+        - in: path
+          name: token
+          required: true
+          description: Reset password token
+          schema:
+            type: string
+      requestBody:
+        description: A JSON object containing new and confirmed passwords
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                confirmPassword:
+                  type: string
+      responses:
+        '200':
+          description: Password reset success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
 
 components:
   schemas:
-    Response:
+    Success:
       type: object
-      properties: 
+      properties:
         success:
           type: boolean
-          default: true
-        message: 
+        message:
           type: string
-        data:
-          $ref:
 
     User: 
       type: object
@@ -121,4 +211,45 @@ components:
           type: string
         phone: 
           type: string
-        
+        role:
+          type: string
+        avatar:
+          type: object
+          properties:
+            url:
+              type: string
+            publicId:
+              type: string
+        cart:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+              quantity:
+                type: integer
+        wishlist:
+          type: array
+          items:
+            type: string
+        resetPasswordToken:
+          type: string
+        resetPasswordExpiry:
+          type: string
+        isDeleted:
+          type: boolean
+        deletedBy:
+          type: string
+        roleLastUpdatedBy:
+          type: string
+        deletedAt:
+          type: string
+        roleUpdatedAt:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+          
