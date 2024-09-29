@@ -83,14 +83,14 @@ export const login = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'User logged in successfully');
 });
 
-// Allows users to log out of the application
+// Allows users to log out
 export const logout = handleAsync(async (_req, res) => {
   res.clearCookie('token', clearCookieOptions);
 
   sendResponse(res, 200, 'User logged out successfully');
 });
 
-// Receives email address from the user and sends a reset password email
+// Sends an email to the user with reset password link
 export const forgotPassword = handleAsync(async (req, res) => {
   const { email } = req.body;
 
