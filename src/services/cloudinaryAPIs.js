@@ -3,7 +3,7 @@ import cloudinary from '../config/cloudinary.config.js';
 import CustomError from '../utils/customError.js';
 
 const generatePublicId = (folder, docId) => {
-  const date = format(new Date(), 'YYYY/M/d');
+  const date = format(new Date(), 'yyyy/M/d');
   return `${folder}/${date}/${docId}`;
 };
 
