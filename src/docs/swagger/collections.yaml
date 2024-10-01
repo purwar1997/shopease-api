@@ -43,7 +43,7 @@ paths:
       description: Creates an account or restores a deleted one
       operationId: signup
       requestBody: 
-        description: A JSON object containing signup information
+        description: A JSON object containing signup info
         required: true
         content: 
           application/json:
@@ -96,7 +96,7 @@ paths:
       description: Allows users to login using their email address and password
       operationId: login
       requestBody:
-        description: A JSON object containing login information
+        description: A JSON object containing login info
         required: true
         content:
           application/json:
@@ -186,7 +186,361 @@ paths:
               schema:
                 $ref: '#/components/schemas/Success'
 
+  /users/self:
+    get:
+      tags:
+        - Users
+      description: Allows users to fetch their profile
+      operationId: getProfile
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message: 
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
+    
+    put:
+      tags:
+        - Users
+      description: Allows users to update their profile
+      operationId: updateProfile
+      requestBody:
+        description: A JSON object containing new profile info
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                phone: 
+                  type: string
+                password:
+                  type: string
+                confirmPassword:
+                  type: string
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message: 
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
+
+    delete:
+      tags:
+        - Users
+      description: Allows users to delete their account
+      operationId: deleteAccount
+      responses:
+        '200':
+          description: Account deletion success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+
+  /users/self/avatar:
+    post:
+      tags:
+        - Users
+      description: Allows users to add their profile photo
+      operationId: addProfilePhoto
+      requestBody:
+        description: Payload containing an image in binary encoded format
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+              required:
+                - avatar
+            encoding:
+              avatar:
+                content-type: image/*
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
+
+    put:
+      tags:
+        - Users
+      description: Allows users to remove their profile photo
+      operationId: removeProfilePhoto
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
+
+  /users/self/avatar/update:
+    post:
+      tags:
+        - Users
+      description: Allows users to update their profile photo
+      operationId: updateProfilePhoto
+      requestBody:
+        description: Payload containing an image in binary encoded format
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+              required:
+                - avatar
+            encoding:
+              avatar:
+                content-type: image/*
+      responses:
+        '200':
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
+
+  /admin/users:
+    get:
+      tags: 
+        - Users
+      description: Allows admins to fetch a list of users
+      operationId: getUsers
+      parameters:
+        - in: query
+          name: roles
+          description: Field to filter users based on their role
+          schema:
+            type: array
+            items: 
+              type: string
+              enum:
+                - user
+                - admin
+            style: form
+            explode: false
+        - in: query
+          name: sort
+          description: Field to sort users by name in asc|desc order
+          schema:
+            type: string
+            enum:
+              - name_asc
+              - name_desc
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data: 
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+          headers:
+            X-Total-Count:
+              description: Total number of users
+              schema:
+                type: integer
+                format: int32
+
+  /admin/users/{userId}:
+    get:
+      tags: 
+        - Users
+      description: Allows admins to fetch a user by ID
+      operationId: getUserbyId
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
+
+    put:
+      tags: 
+        - Users
+      description: Allows admins to update role of a user
+      operationId: updateUserRole
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user whose role is to be updated
+          schema:
+            type: string
+      requestBody:
+        description: A JSON object containing new role
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+      responses:
+        '200':
+          description: Updated user object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
+    delete:
+      tags:
+        - Users
+      description: Allows admins to delete a user
+      operationId: deleteUser
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to be deleted
+          schema:
+            type: string
+      responses: 
+        '200':
+          description: User deletion success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+
+  /admin/admins: 
+    get:
+      tags: 
+        - Users
+      description: Allows admins to fetch a list of other admins
+      operationId: getOtherAdmins
+      responses:
+        '200':
+          description: List of other admins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /admin/self:
+    put:
+      tags:
+        - Users
+      description: Allows admins to demote themselves to the role of a user
+      operationId: adminSelfDemote
+      responses:
+        '200':
+          description: Updated user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags:
+        - Users
+      description: Allows admins to delete their accounts
+      operationId: adminSelfDelete
+      responses:
+        '200':
+          description: Admin deletion success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+
 components:
+  parameters:
+    Page:
+      in: query
+      name: page
+      description: Number of records to skip
+      schema: 
+        type: integer
+        format: int32
+        minimum: 1
+
   schemas:
     Success:
       type: object
@@ -251,5 +605,18 @@ components:
           type: string
         updatedAt:
           type: string
+      required:
+        - id
+        - firstname
+        - lastname
+        - fullname
+        - email
+        - phone
+        - role
+        - cart
+        - wishlist
+        - isDeleted
+        - createdAt
+        - updatedAt
 
           
