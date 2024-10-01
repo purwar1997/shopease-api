@@ -252,7 +252,7 @@ paths:
       operationId: deleteAccount
       responses:
         '200':
-          description: Account deletion success
+          description: Account successfully deleted
           content:
             application/json:
               schema:
@@ -481,7 +481,7 @@ paths:
             type: string
       responses: 
         '200':
-          description: User deletion success
+          description: User successfully deleted
           content:
             application/json:
               schema:
@@ -495,14 +495,21 @@ paths:
       operationId: getOtherAdmins
       responses:
         '200':
-          description: List of other admins
+          description: List of admins
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-
+                type: object
+                properties:
+                  success: 
+                    type: boolean
+                  message:
+                    type: string
+                  data: 
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  
   /admin/self:
     put:
       tags:
@@ -515,7 +522,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data: 
+                    $ref: '#/components/schemas/User'
 
     delete:
       tags:
@@ -524,11 +538,215 @@ paths:
       operationId: adminSelfDelete
       responses:
         '200':
-          description: Admin deletion success
+          description: Admin successfully deleted
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Success'
+
+  /addresses:
+    get:
+      tags:
+        - Addresses
+      description: Allows users to fetch their addresses
+      operationId: getAddresses
+      responses:
+        '200':
+          description: List of addresses
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Address'
+
+    post:
+      tags: 
+        - Addresses
+      description: Allows users to add a new address
+      operationId: addNewAddress 
+      requestBody:
+        description: A JSON object containing address info
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullname:
+                  type: string
+                phone:
+                  type: string
+                line1:
+                  type: string
+                line2:
+                  type: string
+                landmark:
+                  type: string
+                country:
+                  type: string
+                state:
+                  type: string
+                city:
+                  type: string
+                postalCode:
+                  type: string
+                isDefault:
+                  type: boolean
+                  default: false
+      responses:
+        '201':
+          description: Address object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Address'
+  
+  /addresses/{addressId}:
+    get:
+      tags:
+        - Addresses
+      description: Allows users to fetch one of their addresses by ID
+      operationId: getAddressById
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          description: ID of the address to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Address object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Address'
+
+    put:
+      tags:
+        - Addresses
+      description: Allows users to update their address
+      operationId: updateAddress
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          description: ID of the address to be updated
+          schema:
+            type: string
+      requestBody:
+        description: A JSON object containing new address info
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullname:
+                  type: string
+                phone:
+                  type: string
+                line1:
+                  type: string
+                line2:
+                  type: string
+                landmark:
+                  type: string
+                country:
+                  type: string
+                state:
+                  type: string
+                city:
+                  type: string
+                postalCode:
+                  type: string
+                isDefault:
+                  type: boolean
+                  default: false
+      responses:
+        '200':
+          description: Updated address object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Address'
+    
+    delete:
+      tags:
+        - Addresses
+      description: Allows users to delete their address
+      operationId: deleteAddress
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          description: ID of the address to be deleted
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Address successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+
+  /addresses/{addressId}/default:
+    put:
+      tags:
+        - Addresses
+      description: Allows users to set one of their addresses as the default
+      operationId: setDefaultAddress
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          description: ID of the address to be set as the default
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Default address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Address'
 
 components:
   parameters:
@@ -619,4 +837,51 @@ components:
         - createdAt
         - updatedAt
 
+    Address:
+      type: object
+      properties:
+        id:
+          type: string
+        fullname:
+          type: string
+        phone: 
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        landmark:
+          type: string
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        postalCode:
+          type: string
+        isDefault:
+          type: boolean
+        user:
+          type: string
+        isDeleted:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - fullname
+        - phone
+        - line1
+        - country
+        - state
+        - city
+        - postalCode
+        - isDefault
+        - user
+        - isDeleted
+        - createdAt
+        - updatedAt
           
