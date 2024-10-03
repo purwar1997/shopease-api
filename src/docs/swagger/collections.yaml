@@ -64,7 +64,7 @@ paths:
                   type: string
       responses: 
         '200': 
-          description: Restored account
+          description: A JSON object containing a restored account
           content:
             application/json:
               schema: 
@@ -77,7 +77,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/User'
         '201':
-          description: Newly created account
+          description: A JSON containing a newly created account
           content: 
             application/json:
               schema: 
@@ -89,6 +89,7 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/User'
+  
   /auth/login: 
     post:
       tags:
@@ -194,7 +195,7 @@ paths:
       operationId: getProfile
       responses:
         '200':
-          description: User profile
+          description: A JSON object containing a user profile
           content:
             application/json:
               schema:
@@ -232,7 +233,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: Updated profile
+          description: A JSON object containing an updated user profile
           content:
             application/json:
               schema:
@@ -252,7 +253,7 @@ paths:
       operationId: deleteAccount
       responses:
         '200':
-          description: Account successfully deleted
+          description: Account deleted successfully
           content:
             application/json:
               schema:
@@ -282,7 +283,7 @@ paths:
                 content-type: image/*
       responses:
         '200':
-          description: Updated profile
+          description: A JSON object containing an updated user profile
           content:
             application/json:
               schema:
@@ -302,7 +303,7 @@ paths:
       operationId: removeProfilePhoto
       responses:
         '200':
-          description: Updated profile
+          description: A JSON object containing an updated user profile
           content:
             application/json:
               schema:
@@ -339,7 +340,7 @@ paths:
                 content-type: image/*
       responses:
         '200':
-          description: Updated profile
+          description: A JSON object containing an updated user profile
           content:
             application/json:
               schema:
@@ -382,7 +383,7 @@ paths:
         - $ref: '#/components/parameters/Page'
       responses:
         '200':
-          description: List of users
+          description: A JSON object containing a list of users
           content:
             application/json:
               schema:
@@ -418,7 +419,7 @@ paths:
             type: string
       responses:
         '200':
-          description: User object
+          description: A JSON object containing a user
           content:
             application/json:
               schema:
@@ -444,7 +445,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: A JSON object containing new role
+        description: A JSON object containing a new role
         required: true
         content:
           application/json:
@@ -455,7 +456,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: Updated user object
+          description: A JSON object containing an updated user
           content:
             application/json:
               schema:
@@ -467,6 +468,7 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/User'
+    
     delete:
       tags:
         - Users
@@ -481,11 +483,11 @@ paths:
             type: string
       responses: 
         '200':
-          description: User successfully deleted
+          description: A JSON object containing ID of the deleted user
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/ID'
 
   /admin/admins: 
     get:
@@ -495,7 +497,7 @@ paths:
       operationId: getOtherAdmins
       responses:
         '200':
-          description: List of admins
+          description: A JSON object containing a list of admins
           content:
             application/json:
               schema:
@@ -518,7 +520,7 @@ paths:
       operationId: adminSelfDemote
       responses:
         '200':
-          description: Updated user object
+          description: A JSON object containing an updated admin
           content:
             application/json:
               schema:
@@ -534,11 +536,11 @@ paths:
     delete:
       tags:
         - Users
-      description: Allows admins to delete their accounts
+      description: Allows admins to delete their account
       operationId: adminSelfDelete
       responses:
         '200':
-          description: Admin successfully deleted
+          description: Account deleted successfully
           content:
             application/json:
               schema:
@@ -552,7 +554,7 @@ paths:
       operationId: getAddresses
       responses:
         '200':
-          description: List of addresses
+          description: A JSON object containing a list of addresses
           content:
             application/json:
               schema:
@@ -603,7 +605,7 @@ paths:
                   default: false
       responses:
         '201':
-          description: Address object
+          description: A JSON object containing a newly added address
           content:
             application/json:
               schema:
@@ -631,7 +633,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Address object
+          description: A JSON object containing an address
           content:
             application/json:
               schema:
@@ -687,7 +689,7 @@ paths:
                   default: false
       responses:
         '200':
-          description: Updated address object
+          description: A JSON object containing an updated address
           content:
             application/json:
               schema:
@@ -714,11 +716,11 @@ paths:
             type: string
       responses:
         '200':
-          description: Address successfully deleted
+          description: A JSON object containing ID of the deleted address
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/ID'
 
   /addresses/{addressId}/default:
     put:
@@ -735,7 +737,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Default address
+          description: A JSON object containing a default address
           content:
             application/json:
               schema:
@@ -747,6 +749,162 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/Address'
+  
+  /cart:
+    get:
+      tags: 
+        - Cart
+      description: Allows users to fetch their cart
+      operationId: getCart
+      responses:
+        '200':
+          description: A JSON object containing a list of cart items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: 
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CartItem'
+
+  /cart/add:
+    post:
+      tags:
+        - Cart
+      description: Allows users to add an item to their cart
+      operationId: addItemToCart
+      requestBody:
+        description: A JSON object containing ID of the item that is to be added to cart
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+      responses:
+        '200':
+          description: A JSON object containing an added cart item
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/CartItem'
+
+  /cart/remove:
+    put:
+      tags:
+        - Cart
+      description: Allows users to remove an item from their cart
+      operationId: removeItemFromCart
+      requestBody:
+        description: A JSON object containing ID of the item that is to be removed from cart
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+      responses:
+        '200':
+          description: A JSON object containing ID of the removed cart item 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ID'
+
+  /cart/update:
+    put:
+      tags:
+        - Cart
+      description: Allows users to update quantity of a cart item
+      operationId: updateItemQuantity
+      requestBody:
+        description: A JSON object containing product ID and quantity
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: A JSON object containing an updated cart item
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/CartItem'
+
+  /cart/move:
+    put:
+      tags:
+        - Cart
+      description: Alows users to move an item from their cart to wishlist
+      operationId: moveItemToWishlist
+      requestBody:
+        description: A JSON object containing ID of the item that is to be moved to wishlist
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+      responses:
+        '200':
+          description: A JSON object containing a moved cart item 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/CartItem'
+     
+  /cart/clear:
+    put:
+      tags:
+        - Cart
+      description: Allows users to clear their cart
+      operationId: clearCart
+      responses:
+        '200':
+          description: Cart cleared successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
 
 components:
   parameters:
@@ -766,6 +924,16 @@ components:
         success:
           type: boolean
         message:
+          type: string
+
+    ID: 
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
           type: string
 
     User: 
@@ -884,4 +1052,73 @@ components:
         - isDeleted
         - createdAt
         - updatedAt
+
+    CartItem:
+      type: object
+      properties:
+        product: 
+          $ref: '#/components/schemas/Product'
+        quantity:
+          type: integer
+
+    Product:
+      type: object
+      properties:
+        id: 
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        brand:
+          type: string
+        category:
+          type: string
+        stock:
+          type: integer
+        image:
+          type: object
+          properties:
+            url:
+              type: string
+            publicId:
+              type: string
+        soldUnits:
+          type: integer
+        avgRating:
+          type: number
+        reviewCount:
+          type: integer
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+        deletedBy:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        deletedAt:
+          type: string
+        isDeleted:
+          type: boolean
           
+      required:
+        - id
+        - title
+        - description
+        - price
+        - brand
+        - category
+        - stock
+        - image
+        - soldUnits
+        - avgRating
+        - reviewCount
+        - createdBy
+        - createdAt
+        - updatedAt
+        - isDeleted
