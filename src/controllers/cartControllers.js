@@ -5,7 +5,7 @@ import CustomError from '../utils/customError.js';
 import { sendResponse } from '../utils/helperFunctions.js';
 import { QUANTITY } from '../constants/common.js';
 
-// Fetches cart of a logged-in user
+// Allows users to fetch their cart
 export const getCart = handleAsync(async (req, res) => {
   const user = await User.findById(req.user._id).populate({
     path: 'cart.product',
@@ -18,7 +18,7 @@ export const getCart = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Cart fetched successfully', user.cart);
 });
 
-// Allows a logged-in user to add an item to their cart
+// Allows users to add an item to their cart
 export const addItemToCart = handleAsync(async (req, res) => {
   const { productId } = req.body;
   const { user } = req;
@@ -67,7 +67,7 @@ export const addItemToCart = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Item added to cart successfully', result);
 });
 
-// Allows a logged-in user to remove an item from their cart
+// Allows users to remove an item from their cart
 export const removeItemFromCart = handleAsync(async (req, res) => {
   const { productId } = req.body;
   const { user } = req;
@@ -84,7 +84,7 @@ export const removeItemFromCart = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Item removed from cart successfully', productId);
 });
 
-// Allows a logged-in user to update quantity of a cart item
+// Allows users to update quantity of a cart item
 export const updateItemQuantity = handleAsync(async (req, res) => {
   const { productId, quantity } = req.body;
   const { user } = req;
@@ -125,7 +125,7 @@ export const updateItemQuantity = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Item quantity updated successfully', result);
 });
 
-// Allows a logged-in user to move an item from their cart to wishlist
+// Allows users to move an item from their cart to wishlist
 export const moveItemToWishlist = handleAsync(async (req, res) => {
   const { productId } = req.body;
   const { user } = req;
@@ -154,7 +154,7 @@ export const moveItemToWishlist = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Item moved from cart to wishlist successfully', product);
 });
 
-// Allows a logged-in user to remove all items from their cart
+// Allows users to clear their cart
 export const clearCart = handleAsync(async (req, res) => {
   const { user } = req;
 
