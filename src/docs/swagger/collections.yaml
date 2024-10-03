@@ -780,7 +780,7 @@ paths:
       description: Allows users to add an item to their cart
       operationId: addItemToCart
       requestBody:
-        description: A JSON object containing ID of the item that is to be added to cart
+        description: ID of the item that is to be added to cart
         required: true
         content:
           application/json:
@@ -791,7 +791,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: A JSON object containing an added cart item
+          description: A JSON object containing a new cart item
           content:
             application/json:
               schema:
@@ -811,7 +811,7 @@ paths:
       description: Allows users to remove an item from their cart
       operationId: removeItemFromCart
       requestBody:
-        description: A JSON object containing ID of the item that is to be removed from cart
+        description: ID of the item that is to be removed from cart
         required: true
         content:
           application/json:
@@ -822,7 +822,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: A JSON object containing ID of the removed cart item 
+          description: A JSON object containing ID of the removed item 
           content:
             application/json:
               schema:
@@ -848,7 +848,7 @@ paths:
                   type: integer
       responses:
         '200':
-          description: A JSON object containing an updated cart item
+          description: A JSON object containing a cart item whose quantity was updated
           content:
             application/json:
               schema:
@@ -868,7 +868,7 @@ paths:
       description: Alows users to move an item from their cart to wishlist
       operationId: moveItemToWishlist
       requestBody:
-        description: A JSON object containing ID of the item that is to be moved to wishlist
+        description: ID of the item that is to be moved to wishlist
         required: true
         content:
           application/json:
@@ -879,7 +879,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: A JSON object containing a moved cart item 
+          description: A JSON object containing an item that was moved to wishlist
           content:
             application/json:
               schema:
@@ -890,7 +890,7 @@ paths:
                   message:
                     type: string
                   data:
-                    $ref: '#/components/schemas/CartItem'
+                    $ref: '#/components/schemas/Product'
      
   /cart/clear:
     put:
@@ -906,6 +906,129 @@ paths:
               schema:
                 $ref: '#/components/schemas/Success'
 
+  /wishlist:
+    get:
+      tags: 
+        - Wishlist
+      description: Allows users to fetch their wishlist
+      operationId: getWishlist
+      responses:
+        '200':
+          description: A JSON object containing user's wishlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                     type: array
+                     items:
+                        $ref: '#/components/schemas/Product'
+
+  /wishlist/add:
+    put:
+      tags:
+        - Wishlist
+      description: Allows users to add an item to their wishlist
+      operationId: addItemTowWishlist
+      requestBody:
+        description: ID of the item that is to be added to wishlist
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+      responses:
+        '200':
+          description: A JSON object containing a new wishlist item
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Product'
+
+  /wishlist/remove:
+    put:
+      tags:
+        - Wishlist
+      description: Allows users to remove an item from their wishlist
+      operationId: removeItemFromWishlist
+      requestBody:
+        description: ID of the item to be removed from wishlist
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+      responses:
+        '200':
+          description: A JSON object containing ID of the removed item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ID'
+
+  /wishlist/move:
+    put:
+      tags:
+        - Wishlist
+      description: Allows users to move an item from their wishlist to cart
+      operationId: moveItemToCart
+      requestBody:
+        description: ID of the item that is to be moved to cart
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+      responses:
+        '200':
+          description: A JSON object containing an item that was moved to cart
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Product'
+              
+  /wishlist/clear:
+    put:
+      tags:
+        - Wishlist
+      description: Allows users to clear their wishlist
+      operationId: clearWishlist
+      responses:
+        '200':
+          description: Wishlist cleared successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+                
 components:
   parameters:
     Page:
