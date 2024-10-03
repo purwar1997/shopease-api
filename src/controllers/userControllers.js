@@ -169,7 +169,7 @@ export const deleteUser = handleAsync(async (req, res) => {
     throw new CustomError('User not found', 404);
   }
 
-  sendResponse(res, 200, 'User deleted successfully');
+  sendResponse(res, 200, 'User deleted successfully', userId);
 });
 
 // Allows admins to fetch a list of other admins
@@ -206,7 +206,7 @@ export const adminSelfDemote = handleAsync(async (req, res) => {
     { runValidators: true, new: true }
   );
 
-  sendResponse(res, 200, 'Admin demoted to user successfully', demotedAdmin);
+  sendResponse(res, 200, 'Admin demoted to the role of a user successfully', demotedAdmin);
 });
 
 // Allows admins to delete their accounts
