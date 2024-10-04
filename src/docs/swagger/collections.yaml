@@ -77,7 +77,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/User'
         '201':
-          description: A JSON containing a newly created account
+          description: A JSON containing a new account
           content: 
             application/json:
               schema: 
@@ -370,8 +370,8 @@ paths:
               enum:
                 - user
                 - admin
-            style: form
-            explode: false
+          style: form
+          explode: false
         - in: query
           name: sort
           description: Field to sort users by name in asc|desc order
@@ -580,32 +580,10 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                fullname:
-                  type: string
-                phone:
-                  type: string
-                line1:
-                  type: string
-                line2:
-                  type: string
-                landmark:
-                  type: string
-                country:
-                  type: string
-                state:
-                  type: string
-                city:
-                  type: string
-                postalCode:
-                  type: string
-                isDefault:
-                  type: boolean
-                  default: false
+              $ref: '#/components/schemas/AddressBody'
       responses:
         '201':
-          description: A JSON object containing a newly added address
+          description: A JSON object containing a new address
           content:
             application/json:
               schema:
@@ -664,29 +642,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                fullname:
-                  type: string
-                phone:
-                  type: string
-                line1:
-                  type: string
-                line2:
-                  type: string
-                landmark:
-                  type: string
-                country:
-                  type: string
-                state:
-                  type: string
-                city:
-                  type: string
-                postalCode:
-                  type: string
-                isDefault:
-                  type: boolean
-                  default: false
+              $ref: '#/components/schemas/AddressBody'
       responses:
         '200':
           description: A JSON object containing an updated address
@@ -1028,7 +984,333 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Success'
-                
+
+  /products:
+    get:
+      tags: 
+        - Products
+      description: Fetches a list of products
+      operationId: getProducts
+      parameters:
+        - in: query
+          name: categories
+          description: Field to filter products based on the categories they belong to
+          schema:
+            type: array
+            items: 
+              type: string
+          style: form
+          explode: false
+        - in: query
+          name: brands
+          description: Field to filter products based on the brands they belong to
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: false
+        - in: query
+          name: rating
+          description: Field to filter products by their rating
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+        - in: query
+          name: sort
+          description: Option to sort products by
+          schema:
+            type: string
+            enum:
+              - recommended
+              - new
+              - rating
+              - price_asc
+              - price_desc
+            default: recommended
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: A JSON object containing a list of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+          headers:
+            X-Total-Count:
+              description: Total number of products
+              schema:
+                type: integer
+                format: int32
+
+  /products/{productId}:
+    get:
+      tags:
+        - Products
+      description: Fetches a product by ID
+      operationId: getProductById
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: ID of the product to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing a product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Product'
+
+  /admin/products:
+    get:
+      tags:
+        - Products
+      description: Allows admins to fetch a list of products
+      operationId: adminGetProducts
+      parameters:
+        - in: query
+          name: categories
+          description: Field to filter products based on the categories they belong to
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: false
+        - in: query
+          name: brands
+          description: Field to filter products based on the brands they belong to
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: false
+        - in: query
+          name: rating
+          description: Field to filter products by their rating
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+        - in: query
+          name: availability
+          description: Field to filter products based on whether they are in stock or not
+          schema:
+            type: string
+            enum:
+              - true
+              - false
+              - all
+        - in: query
+          name: deleted
+          description: Field to filter products based on whether they are deleted or not
+          schema:
+            type: string
+            enum:
+              - true
+              - false
+              - all
+        - in: query
+          name: sort
+          description: Option to sort products by
+          schema:
+            type: string
+            enum:
+              - new
+              - rating
+              - price_asc
+              - price_desc
+              - stock_asc
+              - stock_desc
+            default: new
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: A JSON object containing a list of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+          headers:
+            X-Total-Count:
+              description: Total number of products
+              schema:
+                type: integer
+                format: int32
+
+    post:
+      tags: 
+        - Products
+      description: Allows admins to add a new product
+      operationId: addNewProduct
+      requestBody:
+        description: Payload containing product info along with an image in binary encoded format
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductBody'
+            encoding:
+              image:
+                contentType: image/*
+      responses:
+        '201':
+          description: A JSON object containing a new product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Product'
+
+  /admin/products/{productId}:
+    get:
+      tags:
+        - Products
+      description: Allows admins to fetch a product by ID
+      operationId: adminGetProductById
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: ID of the product to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing a product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Product'
+
+    post:
+      tags: 
+        - Products
+      description: Allows admins to update a product
+      operationId: updateProduct
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: ID of the product to be updated
+          schema:
+            type: string
+      requestBody:
+        description: Payload containing new product info along with an image in binary encoded format
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductBody'
+            encoding:
+              image:
+                contentType: image/*
+      responses:
+        '200':
+          description: A JSON object containing an updated product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Product'
+
+    delete:
+      tags: 
+        - Product
+      description: Allows admins to delete a product 
+      operationId: deleteProduct
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: ID of the product to be deleted
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing ID of the deleted product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ID'
+
+  /admin/products/{productId}/restore:
+    put:
+      tags:
+        - Product
+      description: Allows admins to restore a deleted product
+      operationId: restoreProduct
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: ID of the deleted product that is to be restored
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing a restored product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Product'
+
 components:
   parameters:
     Page:
@@ -1176,6 +1458,31 @@ components:
         - createdAt
         - updatedAt
 
+    AddressBody:
+      type: object
+      properties:
+        fullname:
+          type: string
+        phone:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        landmark:
+          type: string
+        country:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        postalCode:
+          type: string
+        isDefault:
+          type: boolean
+          default: false
+
     CartItem:
       type: object
       properties:
@@ -1245,3 +1552,32 @@ components:
         - createdAt
         - updatedAt
         - isDeleted
+
+    ProductBody:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+        title: 
+          type: string
+        description: 
+          type: string
+        price:
+          type: number
+          format: int32
+        brand:
+          type: string
+        category:  
+          type: string
+        stock:
+          type: integer
+          format: int32
+      required:
+        - image
+        - title
+        - description
+        - price
+        - brand
+        - category
+        - stock
