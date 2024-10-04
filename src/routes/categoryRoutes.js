@@ -4,7 +4,7 @@ import {
   getCategoryById,
   addNewCategory,
   updateCategory,
-  getProductCategories,
+  getListedCategories,
 } from '../controllers/categoryControllers.js';
 import { categorySchema, categoryIdSchema } from '../schemas/categorySchemas.js';
 import { isAuthenticated, authorizeRole } from '../middlewares/authMiddlewares.js';
@@ -38,6 +38,6 @@ router
     updateCategory
   );
 
-router.route('/product/categories').get(getProductCategories);
+router.route('/categories/listed').get(getListedCategories);
   
 export default router;

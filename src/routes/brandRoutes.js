@@ -4,7 +4,7 @@ import {
   getBrandById,
   addNewBrand,
   updateBrand,
-  getProductBrands,
+  getListedBrands,
 } from '../controllers/brandControllers.js';
 import { brandSchema, brandIdSchema } from '../schemas/brandSchemas.js';
 import { isAuthenticated, authorizeRole } from '../middlewares/authMiddlewares.js';
@@ -38,6 +38,6 @@ router
     updateBrand
   );
 
-router.route('/product/brands').get(getProductBrands);
+router.route('/product/brands').get(getListedBrands);
 
 export default router;
