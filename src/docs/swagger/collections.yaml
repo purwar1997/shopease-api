@@ -1311,6 +1311,149 @@ paths:
                   data:
                     $ref: '#/components/schemas/Product'
 
+  /categories:
+    get:
+      tags: 
+        - Categories
+      description: Fetches a list of all categories
+      operationId: getAllCategories
+      responses:
+        '200':
+          description: A JSON object containing a list of all categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+
+  /categories/{categoryId}:
+    get:
+      tags: 
+        - Categories
+      description: Fetches a category by ID
+      operationId: getCategoryById
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          description: ID of the category to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing a category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Category'
+
+  /admin/categories:
+    post:
+      tags:
+        - Categories
+      description: Allows admins to add a new category
+      operationId: addNewCategory
+      requestBody:
+        description: Payload containing category title and image
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryBody'
+            encoding:
+              image:
+                contentType: image/*
+      responses:
+        '201':
+          description: A JSON object containing a new category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: 
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Category'
+              
+  /admin/categories/{categoryId}:
+    post:
+      tags:
+        - Categories
+      description: Allows admins to update a category
+      operationId: updateCategory
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          description: ID of the category to be updated
+          schema:
+            type: string
+      requestBody:
+        description: Payload containing category title and image
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryBody'
+            encoding:
+              image:
+                contentType: image/*
+      responses:
+        '200':
+          description: A JSON object containing an updated category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Category'
+
+  /categories/listed:
+    get:
+      tags: 
+        - Categories
+      description: Fetches a list of categories under which products have been listed
+      operationId: getListedCategories
+      responses:
+        '200':
+          description: A JSON object containing a list of categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+
 components:
   parameters:
     Page:
@@ -1581,3 +1724,87 @@ components:
         - brand
         - category
         - stock
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        image:
+          type: object
+          properties:
+            url:
+              type: string
+            publicId:
+              type: string
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - title
+        - image
+        - createdBy
+        - createdAt
+        - updatedAt
+
+    CategoryBody:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+        title:
+          type: string
+      required:
+        - image
+        - title
+
+    Brand:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        logo:
+          type: object
+          properties:
+            url:
+              type: string
+            publicId:
+              type: string
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - name
+        - logo
+        - createdBy
+        - createdAt
+        - updatedAt
+
+    BrandBody:
+      type: object
+      properties:
+        logo:
+          type: string
+          format: binary
+        name:
+          type: string
+      required:
+        - logo
+        - name
