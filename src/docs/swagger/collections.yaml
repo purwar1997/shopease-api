@@ -1265,7 +1265,7 @@ paths:
 
     delete:
       tags: 
-        - Product
+        - Products
       description: Allows admins to delete a product 
       operationId: deleteProduct
       parameters:
@@ -1286,7 +1286,7 @@ paths:
   /admin/products/{productId}/restore:
     put:
       tags:
-        - Product
+        - Products
       description: Allows admins to restore a deleted product
       operationId: restoreProduct
       parameters:
