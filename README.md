@@ -6,9 +6,10 @@
 ## 0. Table of Contents
 
 1. [Overview](#1-overview)
-2. [Main Features](#2-main-features)
-3. [Schemas and Routes](#3-schemas-and-routes)
-4. [Deployed Link](#4-deployed-link)
+2. [API Documentation](#2-api-documentation)
+3. [Main Features](#3-main-features)
+4. [Schemas and Routes](#4-schemas-and-routes)
+
 
 ## 1. Overview
 
@@ -16,7 +17,11 @@ A RESTful API for an ecommerce platform to manage authentication, users, cart, w
 
 ![preview](./media/header.png)
 
-## 2. Main Features
+## 2. API Documentation
+
+Swagger is used for API documentation. To view API docs, [click here](http://api.shopease.shubhampurwar.in/docs/swagger).
+
+## 3. Main Features
 
 - User authentication via JSON Web Tokens
 - Database modelling using various Mongoose schemas
@@ -32,8 +37,9 @@ A RESTful API for an ecommerce platform to manage authentication, users, cart, w
 - Scheduled cron jobs to check the expiry status of coupons
 - Configured pm2 to keep API and cron jobs running as daemon processes
 - API and Cron jobs are hosted on DigitalOcean droplet using Nginx as a web server
+- Swagger for documentation of APIs
 
-## 3. Schemas and Routes
+## 4. Schemas and Routes
 
 Shopease API consists of 8 schemas and 70+ routes and controllers.
 
@@ -143,7 +149,3 @@ Shopease API consists of 8 schemas and 70+ routes and controllers.
 - Add product review -> POST /products/:productId/reviews
 - Fetch review by ID -> GET /reviews/:reviewId
 - Update product review -> PUT /reviews/:reviewId
-
-## 4. Deployed Link
-
-This project is hosted on this domain - [click here](http://api.shopease.shubhampurwar.in/).
