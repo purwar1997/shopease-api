@@ -4,7 +4,7 @@ dotenv.config();
 
 const config = {
   server: {
-    port: process.env.SERVER_PORT || 8080,
+    port: process.env.SERVER_PORT || 9000,
   },
   database: {
     url: process.env.MONGODB_URL,
