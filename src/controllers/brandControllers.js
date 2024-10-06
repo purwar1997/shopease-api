@@ -27,7 +27,7 @@ export const getBrandById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Brand fetched by ID successfully', brand);
 });
 
-// Allows an admin to add new brand
+// Allows admins to add a new brand
 export const addNewBrand = handleAsync(async (req, res) => {
   const { name } = req.body;
 
@@ -57,7 +57,7 @@ export const addNewBrand = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Brand added successfully', newBrand);
 });
 
-// Allows an admin to update brand details
+// Allows admins to update a brand
 export const updateBrand = handleAsync(async (req, res) => {
   const { brandId } = req.params;
   const { name } = req.body;
@@ -97,12 +97,12 @@ export const updateBrand = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Brand updated successfully', updatedBrand);
 });
 
-// Fetches a list of those brands under which products have been listed
-export const getProductBrands = handleAsync(async (_req, res) => {
+// Fetches a list of brands under which products have been listed
+export const getListedBrands = handleAsync(async (_req, res) => {
   const products = await Product.find({ isDeleted: false }).select('brand').populate('brand');
 
   let brands = products.map(product => product.brand);
-  brands = removeDuplicateItems(brands, '_id');
+  brands = removeDuplicateItems(brands, 'id');
 
-  sendResponse(res, 200, 'Product brands fetched successfully', brands);
+  sendResponse(res, 200, 'Listed brands fetched successfully', brands);
 });

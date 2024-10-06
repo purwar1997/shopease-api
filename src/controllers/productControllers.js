@@ -56,7 +56,7 @@ export const getProductById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Product fetched by ID successfully', product);
 });
 
-// Allows an admin to fetch a paginated list of products
+// Allows admins to fetch a paginated list of products
 export const adminGetProducts = handleAsync(async (req, res) => {
   const { categories, brands, rating, availability, deleted, sort, page } = req.query;
   const filters = {};
@@ -97,7 +97,7 @@ export const adminGetProducts = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Products fetched successfully', products);
 });
 
-// Allows an admin to fetch a product by ID
+// Allows admins to fetch a product by ID
 export const adminGetProductById = handleAsync(async (req, res) => {
   const { productId } = req.params;
 
@@ -110,7 +110,7 @@ export const adminGetProductById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Product fetched by ID successfully', product);
 });
 
-// Allows an admin to add new product
+// Allows admins to add a new product
 export const addNewProduct = handleAsync(async (req, res) => {
   const { title, brand, category } = req.body;
 
@@ -152,7 +152,7 @@ export const addNewProduct = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Product added successfully', newProduct);
 });
 
-// Allows an admin to update product details
+// Allows admins to update a product
 export const updateProduct = handleAsync(async (req, res) => {
   const { productId } = req.params;
   const { title, brand, category } = req.body;
@@ -205,7 +205,7 @@ export const updateProduct = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Product updated successfully', updatedProduct);
 });
 
-// Allows an admin to delete a product
+// Allows admins to delete a product
 export const deleteProduct = handleAsync(async (req, res) => {
   const { productId } = req.params;
 
@@ -226,7 +226,7 @@ export const deleteProduct = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Product deleted successfully', productId);
 });
 
-// Allows an admin to restore a deleted product
+// Allows admins to restore a deleted product
 export const restoreDeletedProduct = handleAsync(async (req, res) => {
   const { productId } = req.params;
 

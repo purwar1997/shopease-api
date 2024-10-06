@@ -27,7 +27,7 @@ export const getCategoryById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Category fetched by ID successfully', category);
 });
 
-// Allows an admin to add new category
+// Allows admins to add a new category
 export const addNewCategory = handleAsync(async (req, res) => {
   const { title } = req.body;
 
@@ -57,7 +57,7 @@ export const addNewCategory = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Category added successfully', newCategory);
 });
 
-// Allows an admin to update category details
+// Allows admins to update a category
 export const updateCategory = handleAsync(async (req, res) => {
   const { categoryId } = req.params;
   const { title } = req.body;
@@ -97,12 +97,12 @@ export const updateCategory = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Category updated successfully', updatedCategory);
 });
 
-// Fetches a list of those categories under which products have been listed
-export const getProductCategories = handleAsync(async (_req, res) => {
+// Fetches a list of categories under which products have been listed
+export const getListedCategories = handleAsync(async (_req, res) => {
   const products = await Product.find({ isDeleted: false }).select('category').populate('category');
 
   let categories = products.map(product => product.category);
-  categories = removeDuplicateItems(categories, '_id');
+  categories = removeDuplicateItems(categories, 'id');
 
-  sendResponse(res, 200, 'Product categories fetched successfully', categories);
+  sendResponse(res, 200, 'Listed categories fetched successfully', categories);
 });
