@@ -27,7 +27,7 @@ import {
   DELIVERY_OPTIONS,
 } from '../constants/common.js';
 
-// Allows a logged-in user to place an order
+// Allows users to place an order
 export const createOrder = handleAsync(async (req, res) => {
   const { items, deliveryMode } = req.body;
   const { user, coupon } = req;
@@ -80,7 +80,7 @@ export const createOrder = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Order created successfully', order);
 });
 
-// Confirm a placed order upon payment success
+// Confirms an order upon payment success
 export const confirmOrder = handleAsync(async (req, res) => {
   const { orderId } = req.params;
   const { razorpayPaymentId, razorpaySignature } = req.body;
@@ -122,11 +122,8 @@ export const confirmOrder = handleAsync(async (req, res) => {
       new: true,
     }
   )
-    .populate({
-      path: 'items.product',
-      select: { title: 1, price: 1 },
-    })
-    .populate(shippingAddress);
+    .populate('items.product')
+    .populate('shippingAddress');
 
   user.cart = [];
   await user.save();
@@ -155,7 +152,7 @@ export const confirmOrder = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order placed successfully', confirmedOrder);
 });
 
-// Allows a logged-in user to fetch a paginated list of their orders
+// Allows users to fetch a paginated list of their orders
 export const getOrders = handleAsync(async (req, res) => {
   const { duration, page } = req.query;
 
@@ -176,10 +173,7 @@ export const getOrders = handleAsync(async (req, res) => {
     .sort(sortRule)
     .skip(offset)
     .limit(limit)
-    .populate({
-      path: 'items.product',
-      select: { title: 1, description: 1, price: 1, image: 1, isDeleted: 1 },
-    });
+    .populate('items.product');
 
   const orderCount = await Order.countDocuments(filters);
 
@@ -188,15 +182,12 @@ export const getOrders = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Orders fetched successfully', orders);
 });
 
-// Allows a logged-in to fetch an order by ID 
+// Allows users to fetch one of their orders by ID 
 export const getOrderById = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 
   const order = await Order.findOne({ _id: orderId, isPaid: true, isDeleted: false })
-    .populate({
-      path: 'items.product',
-      select: { title: 1, description: 1, price: 1, image: 1 },
-    })
+    .populate('items.product')
     .populate('shippingAddress');
 
   if (!order) {
@@ -210,7 +201,7 @@ export const getOrderById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order fetched by ID successfully', order);
 });
 
-// Allows a logged-in user to cancel their order
+// Allows users to cancel their order
 export const cancelOrder = handleAsync(async (req, res) => {
   const { orderId } = req.params;
   const { user } = req;
@@ -237,10 +228,7 @@ export const cancelOrder = handleAsync(async (req, res) => {
     orderId,
     { status: ORDER_STATUS.CANCELLED },
     { runValidators: true, new: true }
-  ).populate({
-    path: 'items.product',
-    select: { title: 1, description: 1, price: 1, image: 1, isDeleted: 1 },
-  });
+  ).populate('items.product');
 
   await Promise.all(
     order.items.map(async item => {
@@ -272,7 +260,7 @@ export const cancelOrder = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order cancelled successfully', cancelledOrder);
 });
 
-// Allows an admin to fetch a paginated list of orders
+// Allows admins to fetch a paginated list of orders
 export const adminGetOrders = handleAsync(async (req, res) => {
   const { duration, status, paid, sort, page } = req.query;
 
@@ -297,10 +285,8 @@ export const adminGetOrders = handleAsync(async (req, res) => {
     .sort(sortRule)
     .skip(offset)
     .limit(limit)
-    .populate({
-      path: 'items.product',
-      select: { title: 1, price: 1 },
-    });
+    .populate('items.product')
+    .populate('shippingAddress')
 
   const orderCount = await Order.countDocuments(filters);
 
@@ -309,15 +295,12 @@ export const adminGetOrders = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Orders fetched successfully', orders);
 });
 
-// Allows an admin to fetch an order by ID
+// Allows admins to fetch an order by ID
 export const adminGetOrderById = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 
   const order = await Order.findOne({ _id: orderId, isDeleted: false })
-    .populate({
-      path: 'items.product',
-      select: { title: 1, description: 1, price: 1, image: 1 },
-    })
+    .populate('items.product')
     .populate('shippingAddress');
 
   if (!order) {
@@ -327,7 +310,7 @@ export const adminGetOrderById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order fetched by ID successfully', order);
 });
 
-// Allows an admin to update order status
+// Allows admins to update status of an order
 export const updateOrderStatus = handleAsync(async (req, res) => {
   const { orderId } = req.params;
   const { status } = req.body;
@@ -378,15 +361,14 @@ export const updateOrderStatus = handleAsync(async (req, res) => {
       statusUpdatedAt: new Date(),
     },
     { runValidators: true, new: true }
-  ).populate({
-    path: 'items.product',
-    select: { title: 1, price: 1 },
-  });
+  )
+   .populate('items.product')
+   .populate('shippingAddress')
 
   sendResponse(res, 200, 'Order status updated successfully', updatedOrder);
 });
 
-// Allows an admin to delete an order
+// Allows admins to delete an order
 export const deleteOrder = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 
