@@ -10,7 +10,7 @@ import sendEmail from '../services/sendEmail.js';
 import { orderSortRules } from '../utils/sortRules.js';
 import {
   sendResponse,
-  getCurrentDateMilliSec,
+  getCurrentDate,
   generateHmacSha256,
   checkBoolean,
 } from '../utils/helperFunctions.js';
@@ -77,7 +77,7 @@ export const createOrder = handleAsync(async (req, res) => {
     user: user._id,
   });
 
-  sendResponse(res, 201, 'Order created successfully', order);
+  sendResponse(res, 201, 'Order created successfully', order._id);
 });
 
 // Confirms an order upon payment success
@@ -113,7 +113,7 @@ export const confirmOrder = handleAsync(async (req, res) => {
       isPaid: true,
       paymentId: razorpayPaymentId,
       estimatedDeliveryDate: addDays(
-        new Date(),
+        getCurrentDate(),
         Math.ceil((SHIPPING_TIME.MIN + SHIPPING_TIME.MAX) / 2)
       ),
     },
@@ -159,7 +159,7 @@ export const getOrders = handleAsync(async (req, res) => {
   const filters = {
     user: req.user._id,
     createdAt: {
-      $gt: new Date(getCurrentDateMilliSec() - (duration - 1) * 24 * 60 * 60 * 1000),
+      $gt: new Date(getCurrentDate().getTime() - (duration - 1) * 24 * 60 * 60 * 1000),
     },
     isPaid: true,
     isDeleted: false,
@@ -182,7 +182,7 @@ export const getOrders = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Orders fetched successfully', orders);
 });
 
-// Allows users to fetch one of their orders by ID 
+// Allows users to fetch one of their orders by ID
 export const getOrderById = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 
@@ -265,7 +265,7 @@ export const adminGetOrders = handleAsync(async (req, res) => {
   const { duration, status, paid, sort, page } = req.query;
 
   const filters = {
-    createdAt: { $gt: getCurrentDateMilliSec() - (duration - 1) * 24 * 60 * 60 * 1000 },
+    createdAt: { $gt: getCurrentDate().getTime() - (duration - 1) * 24 * 60 * 60 * 1000 },
     isDeleted: false,
   };
 
@@ -286,7 +286,7 @@ export const adminGetOrders = handleAsync(async (req, res) => {
     .skip(offset)
     .limit(limit)
     .populate('items.product')
-    .populate('shippingAddress')
+    .populate('shippingAddress');
 
   const orderCount = await Order.countDocuments(filters);
 

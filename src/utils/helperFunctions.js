@@ -103,14 +103,13 @@ export const singularize = str => pluralize.singular(str);
 
 export const getDateString = date => format(new Date(date), 'MMMM d, yyyy');
 
-export const getCurrentDateMilliSec = () => {
+export const getCurrentDate = () => {
   const current = new Date();
   const year = current.getFullYear();
   const month = current.getMonth();
   const date = current.getDate();
 
-  const normalizedDate = new Date(year, month, date);
-  return normalizedDate.getTime();
+  return new Date(year, month, date);
 };
 
 export const checkBoolean = str => {

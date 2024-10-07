@@ -1,7 +1,7 @@
 import Coupon from '../models/coupon.js';
 import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
-import { sendResponse, getCurrentDateMilliSec } from '../utils/helperFunctions.js';
+import { sendResponse, getCurrentDate } from '../utils/helperFunctions.js';
 import { couponSortRules } from '../utils/sortRules.js';
 import { PAGINATION, DISCOUNT_TYPES, COUPON_STATUS, COUPON_STATES } from '../constants/common.js';
 
@@ -41,7 +41,7 @@ export const getCoupons = handleAsync(async (req, res) => {
   const { duration, discountType, status, sort, page } = req.query;
 
   const filters = {
-    expiryDate: { $lt: new Date(getCurrentDateMilliSec() + duration * 24 * 60 * 60 * 1000) },
+    expiryDate: { $lt: new Date(getCurrentDate().getTime() + duration * 24 * 60 * 60 * 1000) },
   };
 
   if (discountType.length > 0) {
