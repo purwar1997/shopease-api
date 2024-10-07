@@ -9,10 +9,10 @@ export const serializeDocs = data => {
   }
 
   if (!Array.isArray(data)) {
-    return data.toObject();
+    return data.toJSON();
   }
 
-  return data.map(doc => doc.toObject());
+  return data.map(doc => doc.toJSON());
 };
 
 export const sendResponse = (res, statusCode, message, data) => {

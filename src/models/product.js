@@ -101,7 +101,7 @@ const productSchema = new Schema(
   },
   {
     timestamps: true,
-    toObject: {
+    toJSON: {
       versionKey: false,
       transform: function (_doc, res) {
         res.id = res._id;

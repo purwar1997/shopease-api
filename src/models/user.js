@@ -99,9 +99,9 @@ const userSchema = new Schema(
   },
   {
     timestamps: true,
-    toObject: {
-      versionKey: false,
+    toJSON: {
       virtuals: true,
+      versionKey: false,
       transform: function (_doc, res) {
         res.id = res._id;
         delete res._id;
