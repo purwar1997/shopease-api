@@ -440,7 +440,7 @@ paths:
         - in: path
           name: userId
           required: true
-          description: ID of the user whose role is to be updated
+          description: ID of the user whose role needs to be updated
           schema:
             type: string
       requestBody:
@@ -994,31 +994,9 @@ paths:
       description: Fetches a list of products
       operationId: getProducts
       parameters:
-        - in: query
-          name: categories
-          description: Field to filter products based on the categories they belong to
-          schema:
-            type: array
-            items: 
-              type: string
-          style: form
-          explode: false
-        - in: query
-          name: brands
-          description: Field to filter products based on the brands they belong to
-          schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: false
-        - in: query
-          name: rating
-          description: Field to filter products by their rating
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 5
+        - $ref: '#/components/parameters/Categories'
+        - $ref: '#/components/parameters/Brands'
+        - $ref: '#/components/parameters/Rating'
         - in: query
           name: sort
           description: Option to sort products by
@@ -1030,7 +1008,6 @@ paths:
               - rating
               - price_asc
               - price_desc
-            default: recommended
         - $ref: '#/components/parameters/Page'
       responses:
         '200':
@@ -1089,36 +1066,16 @@ paths:
       description: Allows admins to fetch a list of products
       operationId: adminGetProducts
       parameters:
-        - in: query
-          name: categories
-          description: Field to filter products based on the categories they belong to
-          schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: false
-        - in: query
-          name: brands
-          description: Field to filter products based on the brands they belong to
-          schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: false
-        - in: query
-          name: rating
-          description: Field to filter products by their rating
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 5
+        - $ref: '#/components/parameters/Categories'
+        - $ref: '#/components/parameters/Brands'
+        - $ref: '#/components/parameters/Rating'
         - in: query
           name: availability
           description: Field to filter products based on whether they are in stock or not
           schema:
-            type: string
+            oneOf:
+              - type: boolean
+              - type: string
             enum:
               - true
               - false
@@ -1127,7 +1084,9 @@ paths:
           name: deleted
           description: Field to filter products based on whether they are deleted or not
           schema:
-            type: string
+            oneOf:
+              - type: boolean
+              - type: string
             enum:
               - true
               - false
@@ -1144,7 +1103,6 @@ paths:
               - price_desc
               - stock_asc
               - stock_desc
-            default: new
         - $ref: '#/components/parameters/Page'
       responses:
         '200':
@@ -1597,6 +1555,486 @@ paths:
                     items:
                       $ref: '#/components/schemas/Brand'
 
+  /orders:
+    get:
+      tags:
+        - Orders
+      description: Allows users to fetch their orders
+      operationId: getOrders
+      parameters:
+        - $ref: '#/components/parameters/Duration'
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: A JSON object containing a list of orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+          headers:
+            X-Total-Count:
+              description: Total number of user orders
+              schema:
+                type: integer
+
+    post:
+      tags:
+        - Orders
+      description: Allows users to place an order
+      operationId: createOrder
+      requestBody:
+        description: A JSON object containing order info
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product:
+                        type: string
+                      quantity:
+                        type: integer
+                      price:
+                        type: number
+                couponCode:
+                  type: string
+                shippingAddress:
+                  type: string
+                deliveryMode:
+                  type: string
+                  enum:
+                    - standard
+                    - express
+      responses:
+        '201':
+          description: A JSON object containing ID of a newly created order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data: 
+                    type: string
+
+  /orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      description: Allows users to fetch one of their orders by ID
+      operationId: getOrderById
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          description: ID of the order to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing an order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/OrderWithAddress'
+
+  /orders/{orderId}/confirm:
+    put:
+      tags:
+        - Orders
+      description: Confirms an order upon payment success
+      operationId: confirmOrder
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          description: ID of the order that is to be confirmed upon payment success
+          schema:
+            type: string
+      requestBody:
+        description: A JSON object containing razorpay payment info
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                razorpayPaymentId: 
+                  type: string
+                razorpaySignature:
+                  type: string
+      responses:
+        '200':
+          description: A JSON object containing a confirmed order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/OrderWithAddress'
+
+  /orders/{orderId}/cancel:
+    put:
+      tags:
+        - Orders
+      description: Allows users to cancel their order
+      operationId: cancelOrder
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          description: ID of the order to be cancelled
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing a cancelled order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Order'
+
+  /admin/orders:
+    get:
+      tags:
+        - Orders
+      description: Allows admins to fetch a list of orders
+      operationId: adminGetOrders
+      parameters:
+        - $ref: '#/components/parameters/Duration'
+        - in: query
+          name: status
+          description: Field to filter orders by their status
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - created
+                - processing
+                - shipped
+                - delivered
+                - cancelled
+          style: form
+          explode: false
+        - in: query
+          name: paid
+          description: Field on filter orders based on whether they are paid or not
+          schema:
+            oneOf:
+              - type: boolean
+              - type: string
+            enum:
+              - true
+              - false
+              - all
+          style: form
+          explode: false
+        - in: query
+          name: sort
+          description: Field to sort orders by date or amount in asc|desc order
+          schema:
+            type: string
+            enum:
+              - date_asc
+              - date_desc
+              - amount_asc
+              - amount_desc
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: A JSON object containing a list of orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderWithAddress'
+          headers:
+            X-Total-Count:
+              description: Total number of orders
+              schema:
+                type: integer
+
+  /admin/orders/{orderId}:
+    get:
+      tags:
+        - Orders
+      description: Allows admins to fetch an order by ID
+      operationId: adminGetOrderById
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          description: ID of the order to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing an order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/OrderWithAddress'
+    
+    put:
+      tags:
+        - Orders
+      description: Allows admins to update status of an order
+      operationId: updateOrderStatus
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          description: ID of the order whose status needs to be updated
+          schema:
+            type: string
+      requestBody:
+        description: A JSON object containing a new order status
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - processing
+                    - shipped
+                    - delivered
+      responses:
+        '200':
+          description: A JSON object containing an updated order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/OrderWithAddress'
+
+    delete:
+      tags:
+        - Orders
+      description: Allows admins to delete an order
+      operationId: deleteOrder
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          description: ID of the order to be deleted
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing ID of the deleted order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data: 
+                    type: string
+
+  /products/{productId}/reviews:
+    get:
+      tags:
+        - Reviews
+      description: Fetches reviews of a product
+      operationId: getProductReviews
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: ID of the product whose reviews need to be fetched
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: Option to sort reviews by
+          schema:
+            type: string
+            enum:
+              - top
+              - recent 
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: A JSON object containing a list of product reviews
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Reviews'
+          headers:
+            X-Total-Count:
+              description: Total number of product reviews
+              schema:
+                type: integer 
+
+    post:
+      tags:
+        - Reviews
+      description:  Allows users to add a review for a purchased product
+      operationId: addProductReview
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: ID of the product that needs to be reviewed
+          schema:
+            type: string
+      requestBody:
+        description: A JSON object containing review info
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewBody'
+      responses:
+        '201':
+          description: A JSON object containing a newly added review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Review'
+
+  /reviews/{reviewId}:
+    get:
+      tags:
+        - Reviews
+      description: Allows users to fetch one of their reviews by ID
+      operationId: getProductReviewById
+      parameters:
+        - in: path
+          name: reviewId
+          required: true
+          description: ID of the review to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing a product review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Review'
+
+    put:
+      tags:
+        - Reviews
+      description: Allows users to update their review
+      operationId: updateProductReview
+      parameters:
+        - in: path
+          name: reviewId
+          required: true
+          description: ID of the review to be updated
+          schema:
+            type: string
+      requestBody:
+        description: A JSON object containing review info
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewBody'
+      responses:
+        '200':
+          description: A JSON object containing an updated review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Review'
+
 components:
   parameters:
     Page:
@@ -1608,6 +2046,46 @@ components:
         format: int32
         minimum: 1
 
+    Categories:
+      in: query
+      name: categories
+      description: Field to filter products based on the categories they belong to
+      schema:
+        type: array
+        items: 
+          type: string
+      style: form
+      explode: false
+
+    Brands:
+      in: query
+      name: brands
+      description: Field to filter products based on the brands they belong to
+      schema:
+        type: array
+        items:
+          type: string
+      style: form
+      explode: false
+        
+    Rating:
+      in: query
+      name: rating
+      description: Field to filter products by their rating
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 5
+    
+    Duration: 
+      in: query
+      name: duration
+      description: Number of days to fetch past orders
+      schema:
+        type: integer
+        format: int32
+        min: 1
+      
   schemas:
     Success:
       type: object
@@ -2051,3 +2529,34 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    Review:
+      type: object
+      properties:
+        id:
+          type: string
+        rating:
+          type: integer
+        headline:
+          type: string
+        body:
+          type: string
+        product:
+          type: string
+        user:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ReviewBody:
+      rating:
+        type: integer
+      headline:
+        type: string
+      body:
+        type: string
+        
