@@ -209,7 +209,7 @@ export const adminSelfDemote = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Admin demoted to the role of a user successfully', demotedAdmin);
 });
 
-// Allows admins to delete their accounts
+// Allows admins to delete their account
 export const adminSelfDelete = handleAsync(async (req, res) => {
   const userId = req.user._id;
 

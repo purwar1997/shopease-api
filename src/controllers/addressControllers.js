@@ -72,7 +72,7 @@ export const updateAddress = handleAsync(async (req, res) => {
       isDeleted: false,
     });
 
-    if (!addressCount) {
+    if (addressCount === 0) {
       throw new CustomError(
         'Please set another address as the default before changing this address to non-default',
         409

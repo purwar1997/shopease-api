@@ -77,7 +77,7 @@ paths:
                   data:
                     $ref: '#/components/schemas/User'
         '201':
-          description: A JSON containing a new account
+          description: A JSON object containing a new account
           content: 
             application/json:
               schema: 
@@ -402,7 +402,6 @@ paths:
               description: Total number of users
               schema:
                 type: integer
-                format: int32
 
   /admin/users/{userId}:
     get:
@@ -454,6 +453,9 @@ paths:
               properties:
                 role:
                   type: string
+                  enum:
+                    - user
+                    - admin
       responses:
         '200':
           description: A JSON object containing an updated user
@@ -1051,7 +1053,6 @@ paths:
               description: Total number of products
               schema:
                 type: integer
-                format: int32
 
   /products/{productId}:
     get:
@@ -1166,7 +1167,6 @@ paths:
               description: Total number of products
               schema:
                 type: integer
-                format: int32
 
     post:
       tags: 
@@ -1174,7 +1174,7 @@ paths:
       description: Allows admins to add a new product
       operationId: addNewProduct
       requestBody:
-        description: Payload containing product info along with an image in binary encoded format
+        description: Payload containing product info along with an image
         required: true
         content:
           multipart/form-data:
@@ -1239,7 +1239,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: Payload containing new product info along with an image in binary encoded format
+        description: Payload containing new product info along with an image
         required: true
         content:
           multipart/form-data:
@@ -1644,6 +1644,9 @@ components:
           type: string
         role:
           type: string
+          enum:
+            - user
+            - admin
         avatar:
           type: object
           properties:
@@ -1668,6 +1671,7 @@ components:
           type: string
         resetPasswordExpiry:
           type: string
+          format: date-time
         isDeleted:
           type: boolean
         deletedBy:
@@ -1676,26 +1680,17 @@ components:
           type: string
         deletedAt:
           type: string
+          format: date-time
         roleUpdatedAt:
           type: string
+          format: date-time
         createdAt:
           type: string
+          format: date-time
         updatedAt:
           type: string
-      required:
-        - id
-        - firstname
-        - lastname
-        - fullname
-        - email
-        - phone
-        - role
-        - cart
-        - wishlist
-        - isDeleted
-        - createdAt
-        - updatedAt
-
+          format: date-time
+      
     Address:
       type: object
       properties:
@@ -1727,22 +1722,10 @@ components:
           type: boolean
         createdAt:
           type: string
+          format: date-time
         updatedAt:
           type: string
-      required:
-        - id
-        - fullname
-        - phone
-        - line1
-        - country
-        - state
-        - city
-        - postalCode
-        - isDefault
-        - user
-        - isDeleted
-        - createdAt
-        - updatedAt
+          format: date-time
 
     AddressBody:
       type: object
@@ -1815,29 +1798,15 @@ components:
           type: string
         createdAt:
           type: string
+          format: date-time
         updatedAt:
           type: string
+          format: date-time
         deletedAt:
           type: string
+          format: date-time
         isDeleted:
           type: boolean
-          
-      required:
-        - id
-        - title
-        - description
-        - price
-        - brand
-        - category
-        - stock
-        - image
-        - soldUnits
-        - avgRating
-        - reviewCount
-        - createdBy
-        - createdAt
-        - updatedAt
-        - isDeleted
 
     ProductBody:
       type: object
@@ -1851,7 +1820,6 @@ components:
           type: string
         price:
           type: number
-          format: int32
         brand:
           type: string
         category:  
@@ -1888,15 +1856,10 @@ components:
           type: string
         createdAt:
           type: string
+          format: date-time
         updatedAt:
           type: string
-      required:
-        - id
-        - title
-        - image
-        - createdBy
-        - createdAt
-        - updatedAt
+          format: date-time
 
     CategoryBody:
       type: object
@@ -1930,15 +1893,10 @@ components:
           type: string
         createdAt:
           type: string
+          format: date-time
         updatedAt:
           type: string
-      required:
-        - id
-        - name
-        - logo
-        - createdBy
-        - createdAt
-        - updatedAt
+          format: date-time
 
     BrandBody:
       type: object
@@ -1951,3 +1909,145 @@ components:
       required:
         - logo
         - name
+
+    Order:
+      type: object
+      properties:
+        id: 
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/Product'
+              quantity:
+                type: integer
+              price:
+                type: number
+        orderAmount:
+          type: number
+        discount:
+          type: number
+        shippingCharges:
+          type: number
+        taxAmount:
+          type: number
+        totalAmount:
+          type: number
+        couponCode:
+          type: string
+        shippingAddress:
+          type: string
+        deliveryMode:
+          type: string
+          enum:
+            - standard
+            - express
+        isPaid:
+          type: boolean
+        paymentId: 
+          type: string
+        status:
+          type: string
+          enum:
+            - created 
+            - processing
+            - shipped
+            - delivered
+            - cancelled
+        estimatedDeliveryDate:
+          type: string
+          format: date-time
+        user:
+          type: string
+        isDeleted:
+          type: boolean
+        deletedBy:
+          type: string
+        statusLastUpdatedBy:
+          type: string
+        deletedAt:
+          type: string
+          format: date-time
+        statusUpdatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    OrderWithAddress:
+      type: object
+      properties:
+        id: 
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/Product'
+              quantity:
+                type: integer
+              price:
+                type: number
+        orderAmount:
+          type: number
+        discount:
+          type: number
+        shippingCharges:
+          type: number
+        taxAmount:
+          type: number
+        totalAmount:
+          type: number
+        couponCode:
+          type: string
+        shippingAddress:
+          $ref: '#/components/schemas/Address'
+        deliveryMode:
+          type: string
+          enum:
+            - standard
+            - express
+        isPaid:
+          type: boolean
+        paymentId: 
+          type: string
+        status:
+          type: string
+          enum:
+            - created 
+            - processing
+            - shipped
+            - delivered
+            - cancelled
+        estimatedDeliveryDate:
+          type: string
+          format: date-time
+        user:
+          type: string
+        isDeleted:
+          type: boolean
+        deletedBy:
+          type: string
+        statusLastUpdatedBy:
+          type: string
+        deletedAt:
+          type: string
+          format: date-time
+        statusUpdatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
