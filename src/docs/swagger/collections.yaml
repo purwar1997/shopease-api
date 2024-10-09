@@ -458,7 +458,7 @@ paths:
                     - admin
       responses:
         '200':
-          description: A JSON object containing an updated user
+          description: A JSON object containing a user with updated role
           content:
             application/json:
               schema:
@@ -1855,7 +1855,7 @@ paths:
                     - delivered
       responses:
         '200':
-          description: A JSON object containing an updated order
+          description: A JSON object containing an order with updated status
           content:
             application/json:
               schema:
@@ -1932,7 +1932,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Reviews'
+                      $ref: '#/components/schemas/Review'
           headers:
             X-Total-Count:
               description: Total number of product reviews
@@ -2553,10 +2553,12 @@ components:
           format: date-time
 
     ReviewBody:
-      rating:
-        type: integer
-      headline:
-        type: string
-      body:
-        type: string
+      type: object
+      properties:
+        rating:
+          type: integer
+        headline:
+          type: string
+        body:
+          type: string
         
