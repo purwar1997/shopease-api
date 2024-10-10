@@ -75,6 +75,6 @@ export const resetPasswordSchema = customJoi.object({
   confirmPassword: confirmPasswordSchema,
 });
 
-export const resetPasswordTokenSchema = Joi.object({
-  token: getPathParamSchema('Reset password token'),
+export const tokenSchema = Joi.object({
+  token: getPathParamSchema('Reset password token', ':token'),
 });

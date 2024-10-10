@@ -55,5 +55,5 @@ export const reviewsQuerySchema = Joi.object({
 });
 
 export const reviewIdSchema = Joi.object({
-  reviewId: getPathIDSchema('Review ID'),
+  reviewId: getPathIDSchema('Review ID', ':reviewId'),
 });

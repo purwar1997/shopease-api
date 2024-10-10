@@ -13,5 +13,5 @@ export const brandSchema = customJoi.object({
 });
 
 export const brandIdSchema = Joi.object({
-  brandId: getPathIDSchema('Brand ID'),
+  brandId: getPathIDSchema('Brand ID', ':brandId'),
 });

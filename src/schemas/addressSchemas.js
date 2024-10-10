@@ -74,5 +74,5 @@ export const addressSchema = customJoi.object({
 });
 
 export const addressIdSchema = Joi.object({
-  addressId: getPathIDSchema('Address ID'),
+  addressId: getPathIDSchema('Address ID', ':addressId'),
 });

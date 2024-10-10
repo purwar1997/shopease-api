@@ -13,5 +13,5 @@ export const categorySchema = customJoi.object({
 });
 
 export const categoryIdSchema = Joi.object({
-  categoryId: getPathIDSchema('Category ID'),
+  categoryId: getPathIDSchema('Category ID', ':categoryId'),
 });

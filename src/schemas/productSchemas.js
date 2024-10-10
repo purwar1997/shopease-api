@@ -4,7 +4,7 @@ import { formatOptions } from '../utils/helperFunctions.js';
 import {
   roundToTwoDecimalPlaces,
   removeExtraInnerSpaces,
-  parseCommaSeparatedStrings,
+  sanitizeCommaSeparatedValues,
 } from '../utils/joiSanitizers.js';
 import { validateObjectId, validateOption } from '../utils/joiValidators.js';
 import { pageSchema, getPathIDSchema } from './commonSchemas.js';
@@ -16,7 +16,7 @@ const categoriesSchema = Joi.string()
   .trim()
   .empty('')
   .default([])
-  .custom(parseCommaSeparatedStrings)
+  .custom(sanitizeCommaSeparatedValues)
   .messages({
     'string.base': 'Categories must be a string',
   });
@@ -25,7 +25,7 @@ const brandsSchema = Joi.string()
   .trim()
   .empty('')
   .default([])
-  .custom(parseCommaSeparatedStrings)
+  .custom(sanitizeCommaSeparatedValues)
   .messages({
     'string.base': 'Brands must be a string',
   });
@@ -167,5 +167,5 @@ export const adminProductsQuerySchema = Joi.object({
 });
 
 export const productIdSchema = Joi.object({
-  productId: getPathIDSchema('Product ID'),
+  productId: getPathIDSchema('Product ID', ':productId'),
 });

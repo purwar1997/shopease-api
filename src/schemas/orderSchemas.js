@@ -2,7 +2,7 @@ import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
 import { getPathParamSchema, pageSchema } from './commonSchemas.js';
 import { formatOptions } from '../utils/helperFunctions.js';
-import { roundToTwoDecimalPlaces, stripEmptyKeys } from '../utils/joiSanitizers.js';
+import { roundToTwoDecimalPlaces, stripEmptyFields } from '../utils/joiSanitizers.js';
 import {
   validateObjectId,
   validateOption,
@@ -99,9 +99,9 @@ export const orderSchema = customJoi
         'any.invalid': `Invalid delivery mode. Valid options are: ${formatOptions(DELIVERY_MODES)}`,
       }),
   })
-  .custom(stripEmptyKeys);
+  .custom(stripEmptyFields);
 
-export const confirmOrderSchema = customJoi.object({
+export const paymentInfoSchema = customJoi.object({
   razorpayPaymentId: Joi.string().trim().required().messages({
     'any.required': 'Payment ID is required',
     'string.base': 'Payment ID must be a string',
@@ -180,5 +180,5 @@ export const orderStatusSchema = customJoi.object({
 });
 
 export const orderIdSchema = Joi.object({
-  orderId: getPathParamSchema('Order ID'),
+  orderId: getPathParamSchema('Order ID', ':orderId'),
 });

@@ -7,7 +7,7 @@ import { ROLES } from '../constants/common.js';
 import { USER_SORT_OPTIONS } from '../constants/sortOptions.js';
 import { REGEX } from '../constants/regexPatterns.js';
 
-export const updateUserSchema = customJoi
+export const userSchema = customJoi
   .object({
     firstname: Joi.string().trim().pattern(REGEX.NAME).max(50).required().messages({
       'any.required': 'First name is required',
@@ -45,7 +45,7 @@ export const updateUserSchema = customJoi
     'object.with': 'Confirm password is required',
   });
 
-export const updateRoleSchema = customJoi.object({
+export const userRoleSchema = customJoi.object({
   role: Joi.string()
     .trim()
     .lowercase()
@@ -86,5 +86,5 @@ export const usersQuerySchema = Joi.object({
 });
 
 export const userIdSchema = Joi.object({
-  userId: getPathIDSchema('User ID'),
+  userId: getPathIDSchema('User ID', ':userId'),
 });
