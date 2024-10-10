@@ -6,7 +6,7 @@ import { stripDiscountValue } from '../utils/joiSanitizers.js';
 import { pageSchema, getPathIDSchema } from './commonSchemas.js';
 import { DISCOUNT_TYPES, DISCOUNT, COUPON_STATUS } from '../constants/common.js';
 import { COUPON_SORT_OPTIONS } from '../constants/sortOptions.js';
-import { EXPIRY_DURATION } from '../constants/filterOptions.js';
+import { COUPON_EXPIRATION } from '../constants/filterOptions.js';
 import { REGEX } from '../constants/regexPatterns.js';
 
 export const couponSchema = customJoi
@@ -81,18 +81,17 @@ export const couponCodeSchema = Joi.object({
 });
 
 export const couponsQuerySchema = Joi.object({
-  duration: Joi.number()
+  daysUntilExpiration: Joi.number()
     .integer()
-    .min(EXPIRY_DURATION.MIN)
-    .max(EXPIRY_DURATION.MAX)
+    .min(COUPON_EXPIRATION.MIN)
+    .max(COUPON_EXPIRATION.MAX)
     .empty('')
-    .default(EXPIRY_DURATION.DEFAULT)
     .unsafe()
     .messages({
-      'number.base': 'Expiry duration must be a number',
-      'number.integer': 'Expiry duration must be an integer',
-      'number.min': `Expiry duration must be at least ${EXPIRY_DURATION.MIN}`,
-      'number.max': `Expiry duration must be less than or equal to ${EXPIRY_DURATION.MAX}`,
+      'number.base': 'Days until expiration must be a number',
+      'number.integer': 'Days until expiration must be an integer',
+      'number.min': `Days until expiration must be at least ${COUPON_EXPIRATION.MIN}`,
+      'number.max': `Days until expiration must be less than or equal to ${COUPON_EXPIRATION.MAX}`,
     }),
 
   discountType: Joi.string()

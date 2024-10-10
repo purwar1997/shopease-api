@@ -16,7 +16,7 @@ const allowedStatusForUpdate = { ...ORDER_STATUS };
 delete allowedStatusForUpdate.CREATED;
 delete allowedStatusForUpdate.CANCELLED;
 
-const durationSchema = Joi.number()
+const daysInPastSchema = Joi.number()
   .integer()
   .min(ORDER_DURATION.MIN)
   .max(ORDER_DURATION.MAX)
@@ -24,10 +24,10 @@ const durationSchema = Joi.number()
   .default(ORDER_DURATION.DEFAULT)
   .unsafe()
   .messages({
-    'number.base': 'Order duration must be a number',
-    'number.integer': 'Order duration must be an integer',
-    'number.min': `Order duration must be at least ${ORDER_DURATION.MIN}`,
-    'number.max': `Order duration must be less than or equal to ${ORDER_DURATION.MAX}`,
+    'number.base': 'Days in past must be a number',
+    'number.integer': 'Days in past must be an integer',
+    'number.min': `Days in past must be at least ${ORDER_DURATION.MIN}`,
+    'number.max': `Days in past must be less than or equal to ${ORDER_DURATION.MAX}`,
   });
 
 const orderItemSchema = Joi.object({
@@ -116,12 +116,12 @@ export const paymentInfoSchema = customJoi.object({
 });
 
 export const ordersQuerySchema = Joi.object({
-  duration: durationSchema,
+  daysInPast: daysInPastSchema,
   page: pageSchema,
 });
 
 export const adminOrdersQuerySchema = Joi.object({
-  duration: durationSchema,
+  daysInPast: daysInPastSchema,
 
   status: Joi.string()
     .trim()

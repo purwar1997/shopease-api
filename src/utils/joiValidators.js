@@ -29,7 +29,9 @@ export const validateCommaSeparatedValues = options => (value, helpers) => {
     return helpers.error('string.base');
   }
 
-  const valuesArray = value.split(',').map(str => str.trim().toLowerCase());
+  let valuesArray = value.split(',').map(str => str.trim().toLowerCase());
+  valuesArray = [...new Set(valuesArray)];
+
   options = Object.values(options);
 
   for (const value of valuesArray) {

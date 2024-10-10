@@ -137,7 +137,7 @@ export const getUserById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'User fetched by ID successfully', user);
 });
 
-// Allows admins to update role of a user
+// Allows admins to update the role of a user
 export const updateUserRole = handleAsync(async (req, res) => {
   const { userId } = req.params;
   const { role } = req.body;

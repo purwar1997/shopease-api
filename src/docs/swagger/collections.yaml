@@ -434,7 +434,7 @@ paths:
     put:
       tags: 
         - Users
-      description: Allows admins to update role of a user
+      description: Allows admins to update the role of a user
       operationId: updateUserRole
       parameters:
         - in: path
@@ -1555,6 +1555,285 @@ paths:
                     items:
                       $ref: '#/components/schemas/Brand'
 
+  /coupons:
+    get:
+      tags: 
+        - Coupons
+      description: Fetches a list of all valid coupons
+      operationId: getValidCoupons
+      responses:
+        '200':
+          description: A JSON object containing a list of valid coupons
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Coupon'
+
+  /coupons/validity:
+    get:
+      tags:
+        - Coupons
+      description: Allows users to check the validity of a coupon
+      operationId: checkCouponValidity
+      parameters:
+        - in: query
+          name: couponCode
+          required: true
+          description: Coupon code that needs to be verified
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Provided coupon is valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+
+  /admin/coupons:
+    get:
+      tags:
+        - Coupons
+      description: Allows admins to fetch a list of coupons
+      operationId: adminGetCoupons
+      parameters:
+        - in: query
+          name: daysUntilExpiration
+          description: Number of days until expiration of coupons
+          schema:
+            type: integer
+            format: int32
+            min: 1
+        - in: query
+          name: discountType
+          description: Field to filter coupons by their discount type
+          schema: 
+            type: array
+            items:
+              type: string
+              enum:
+                - flat
+                - percentage
+          style: form
+          explode: false
+        - in: query
+          name: status
+          description: Field to filter coupons by their status
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - active
+                - inactive
+                - expired
+          style: form
+          explode: false
+        - in: query
+          name: sort
+          description: Option to sort coupons by expiry date in asc|desc order
+          schema:
+            type: string
+            enum:
+              - expiry_asc
+              - expiry_desc
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: A JSON object containing a list of coupons
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Coupon'
+          headers:
+            X-Total-Count:
+              description: Total number of coupons
+              schema:
+                type: integer
+
+    post: 
+      tags:
+        - Coupons
+      description: Allows admins to create a new coupon
+      operationId: createCoupon
+      requestBody:
+        description: A JSON object containing coupon info
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponBody'
+      responses:
+        '201':
+          description: A JSON object containing a new coupon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Coupon'
+
+  /admin/coupons/{couponId}:
+    get:
+      tags:
+        - Coupons
+      description: Allows admins to fetch a coupon by ID
+      operationId: getCouponById
+      parameters:
+        - in: path
+          name: couponId
+          required: true
+          description: ID of the coupon to be fetched
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing a coupon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Coupon'
+
+    put:
+      tags:
+        - Coupons
+      description: Allows admins to update a coupon
+      operationId: updateCoupon
+      parameters:
+        - in: path
+          name: couponId
+          required: true
+          description: ID of the coupon to be updated
+          schema:
+            type: string
+      requestBody:
+        description: A JSON object containing new coupon info
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponBody'
+      responses:
+        '200':
+          description: A JSON object containing an updated coupon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Coupon'
+
+    delete:
+      tags:
+        - Coupons
+      description: Allows admins to delete a coupon
+      operationId: deleteCoupon
+      parameters:
+        - in: path
+          name: couponId
+          required: true
+          description: ID of the coupon to be deleted
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing ID of the deleted coupon
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ID'
+
+  /admin/coupons/{couponId}/activate:
+    put:
+      tags:
+        - Coupons
+      description: Allows admins to activate a coupon
+      operationId: activateCoupon
+      parameters:
+        - in: path
+          name: couponId
+          required: true
+          description: ID of the coupon to be activated
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing an active coupon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Coupon'
+
+  /admin/coupons/{couponId}/deactivate:
+    put:
+      tags:
+        - Coupons
+      description: Allows admins to deactivate a coupon
+      operationId: deactivateCoupon
+      parameters:
+        - in: path
+          name: couponId
+          required: true
+          description: ID of the coupon to be deactivated
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON object containing an inactive coupon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Coupon'
+                    
   /orders:
     get:
       tags:
@@ -1562,7 +1841,7 @@ paths:
       description: Allows users to fetch their orders
       operationId: getOrders
       parameters:
-        - $ref: '#/components/parameters/Duration'
+        - $ref: '#/components/parameters/DaysInPast'
         - $ref: '#/components/parameters/Page'
       responses:
         '200':
@@ -1597,28 +1876,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                items:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      product:
-                        type: string
-                      quantity:
-                        type: integer
-                      price:
-                        type: number
-                couponCode:
-                  type: string
-                shippingAddress:
-                  type: string
-                deliveryMode:
-                  type: string
-                  enum:
-                    - standard
-                    - express
+              $ref: '#/components/schemas/OrderBody'
       responses:
         '201':
           description: A JSON object containing ID of a newly created order
@@ -1737,7 +1995,7 @@ paths:
       description: Allows admins to fetch a list of orders
       operationId: adminGetOrders
       parameters:
-        - $ref: '#/components/parameters/Duration'
+        - $ref: '#/components/parameters/DaysInPast'
         - in: query
           name: status
           description: Field to filter orders by their status
@@ -1830,7 +2088,7 @@ paths:
     put:
       tags:
         - Orders
-      description: Allows admins to update status of an order
+      description: Allows admins to update the status of an order
       operationId: updateOrderStatus
       parameters:
         - in: path
@@ -2077,9 +2335,9 @@ components:
         minimum: 1
         maximum: 5
     
-    Duration: 
+    DaysInPast:
       in: query
-      name: duration
+      name: daysInPast
       description: Number of days to fetch past orders
       schema:
         type: integer
@@ -2388,6 +2646,62 @@ components:
         - logo
         - name
 
+    Coupon: 
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        discountType:
+          type: string
+          enum:
+            - flat
+            - percentage
+        flatDiscount:
+          type: integer
+        percentageDiscount:
+          type: integer
+        expiryDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - expired
+        createdBy:
+          type: string
+        lastUpdatedBy:
+          type: string
+        activeStatusLastUpdatedBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CouponBody:
+      type: object
+      properties:
+        code:
+          type: string
+        discountType:
+          type: string
+          enum:
+            - flat
+            - percentage
+        flatDiscount:
+          type: integer
+        percentageDiscount:
+          type: integer
+        expiryDate:
+          type: string
+          format: date-time
+
     Order:
       type: object
       properties:
@@ -2529,6 +2843,30 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    OrderBody:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+              quantity:
+                type: integer
+              price:
+                type: number
+        couponCode:
+          type: string
+        shippingAddress:
+          type: string
+        deliveryMode:
+          type: string
+          enum:
+            - standard
+            - express
 
     Review:
       type: object

@@ -154,12 +154,12 @@ export const confirmOrder = handleAsync(async (req, res) => {
 
 // Allows users to fetch a paginated list of their orders
 export const getOrders = handleAsync(async (req, res) => {
-  const { duration, page } = req.query;
+  const { daysInPast, page } = req.query;
 
   const filters = {
     user: req.user._id,
     createdAt: {
-      $gt: new Date(getCurrentDate().getTime() - (duration - 1) * 24 * 60 * 60 * 1000),
+      $gt: new Date(getCurrentDate().getTime() - (daysInPast - 1) * 24 * 60 * 60 * 1000),
     },
     isPaid: true,
     isDeleted: false,
@@ -262,10 +262,10 @@ export const cancelOrder = handleAsync(async (req, res) => {
 
 // Allows admins to fetch a paginated list of orders
 export const adminGetOrders = handleAsync(async (req, res) => {
-  const { duration, status, paid, sort, page } = req.query;
+  const { daysInPast, status, paid, sort, page } = req.query;
 
   const filters = {
-    createdAt: { $gt: getCurrentDate().getTime() - (duration - 1) * 24 * 60 * 60 * 1000 },
+    createdAt: { $gt: getCurrentDate().getTime() - (daysInPast - 1) * 24 * 60 * 60 * 1000 },
     isDeleted: false,
   };
 
@@ -310,7 +310,7 @@ export const adminGetOrderById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order fetched by ID successfully', order);
 });
 
-// Allows admins to update status of an order
+// Allows admins to update the status of an order
 export const updateOrderStatus = handleAsync(async (req, res) => {
   const { orderId } = req.params;
   const { status } = req.body;

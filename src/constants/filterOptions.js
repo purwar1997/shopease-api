@@ -4,7 +4,7 @@ export const FILTER_OPTIONS = Object.freeze({
   ALL: 'all',
 });
 
-export const EXPIRY_DURATION = Object.freeze({
+export const COUPON_EXPIRATION = Object.freeze({
   MIN: 1,
   MAX: Number.MAX_SAFE_INTEGER,
   DEFAULT: 15,

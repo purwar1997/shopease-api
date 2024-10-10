@@ -2,7 +2,7 @@ import express from 'express';
 import {
   getValidCoupons,
   checkCouponValidity,
-  getCoupons,
+  adminGetCoupons,
   createCoupon,
   getCouponById,
   updateCoupon,
@@ -35,7 +35,7 @@ router
 router
   .route('/admin/coupons')
   .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
-  .get(validateQueryParams(couponsQuerySchema), getCoupons)
+  .get(validateQueryParams(couponsQuerySchema), adminGetCoupons)
   .post(validatePayload(couponSchema), createCoupon);
 
 router
