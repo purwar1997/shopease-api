@@ -11,7 +11,7 @@ import {
   loginSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
-  resetPasswordTokenSchema,
+  tokenSchema,
 } from '../schemas/authSchemas.js';
 import { isAuthenticated } from '../middlewares/authMiddlewares.js';
 import { validatePayload, validatePathParams } from '../middlewares/requestValidators.js';
@@ -25,10 +25,6 @@ router.route('/logout').post(isAuthenticated, logout);
 router.route('/password/forgot').post(validatePayload(forgotPasswordSchema), forgotPassword);
 router
   .route('/password/reset/:token')
-  .put(
-    validatePathParams(resetPasswordTokenSchema),
-    validatePayload(resetPasswordSchema),
-    resetPassword
-  );
+  .put(validatePathParams(tokenSchema), validatePayload(resetPasswordSchema), resetPassword);
 
 export default router;

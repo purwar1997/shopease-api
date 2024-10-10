@@ -16,11 +16,10 @@ import {
 } from '../controllers/userControllers.js';
 import {
   userIdSchema,
-  updateUserSchema,
-  updateRoleSchema,
+  userSchema,
+  userRoleSchema,
   usersQuerySchema,
 } from '../schemas/userSchemas.js';
-import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 import { isAuthenticated, authorizeRole } from '../middlewares/authMiddlewares.js';
 import {
   validatePayload,
@@ -36,14 +35,14 @@ const router = express.Router();
 
 router
   .route('/users/self')
-  .all(isHttpMethodAllowed, isAuthenticated)
+  .all(isAuthenticated)
   .get(getProfile)
-  .put(validatePayload(updateUserSchema), verifyPhone, updateProfile)
+  .put(validatePayload(userSchema), verifyPhone, updateProfile)
   .delete(deleteAccount);
 
 router
   .route('/users/self/avatar')
-  .all(isHttpMethodAllowed, isAuthenticated)
+  .all(isAuthenticated)
   .post(parseFormData(UPLOAD_FOLDERS.USER_AVATARS, UPLOAD_FILES.USER_AVATAR), addProfilePhoto)
   .put(removeProfilePhoto);
 
@@ -66,12 +65,12 @@ router
 
 router
   .route('/admin/users/:userId')
-  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
   .get(validatePathParams(userIdSchema), getUserById)
   .put(
     checkAdminSelfUpdate,
     validatePathParams(userIdSchema),
-    validatePayload(updateRoleSchema),
+    validatePayload(userRoleSchema),
     updateUserRole
   )
   .delete(checkAdminSelfDelete, validatePathParams(userIdSchema), deleteUser);
@@ -80,7 +79,7 @@ router.route('/admin/admins').get(isAuthenticated, authorizeRole(ROLES.ADMIN), g
 
 router
   .route('/admin/self')
-  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
   .put(adminSelfDemote)
   .delete(adminSelfDelete);
 

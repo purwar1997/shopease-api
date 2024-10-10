@@ -12,13 +12,12 @@ import {
 } from '../controllers/orderControllers.js';
 import {
   orderSchema,
-  confirmOrderSchema,
+  paymentInfoSchema,
   ordersQuerySchema,
   adminOrdersQuerySchema,
   orderStatusSchema,
   orderIdSchema,
 } from '../schemas/orderSchemas.js';
-import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 import { isAuthenticated, authorizeRole } from '../middlewares/authMiddlewares.js';
 import {
   validatePayload,
@@ -36,7 +35,7 @@ const router = express.Router();
 
 router
   .route('/orders')
-  .all(isHttpMethodAllowed, isAuthenticated)
+  .all( isAuthenticated)
   .get(validateQueryParams(ordersQuerySchema), getOrders)
   .post(
     validatePayload(orderSchema),
@@ -55,7 +54,7 @@ router
   .put(
     isAuthenticated,
     validatePathParams(orderIdSchema),
-    validatePayload(confirmOrderSchema),
+    validatePayload(paymentInfoSchema),
     confirmOrder
   );
 
@@ -75,7 +74,6 @@ router
 router
   .route('/admin/orders/:orderId')
   .all(
-    isHttpMethodAllowed,
     isAuthenticated,
     authorizeRole(ROLES.ADMIN),
     validatePathParams(orderIdSchema)

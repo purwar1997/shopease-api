@@ -16,7 +16,6 @@ import {
   couponsQuerySchema,
   couponIdSchema,
 } from '../schemas/couponSchemas.js';
-import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 import { isAuthenticated, authorizeRole } from '../middlewares/authMiddlewares.js';
 import {
   validatePayload,
@@ -35,14 +34,14 @@ router
 
 router
   .route('/admin/coupons')
-  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all( isAuthenticated, authorizeRole(ROLES.ADMIN))
   .get(validateQueryParams(couponsQuerySchema), getCoupons)
   .post(validatePayload(couponSchema), createCoupon);
 
 router
   .route('/admin/coupons/:couponId')
   .all(
-    isHttpMethodAllowed,
+    
     isAuthenticated,
     authorizeRole(ROLES.ADMIN),
     validatePathParams(couponIdSchema)

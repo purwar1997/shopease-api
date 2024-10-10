@@ -15,7 +15,6 @@ import {
   productsQuerySchema,
   adminProductsQuerySchema,
 } from '../schemas/productSchemas.js';
-import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 import { isAuthenticated, authorizeRole } from '../middlewares/authMiddlewares.js';
 import { parseFormData } from '../middlewares/parseFormData.js';
 import {
@@ -32,7 +31,7 @@ router.route('/products/:productId').get(validatePathParams(productIdSchema), ge
 
 router
   .route('/admin/products')
-  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all( isAuthenticated, authorizeRole(ROLES.ADMIN))
   .get(validateQueryParams(adminProductsQuerySchema), adminGetProducts)
   .post(
     parseFormData(UPLOAD_FOLDERS.PRODUCT_IMAGES, UPLOAD_FILES.PRODUCT_IMAGE),
@@ -43,7 +42,6 @@ router
 router
   .route('/admin/products/:productId')
   .all(
-    isHttpMethodAllowed,
     isAuthenticated,
     authorizeRole(ROLES.ADMIN),
     validatePathParams(productIdSchema)
