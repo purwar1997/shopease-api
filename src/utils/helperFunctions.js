@@ -80,23 +80,22 @@ export const formatCastError = error => {
 };
 
 export const formatOptions = options => {
-  options = Object.values(options);
+  const optionsList = Object.values(options);
 
-  if (options.length === 0) {
+  if (optionsList.length === 0) {
     return '';
   }
 
-  if (options.length === 1) {
-    return options[0];
+  if (optionsList.length === 1) {
+    return optionsList[0];
   }
 
-  if (options.length === 2) {
-    return options.join(' and ');
+  if (optionsList.length === 2) {
+    return `${optionsList[0]} and ${optionsList[1]}`;
   }
 
-  const lastOption = options.pop();
-
-  return `${options.join(', ')} and ${lastOption}`;
+  const lastOption = optionsList.pop();
+  return `${optionsList.join(', ')} and ${lastOption}`;
 };
 
 export const singularize = str => pluralize.singular(str);
@@ -112,12 +111,16 @@ export const getCurrentDate = () => {
   return new Date(year, month, date);
 };
 
-export const checkBoolean = str => {
+export const isBoolean = str => {
   str = str.trim().toLowerCase();
   return str === 'true' || str === 'false';
 };
 
-export const removeDuplicateItems = (array, field) => {
+export const isObject = value => {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+};
+
+export const removeDuplicateObjects = (array, key) => {
   if (!Array.isArray(array)) {
     return array;
   }
@@ -126,19 +129,19 @@ export const removeDuplicateItems = (array, field) => {
     return array;
   }
 
-  if (typeof array[0] !== 'object') {
-    return [...new Set(array)];
+  if (!array.every(isObject)) {
+    return array;
   }
 
-  const uniqueItems = {};
+  const uniqueObjects = {};
 
-  for (const item of array) {
-    if (!uniqueItems[item[field]]) {
-      uniqueItems[item[field]] = item;
+  for (const obj of array) {
+    if (!uniqueObjects[obj[key]]) {
+      uniqueObjects[obj[key]] = obj;
     }
   }
 
-  return Object.values(uniqueItems);
+  return Object.values(uniqueObjects);
 };
 
 export const generateHmacSha256 = (message, secret) =>

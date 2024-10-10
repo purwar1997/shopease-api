@@ -30,12 +30,7 @@ const setupLogger = app => {
   });
 
   app.use(morgan(logFormatString, { stream: accessLogStream }));
-
-  app.use(
-    morgan(logFormatString, {
-      skip: (_req, res) => res.statusCode < 400,
-    })
-  );
+  app.use(morgan(logFormatString));
 };
 
 export default setupLogger;
