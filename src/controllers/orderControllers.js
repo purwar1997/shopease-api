@@ -12,7 +12,7 @@ import {
   sendResponse,
   getCurrentDate,
   generateHmacSha256,
-  checkBoolean,
+  isBoolean,
 } from '../utils/helperFunctions.js';
 import {
   getOrderConfirmationEmail,
@@ -273,7 +273,7 @@ export const adminGetOrders = handleAsync(async (req, res) => {
     filters.status = { $in: status };
   }
 
-  if (checkBoolean(paid)) {
+  if (isBoolean(paid)) {
     filters.isPaid = paid;
   }
 

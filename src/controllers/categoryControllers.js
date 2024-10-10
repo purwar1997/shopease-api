@@ -3,11 +3,11 @@ import Category from '../models/category.js';
 import Product from '../models/product.js';
 import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
-import { sendResponse, removeDuplicateItems } from '../utils/helperFunctions.js';
+import { sendResponse, removeDuplicateObjects } from '../utils/helperFunctions.js';
 import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { UPLOAD_FOLDERS } from '../constants/common.js';
 
-// Fetches a list of all categories 
+// Fetches a list of all categories
 export const getAllCategories = handleAsync(async (_req, res) => {
   const categories = await Category.find();
 
@@ -102,7 +102,7 @@ export const getListedCategories = handleAsync(async (_req, res) => {
   const products = await Product.find({ isDeleted: false }).select('category').populate('category');
 
   let categories = products.map(product => product.category);
-  categories = removeDuplicateItems(categories, 'id');
+  categories = removeDuplicateObjects(categories, 'id');
 
   sendResponse(res, 200, 'Listed categories fetched successfully', categories);
 });

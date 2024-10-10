@@ -4,7 +4,7 @@ import Category from '../models/category.js';
 import Brand from '../models/brand.js';
 import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
-import { sendResponse, checkBoolean } from '../utils/helperFunctions.js';
+import { sendResponse, isBoolean } from '../utils/helperFunctions.js';
 import { productSortRules, adminProductSortRules } from '../utils/sortRules.js';
 import { deleteImage, uploadImage } from '../services/cloudinaryAPIs.js';
 import { PAGINATION, UPLOAD_FOLDERS } from '../constants/common.js';
@@ -77,11 +77,11 @@ export const adminGetProducts = handleAsync(async (req, res) => {
     filters.avgRating = { $gte: rating };
   }
 
-  if (checkBoolean(availability)) {
+  if (isBoolean(availability)) {
     filters.stock = availability === FILTER_OPTIONS.TRUE ? { $gt: 0 } : 0;
   }
 
-  if (checkBoolean(deleted)) {
+  if (isBoolean(deleted)) {
     filters.isDeleted = deleted === FILTER_OPTIONS.TRUE;
   }
 
