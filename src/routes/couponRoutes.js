@@ -7,11 +7,11 @@ import {
   getCouponById,
   updateCoupon,
   deleteCoupon,
-  changeCouponState,
+  activateCoupon,
+  deactivateCoupon,
 } from '../controllers/couponControllers.js';
 import {
   couponSchema,
-  couponStateSchema,
   couponCodeSchema,
   couponsQuerySchema,
   couponIdSchema,
@@ -34,30 +34,33 @@ router
 
 router
   .route('/admin/coupons')
-  .all( isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
   .get(validateQueryParams(couponsQuerySchema), getCoupons)
   .post(validatePayload(couponSchema), createCoupon);
 
 router
   .route('/admin/coupons/:couponId')
-  .all(
-    
-    isAuthenticated,
-    authorizeRole(ROLES.ADMIN),
-    validatePathParams(couponIdSchema)
-  )
+  .all(isAuthenticated, authorizeRole(ROLES.ADMIN), validatePathParams(couponIdSchema))
   .get(getCouponById)
   .put(validatePayload(couponSchema), updateCoupon)
   .delete(deleteCoupon);
 
 router
-  .route('/admin/coupons/:couponId/state')
+  .route('/admin/coupons/:couponId/activate')
   .put(
     isAuthenticated,
     authorizeRole(ROLES.ADMIN),
     validatePathParams(couponIdSchema),
-    validatePayload(couponStateSchema),
-    changeCouponState
+    activateCoupon
+  );
+
+router
+  .route('/admin/coupons/:couponId/deactivate')
+  .put(
+    isAuthenticated,
+    authorizeRole(ROLES.ADMIN),
+    validatePathParams(couponIdSchema),
+    deactivateCoupon
   );
 
 export default router;

@@ -44,12 +44,8 @@ export const validateCoupon = handleAsync(async (req, _res, next) => {
       throw new CustomError('Coupon does not exist', 404);
     }
 
-    if (coupon.expiryDate < new Date()) {
-      throw new CustomError('Coupon has been expired', 400);
-    }
-
-    if (coupon.status === COUPON_STATUS.INACTIVE) {
-      throw new CustomError('Coupon is currently inactive', 403);
+    if (coupon.expiryDate < new Date() || coupon.status === COUPON_STATUS.INACTIVE) {
+      throw new CustomError('Invalid coupon', 400);
     }
 
     req.coupon = coupon;

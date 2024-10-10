@@ -38,11 +38,6 @@ export const COUPON_STATUS = Object.freeze({
   EXPIRED: 'expired',
 });
 
-export const COUPON_STATES = Object.freeze({
-  ACTIVATE: 'activated',
-  DEACTIVATE: 'deactivated',
-});
-
 export const UPLOAD_FOLDERS = Object.freeze({
   USER_AVATARS: 'user-avatars',
   CATEGORY_IMAGES: 'category-images',

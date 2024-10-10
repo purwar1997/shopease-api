@@ -4,7 +4,7 @@ import { formatOptions } from '../utils/helperFunctions.js';
 import { validateCommaSeparatedValues, validateOption } from '../utils/joiValidators.js';
 import { stripDiscountValue } from '../utils/joiSanitizers.js';
 import { pageSchema, getPathIDSchema } from './commonSchemas.js';
-import { DISCOUNT_TYPES, DISCOUNT, COUPON_STATES, COUPON_STATUS } from '../constants/common.js';
+import { DISCOUNT_TYPES, DISCOUNT, COUPON_STATUS } from '../constants/common.js';
 import { COUPON_SORT_OPTIONS } from '../constants/sortOptions.js';
 import { EXPIRY_DURATION } from '../constants/filterOptions.js';
 import { REGEX } from '../constants/regexPatterns.js';
@@ -71,20 +71,6 @@ export const couponSchema = customJoi
     }),
   })
   .custom(stripDiscountValue);
-
-export const couponStateSchema = customJoi.object({
-  state: Joi.string()
-    .trim()
-    .lowercase()
-    .required()
-    .custom(validateOption(COUPON_STATES))
-    .messages({
-      'any.required': 'Coupon state is required',
-      'string.base': 'Coupon state must be a string',
-      'string.empty': 'Coupon state cannot be empty',
-      'any.invalid': `Invalid coupon state. Valid options are: ${formatOptions(COUPON_STATES)}`,
-    }),
-});
 
 export const couponCodeSchema = Joi.object({
   couponCode: Joi.string().trim().uppercase().required().messages({

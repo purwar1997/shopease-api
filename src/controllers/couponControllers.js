@@ -3,7 +3,7 @@ import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
 import { sendResponse, getCurrentDate } from '../utils/helperFunctions.js';
 import { couponSortRules } from '../utils/sortRules.js';
-import { PAGINATION, DISCOUNT_TYPES, COUPON_STATUS, COUPON_STATES } from '../constants/common.js';
+import { PAGINATION, DISCOUNT_TYPES, COUPON_STATUS } from '../constants/common.js';
 
 // Fetches a list of all valid coupons
 export const getValidCoupons = handleAsync(async (_req, res) => {
@@ -15,7 +15,7 @@ export const getValidCoupons = handleAsync(async (_req, res) => {
   sendResponse(res, 200, 'Valid coupons fetched successfully', coupons);
 });
 
-// Allows a logged-in user to check validity of a coupon
+// Allows users to check the validity of a coupon
 export const checkCouponValidity = handleAsync(async (req, res) => {
   const { couponCode } = req.query;
 
@@ -25,18 +25,14 @@ export const checkCouponValidity = handleAsync(async (req, res) => {
     throw new CustomError('Coupon does not exist', 404);
   }
 
-  if (coupon.expiryDate < new Date()) {
-    throw new CustomError('Coupon has been expired', 400);
+  if (coupon.expiryDate < new Date() || coupon.status === COUPON_STATUS.INACTIVE) {
+    throw new CustomError('Invalid coupon', 400);
   }
 
-  if (coupon.status === COUPON_STATUS.INACTIVE) {
-    throw new CustomError('Coupon is currently inactive', 403);
-  }
-
-  sendResponse(res, 200, 'Provided coupon is valid', { valid: true, coupon });
+  sendResponse(res, 200, 'Provided coupon is valid');
 });
 
-// Allows an admin to fetch a paginated list of coupons
+// Allows admins to fetch a paginated list of coupons
 export const getCoupons = handleAsync(async (req, res) => {
   const { duration, discountType, status, sort, page } = req.query;
 
@@ -64,7 +60,7 @@ export const getCoupons = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Coupons fetched successfully', coupons);
 });
 
-// Allows an admin to create new coupon
+// Allows admins to create a new coupon
 export const createCoupon = handleAsync(async (req, res) => {
   const { code } = req.body;
 
@@ -82,8 +78,9 @@ export const createCoupon = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Coupon created successfully', newCoupon);
 });
 
-// Allows an admin to fetch a coupon by ID
-export const getCouponById = handleAsync(async (req, res) => {I
+// Allows admins to fetch a coupon by ID
+export const getCouponById = handleAsync(async (req, res) => {
+  I;
   const { couponId } = req.params;
 
   const coupon = await Coupon.findById(couponId);
@@ -95,7 +92,7 @@ export const getCouponById = handleAsync(async (req, res) => {I
   sendResponse(res, 200, 'Coupon fetched by ID successfully', coupon);
 });
 
-// Allows an admin to update coupon details
+// Allows admins to update a coupon
 export const updateCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
   const { code, discountType, expiryDate } = req.body;
@@ -133,7 +130,7 @@ export const updateCoupon = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Coupon updated successfully', updatedCoupon);
 });
 
-// Allows an admin to delete a coupon
+// Allows admins to delete a coupon
 export const deleteCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
 
@@ -146,10 +143,9 @@ export const deleteCoupon = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Coupon deleted successfully', couponId);
 });
 
-// Allows an admin to activate or deactivate a coupon
-export const changeCouponState = handleAsync(async (req, res) => {
+// Allows admins to activate a coupon
+export const activateCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
-  const { state } = req.body;
 
   let coupon = await Coupon.findById(couponId);
 
@@ -158,16 +154,43 @@ export const changeCouponState = handleAsync(async (req, res) => {
   }
 
   if (coupon.expiryDate < new Date()) {
-    throw new CustomError(
-      `Expired coupon cannot be ${state === COUPON_STATES.ACTIVATE ? 'activated' : 'deactivated'}`,
-      403
-    );
+    throw new CustomError('Expired coupons cannot be activated', 403);
   }
 
-  coupon.status = state === COUPON_STATES.ACTIVATE ? COUPON_STATUS.ACTIVE : COUPON_STATUS.INACTIVE;
+  if (coupon.status === COUPON_STATUS.ACTIVE) {
+    throw new CustomError('Coupon is already active', 409);
+  }
+
+  coupon.status = COUPON_STATUS.ACTIVE;
   coupon.activeStatusLastUpdatedBy = req.user._id;
 
   coupon = await coupon.save();
 
-  sendResponse(res, 200, 'Coupon state changed successfully', coupon);
+  sendResponse(res, 200, 'Coupon activated successfully', coupon);
+});
+
+// Allows admins to deactivate a coupon
+export const deactivateCoupon = handleAsync(async (req, res) => {
+  const { couponId } = req.params;
+
+  let coupon = await Coupon.findById(couponId);
+
+  if (!coupon) {
+    throw new CustomError('Coupon not found', 404);
+  }
+
+  if (coupon.expiryDate < new Date()) {
+    throw new CustomError('Coupon has already been expired', 409);
+  }
+
+  if (coupon.status === COUPON_STATUS.INACTIVE) {
+    throw new CustomError('Coupon is already inactive', 409);
+  }
+
+  coupon.status = COUPON_STATUS.INACTIVE;
+  coupon.activeStatusLastUpdatedBy = req.user._id;
+
+  coupon = await coupon.save();
+
+  sendResponse(res, 200, 'Coupon deactivated successfully', coupon);
 });
