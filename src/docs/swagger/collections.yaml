@@ -1861,7 +1861,7 @@ paths:
                       $ref: '#/components/schemas/Order'
           headers:
             X-Total-Count:
-              description: Total number of user orders
+              description: Total number of orders that belong to a user
               schema:
                 type: integer
 
