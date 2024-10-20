@@ -2,6 +2,7 @@ import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
 import { formatOptions } from '../utils/helperFunctions.js';
 import { validateOption, validateCommaSeparatedValues } from '../utils/joiValidators.js';
+import { stripObjectKeys } from '../utils/joiSanitizers.js';
 import { getPathIDSchema, pageSchema } from './commonSchemas.js';
 import { ROLES } from '../constants/common.js';
 import { USER_SORT_OPTIONS } from '../constants/sortOptions.js';
@@ -36,11 +37,12 @@ export const userSchema = customJoi
         'Password must be 6-20 characters long and should contain atleast one digit, one letter and one special character',
     }),
 
-    confirmPassword: Joi.any().valid(Joi.ref('password')).strip().messages({
+    confirmPassword: Joi.any().valid(Joi.ref('password')).messages({
       'any.only': "Confirm password doesn't match with password",
     }),
   })
   .with('password', 'confirmPassword')
+  .custom(stripObjectKeys('confirmPassword'))
   .messages({
     'object.with': 'Confirm password is required',
   });

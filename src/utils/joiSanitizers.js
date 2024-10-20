@@ -1,6 +1,6 @@
 import { DISCOUNT_TYPES } from '../constants/common.js';
 
-export const stripEmptyFields = obj => {
+export const stripEmptyKeys = obj => {
   for (const key in obj) {
     if (obj[key] === undefined || obj[key] === null || obj[key] === '') {
       delete obj[key];
@@ -9,6 +9,16 @@ export const stripEmptyFields = obj => {
 
   return obj;
 };
+
+export const stripObjectKeys =
+  (...keys) =>
+  (value, _helpers) => {
+    for (const key of keys) {
+      delete value[key];
+    }
+
+    return value;
+  };
 
 export const roundToTwoDecimalPlaces = (value, helpers) => {
   if (isNaN(value)) {

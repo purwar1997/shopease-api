@@ -38,6 +38,6 @@ router
     updateBrand
   );
 
-router.route('/product/brands').get(getListedBrands);
+router.route('/brands/listed').get(getListedBrands);
 
 export default router;
