@@ -2,13 +2,13 @@ import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
 
 const joiValidator = (schema, type) =>
-  handleAsync(async (req, _res, next) => {
+  handleAsync((req, _res, next) => {
     const joiOptions = {
       abortEarly: false,
       stripUnknown: true,
     };
 
-    const { error, value } = schema.validate(req[type], joiOptions);
+    const { error, value } = schema.validate(req[type] ?? {}, joiOptions);
 
     if (error) {
       const joiErrorMessage = error.details.map(errorDetail => errorDetail.message).join('. ');

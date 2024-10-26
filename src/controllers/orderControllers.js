@@ -362,8 +362,8 @@ export const updateOrderStatus = handleAsync(async (req, res) => {
     },
     { runValidators: true, new: true }
   )
-   .populate('items.product')
-   .populate('shippingAddress')
+    .populate('items.product')
+    .populate('shippingAddress');
 
   sendResponse(res, 200, 'Order status updated successfully', updatedOrder);
 });
