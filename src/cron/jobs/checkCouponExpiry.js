@@ -15,6 +15,8 @@ export const checkCouponExpiry = async () => {
         status: COUPON_STATUS.EXPIRED,
       }
     );
+
+    console.log('Successfully checked expiry date of coupons');
   } catch (error) {
     console.log('Failed to check expiry date of coupons');
     console.error('ERROR:', error);

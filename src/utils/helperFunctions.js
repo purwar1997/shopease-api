@@ -3,12 +3,20 @@ import pluralize from 'pluralize';
 import crypto from 'crypto';
 import { format } from 'date-fns';
 
-export const serializeDocs = data => {
-  if (!data) {
-    return;
-  }
+export const isPrimitive = value => {
+  return (
+    typeof value === 'string' ||
+    typeof value === 'number' ||
+    typeof value === 'boolean' ||
+    typeof value === 'symbol' ||
+    typeof value === 'bigint' ||
+    typeof value === 'undefined' ||
+    value === null
+  );
+};
 
-  if (!Array.isArray(data)) {
+export const convertToJSON = data => {
+  if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
     return data.toJSON();
   }
 
@@ -19,7 +27,7 @@ export const sendResponse = (res, statusCode, message, data) => {
   res.status(statusCode).json({
     success: true,
     message,
-    data: serializeDocs(data),
+    data: isPrimitive(data) ? data : convertToJSON(data),
   });
 };
 
@@ -103,10 +111,10 @@ export const singularize = str => pluralize.singular(str);
 export const getDateString = date => format(new Date(date), 'MMMM d, yyyy');
 
 export const getCurrentDate = () => {
-  const current = new Date();
-  const year = current.getFullYear();
-  const month = current.getMonth();
-  const date = current.getDate();
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const date = now.getDate();
 
   return new Date(year, month, date);
 };
