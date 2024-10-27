@@ -193,14 +193,18 @@ export const updateProduct = handleAsync(async (req, res) => {
 
   const response = await uploadImage(UPLOAD_FOLDERS.PRODUCT_IMAGES, req.file, productId);
 
-  const updatedProduct = await Product.findByIdAndUpdate(productId, {
-    ...req.body,
-    image: {
-      url: response.secure_url,
-      publicId: response.public_id,
+  const updatedProduct = await Product.findByIdAndUpdate(
+    productId,
+    {
+      ...req.body,
+      image: {
+        url: response.secure_url,
+        publicId: response.public_id,
+      },
+      lastUpdatedBy: req.user._id,
     },
-    lastUpdatedBy: req.user._id,
-  });
+    { runValidators: true, new: true }
+  );
 
   sendResponse(res, 200, 'Product updated successfully', updatedProduct);
 });
