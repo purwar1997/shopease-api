@@ -77,12 +77,12 @@ export const adminGetProducts = handleAsync(async (req, res) => {
     filters.avgRating = { $gte: rating };
   }
 
-  if (isBoolean(availability)) {
+  if (availability && isBoolean(availability)) {
     filters.stock = availability === FILTER_OPTIONS.TRUE ? { $gt: 0 } : 0;
   }
 
-  if (isBoolean(deleted)) {
-    filters.isDeleted = deleted === FILTER_OPTIONS.TRUE;
+  if (deleted && isBoolean(deleted)) {
+    filters.isDeleted = deleted;
   }
 
   const sortRule = adminProductSortRules[sort];
