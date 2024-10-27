@@ -227,7 +227,7 @@ export const deleteProduct = handleAsync(async (req, res) => {
     throw new CustomError('Product not found', 404);
   }
 
-  sendResponse(res, 200, 'Product deleted successfully', productId);
+  sendResponse(res, 200, 'Product deleted successfully', { id: productId });
 });
 
 // Allows admins to restore a deleted product

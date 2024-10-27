@@ -77,7 +77,7 @@ export const createOrder = handleAsync(async (req, res) => {
     user: user._id,
   });
 
-  sendResponse(res, 201, 'Order created successfully', order._id);
+  sendResponse(res, 201, 'Order created successfully', { id: order._id });
 });
 
 // Confirms an order upon payment success
@@ -418,5 +418,5 @@ export const deleteOrder = handleAsync(async (req, res) => {
     }
   }
 
-  sendResponse(res, 200, 'Order deleted successfully', orderId);
+  sendResponse(res, 200, 'Order deleted successfully', { id: orderId });
 });

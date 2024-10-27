@@ -53,7 +53,7 @@ export const removeItemFromWishlist = handleAsync(async (req, res) => {
   user.wishlist = user.wishlist.filter(item => item.toString() !== productId);
   await user.save();
 
-  sendResponse(res, 200, 'Item removed from wishlist successfully', productId);
+  sendResponse(res, 200, 'Item removed from wishlist successfully', { id: productId });
 });
 
 // Allows users to move an item from their wishlist to cart

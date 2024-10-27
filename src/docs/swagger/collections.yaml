@@ -1,17 +1,17 @@
 openapi: 3.0.0
 
-info: 
+info:
   title: Shopease
   description: The API collection for Shopease
   version: 1.0.0
 
-servers: 
+servers:
   - url: http://localhost:9000/api/v1
     description: Shopease Development Server
   - url: http://api.shopease.shubhampurwar.in/api/v1
     description: Shopease Production Server
 
-tags: 
+tags:
   - name: Authentication
     description: Authentication API
   - name: Users
@@ -34,40 +34,40 @@ tags:
     description: Orders API
   - name: Reviews
     description: Reviews API
-    
-paths: 
+
+paths:
   /auth/signup:
-    post: 
-      tags: 
+    post:
+      tags:
         - Authentication
       description: Creates an account or restores a deleted one
       operationId: signup
-      requestBody: 
+      requestBody:
         description: A JSON object containing signup info
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
+            schema:
               type: object
-              properties: 
-                firstname: 
+              properties:
+                firstname:
                   type: string
                 lastname:
                   type: string
                 email:
                   type: string
-                phone: 
+                phone:
                   type: string
-                password: 
+                password:
                   type: string
-                confirmPassword: 
+                confirmPassword:
                   type: string
-      responses: 
-        '200': 
+      responses:
+        '200':
           description: A JSON object containing a restored account
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   success:
@@ -78,19 +78,19 @@ paths:
                     $ref: '#/components/schemas/User'
         '201':
           description: A JSON object containing a new account
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
-                  success: 
+                properties:
+                  success:
                     type: boolean
-                  message: 
+                  message:
                     type: string
                   data:
                     $ref: '#/components/schemas/User'
-  
-  /auth/login: 
+
+  /auth/login:
     post:
       tags:
         - Authentication
@@ -106,10 +106,10 @@ paths:
               properties:
                 email:
                   type: string
-                password: 
+                password:
                   type: string
       responses:
-        '200': 
+        '200':
           description: Login success
           content:
             application/json:
@@ -129,7 +129,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Success'
-  
+
   /auth/password/forgot:
     post:
       tags:
@@ -156,7 +156,7 @@ paths:
 
   /auth/password/reset/{token}:
     put:
-      tags: 
+      tags:
         - Authentication
       description: Allows users to reset their account password
       operationId: resetPassword
@@ -203,11 +203,11 @@ paths:
                 properties:
                   success:
                     type: boolean
-                  message: 
+                  message:
                     type: string
                   data:
                     $ref: '#/components/schemas/User'
-    
+
     put:
       tags:
         - Users
@@ -225,7 +225,7 @@ paths:
                   type: string
                 lastname:
                   type: string
-                phone: 
+                phone:
                   type: string
                 password:
                   type: string
@@ -241,7 +241,7 @@ paths:
                 properties:
                   success:
                     type: boolean
-                  message: 
+                  message:
                     type: string
                   data:
                     $ref: '#/components/schemas/User'
@@ -355,7 +355,7 @@ paths:
 
   /admin/users:
     get:
-      tags: 
+      tags:
         - Users
       description: Allows admins to fetch a list of users
       operationId: getUsers
@@ -365,7 +365,7 @@ paths:
           description: Field to filter users based on their role
           schema:
             type: array
-            items: 
+            items:
               type: string
               enum:
                 - user
@@ -393,7 +393,7 @@ paths:
                     type: boolean
                   message:
                     type: string
-                  data: 
+                  data:
                     type: array
                     items:
                       $ref: '#/components/schemas/User'
@@ -405,7 +405,7 @@ paths:
 
   /admin/users/{userId}:
     get:
-      tags: 
+      tags:
         - Users
       description: Allows admins to fetch a user by ID
       operationId: getUserbyId
@@ -432,7 +432,7 @@ paths:
                     $ref: '#/components/schemas/User'
 
     put:
-      tags: 
+      tags:
         - Users
       description: Allows admins to update the role of a user
       operationId: updateUserRole
@@ -470,7 +470,7 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/User'
-    
+
     delete:
       tags:
         - Users
@@ -483,7 +483,7 @@ paths:
           description: ID of the user to be deleted
           schema:
             type: string
-      responses: 
+      responses:
         '200':
           description: A JSON object containing ID of the deleted user
           content:
@@ -491,9 +491,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ID'
 
-  /admin/admins: 
+  /admin/admins:
     get:
-      tags: 
+      tags:
         - Users
       description: Allows admins to fetch a list of other admins
       operationId: getOtherAdmins
@@ -505,15 +505,15 @@ paths:
               schema:
                 type: object
                 properties:
-                  success: 
+                  success:
                     type: boolean
                   message:
                     type: string
-                  data: 
+                  data:
                     type: array
                     items:
                       $ref: '#/components/schemas/User'
-                  
+
   /admin/self:
     put:
       tags:
@@ -532,7 +532,7 @@ paths:
                     type: boolean
                   message:
                     type: string
-                  data: 
+                  data:
                     $ref: '#/components/schemas/User'
 
     delete:
@@ -572,10 +572,10 @@ paths:
                       $ref: '#/components/schemas/Address'
 
     post:
-      tags: 
+      tags:
         - Addresses
       description: Allows users to add a new address
-      operationId: addNewAddress 
+      operationId: addNewAddress
       requestBody:
         description: A JSON object containing address info
         required: true
@@ -597,7 +597,7 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/Address'
-  
+
   /addresses/{addressId}:
     get:
       tags:
@@ -659,7 +659,7 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/Address'
-    
+
     delete:
       tags:
         - Addresses
@@ -707,10 +707,10 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/Address'
-  
+
   /cart:
     get:
-      tags: 
+      tags:
         - Cart
       description: Allows users to fetch their cart
       operationId: getCart
@@ -722,7 +722,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  success: 
+                  success:
                     type: boolean
                   message:
                     type: string
@@ -780,7 +780,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: A JSON object containing ID of the removed item 
+          description: A JSON object containing ID of the removed item
           content:
             application/json:
               schema:
@@ -849,7 +849,7 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/Product'
-     
+
   /cart/clear:
     put:
       tags:
@@ -866,7 +866,7 @@ paths:
 
   /wishlist:
     get:
-      tags: 
+      tags:
         - Wishlist
       description: Allows users to fetch their wishlist
       operationId: getWishlist
@@ -883,9 +883,9 @@ paths:
                   message:
                     type: string
                   data:
-                     type: array
-                     items:
-                        $ref: '#/components/schemas/Product'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
 
   /wishlist/add:
     put:
@@ -972,7 +972,7 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/Product'
-              
+
   /wishlist/clear:
     put:
       tags:
@@ -989,7 +989,7 @@ paths:
 
   /products:
     get:
-      tags: 
+      tags:
         - Products
       description: Fetches a list of products
       operationId: getProducts
@@ -1127,7 +1127,7 @@ paths:
                 type: integer
 
     post:
-      tags: 
+      tags:
         - Products
       description: Allows admins to add a new product
       operationId: addNewProduct
@@ -1185,7 +1185,7 @@ paths:
                     $ref: '#/components/schemas/Product'
 
     post:
-      tags: 
+      tags:
         - Products
       description: Allows admins to update a product
       operationId: updateProduct
@@ -1222,9 +1222,9 @@ paths:
                     $ref: '#/components/schemas/Product'
 
     delete:
-      tags: 
+      tags:
         - Products
-      description: Allows admins to delete a product 
+      description: Allows admins to delete a product
       operationId: deleteProduct
       parameters:
         - in: path
@@ -1271,7 +1271,7 @@ paths:
 
   /categories:
     get:
-      tags: 
+      tags:
         - Categories
       description: Fetches a list of all categories
       operationId: getAllCategories
@@ -1294,7 +1294,7 @@ paths:
 
   /categories/{categoryId}:
     get:
-      tags: 
+      tags:
         - Categories
       description: Fetches a category by ID
       operationId: getCategoryById
@@ -1344,13 +1344,13 @@ paths:
               schema:
                 type: object
                 properties:
-                  success: 
+                  success:
                     type: boolean
                   message:
                     type: string
                   data:
                     $ref: '#/components/schemas/Category'
-              
+
   /admin/categories/{categoryId}:
     post:
       tags:
@@ -1391,7 +1391,7 @@ paths:
 
   /categories/listed:
     get:
-      tags: 
+      tags:
         - Categories
       description: Fetches a list of categories under which products have been listed
       operationId: getListedCategories
@@ -1414,7 +1414,7 @@ paths:
 
   /brands:
     get:
-      tags: 
+      tags:
         - Brands
       description: Fetches a list of all brands
       operationId: getAllBrands
@@ -1437,7 +1437,7 @@ paths:
 
   /brands/{brandId}:
     get:
-      tags: 
+      tags:
         - Brands
       description: Fetches a brand by ID
       operationId: getBrandById
@@ -1487,13 +1487,13 @@ paths:
               schema:
                 type: object
                 properties:
-                  success: 
+                  success:
                     type: boolean
                   message:
                     type: string
                   data:
                     $ref: '#/components/schemas/Brand'
-            
+
   /admin/brands/{brandId}:
     post:
       tags:
@@ -1534,7 +1534,7 @@ paths:
 
   /brands/listed:
     get:
-      tags: 
+      tags:
         - Brands
       description: Fetches a list of brands under which products have been listed
       operationId: getListedBrands
@@ -1557,7 +1557,7 @@ paths:
 
   /coupons:
     get:
-      tags: 
+      tags:
         - Coupons
       description: Fetches a list of all valid coupons
       operationId: getValidCoupons
@@ -1597,7 +1597,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      isValid:
+                        type: boolean
 
   /admin/coupons:
     get:
@@ -1616,7 +1626,7 @@ paths:
         - in: query
           name: discountType
           description: Field to filter coupons by their discount type
-          schema: 
+          schema:
             type: array
             items:
               type: string
@@ -1669,7 +1679,7 @@ paths:
               schema:
                 type: integer
 
-    post: 
+    post:
       tags:
         - Coupons
       description: Allows admins to create a new coupon
@@ -1833,7 +1843,7 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/Coupon'
-                    
+
   /orders:
     get:
       tags:
@@ -1883,14 +1893,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data: 
-                    type: string
+                $ref: '#/components/schemas/ID'
 
   /orders/{orderId}:
     get:
@@ -1941,7 +1944,7 @@ paths:
             schema:
               type: object
               properties:
-                razorpayPaymentId: 
+                razorpayPaymentId:
                   type: string
                 razorpaySignature:
                   type: string
@@ -2084,7 +2087,7 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/OrderWithAddress'
-    
+
     put:
       tags:
         - Orders
@@ -2150,7 +2153,7 @@ paths:
                     type: boolean
                   message:
                     type: string
-                  data: 
+                  data:
                     type: string
 
   /products/{productId}/reviews:
@@ -2173,7 +2176,7 @@ paths:
             type: string
             enum:
               - top
-              - recent 
+              - recent
         - $ref: '#/components/parameters/Page'
       responses:
         '200':
@@ -2195,12 +2198,12 @@ paths:
             X-Total-Count:
               description: Total number of product reviews
               schema:
-                type: integer 
+                type: integer
 
     post:
       tags:
         - Reviews
-      description:  Allows users to add a review for a purchased product
+      description: Allows users to add a review for a purchased product
       operationId: addProductReview
       parameters:
         - in: path
@@ -2299,7 +2302,7 @@ components:
       in: query
       name: page
       description: Number of records to skip
-      schema: 
+      schema:
         type: integer
         format: int32
         minimum: 1
@@ -2310,7 +2313,7 @@ components:
       description: Field to filter products based on the categories they belong to
       schema:
         type: array
-        items: 
+        items:
           type: string
       style: form
       explode: false
@@ -2325,7 +2328,7 @@ components:
           type: string
       style: form
       explode: false
-        
+
     Rating:
       in: query
       name: rating
@@ -2334,7 +2337,7 @@ components:
         type: integer
         minimum: 1
         maximum: 5
-    
+
     DaysInPast:
       in: query
       name: daysInPast
@@ -2343,7 +2346,7 @@ components:
         type: integer
         format: int32
         min: 1
-      
+
   schemas:
     Success:
       type: object
@@ -2353,7 +2356,7 @@ components:
         message:
           type: string
 
-    ID: 
+    ID:
       type: object
       properties:
         success:
@@ -2361,22 +2364,25 @@ components:
         message:
           type: string
         data:
-          type: string
+          type: object
+          properties:
+            id:
+              type: string
 
-    User: 
+    User:
       type: object
-      properties: 
-        id: 
+      properties:
+        id:
           type: string
-        firstname: 
+        firstname:
           type: string
-        lastname: 
+        lastname:
           type: string
         fullname:
           type: string
         email:
           type: string
-        phone: 
+        phone:
           type: string
         role:
           type: string
@@ -2426,7 +2432,7 @@ components:
         updatedAt:
           type: string
           format: date-time
-      
+
     Address:
       type: object
       properties:
@@ -2434,7 +2440,7 @@ components:
           type: string
         fullname:
           type: string
-        phone: 
+        phone:
           type: string
         line1:
           type: string
@@ -2491,7 +2497,7 @@ components:
     CartItem:
       type: object
       properties:
-        product: 
+        product:
           $ref: '#/components/schemas/Product'
         quantity:
           type: integer
@@ -2499,7 +2505,7 @@ components:
     Product:
       type: object
       properties:
-        id: 
+        id:
           type: string
         title:
           type: string
@@ -2550,15 +2556,15 @@ components:
         image:
           type: string
           format: binary
-        title: 
+        title:
           type: string
-        description: 
+        description:
           type: string
         price:
           type: number
         brand:
           type: string
-        category:  
+        category:
           type: string
         stock:
           type: integer
@@ -2646,7 +2652,7 @@ components:
         - logo
         - name
 
-    Coupon: 
+    Coupon:
       type: object
       properties:
         id:
@@ -2705,7 +2711,7 @@ components:
     Order:
       type: object
       properties:
-        id: 
+        id:
           type: string
         items:
           type: array
@@ -2739,12 +2745,12 @@ components:
             - express
         isPaid:
           type: boolean
-        paymentId: 
+        paymentId:
           type: string
         status:
           type: string
           enum:
-            - created 
+            - created
             - processing
             - shipped
             - delivered
@@ -2776,7 +2782,7 @@ components:
     OrderWithAddress:
       type: object
       properties:
-        id: 
+        id:
           type: string
         items:
           type: array
@@ -2810,12 +2816,12 @@ components:
             - express
         isPaid:
           type: boolean
-        paymentId: 
+        paymentId:
           type: string
         status:
           type: string
           enum:
-            - created 
+            - created
             - processing
             - shipped
             - delivered
@@ -2899,4 +2905,3 @@ components:
           type: string
         body:
           type: string
-        

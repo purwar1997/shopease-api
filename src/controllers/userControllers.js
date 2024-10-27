@@ -169,7 +169,7 @@ export const deleteUser = handleAsync(async (req, res) => {
     throw new CustomError('User not found', 404);
   }
 
-  sendResponse(res, 200, 'User deleted successfully', userId);
+  sendResponse(res, 200, 'User deleted successfully', { id: userId });
 });
 
 // Allows admins to fetch a list of other admins

@@ -81,7 +81,7 @@ export const removeItemFromCart = handleAsync(async (req, res) => {
   user.cart = user.cart.filter(item => item.product.toString() !== productId);
   await user.save();
 
-  sendResponse(res, 200, 'Item removed from cart successfully', productId);
+  sendResponse(res, 200, 'Item removed from cart successfully', { id: productId });
 });
 
 // Allows users to update quantity of a cart item

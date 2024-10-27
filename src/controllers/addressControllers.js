@@ -120,7 +120,7 @@ export const deleteAddress = handleAsync(async (req, res) => {
   address.isDeleted = true;
   await address.save();
 
-  sendResponse(res, 200, 'Address deleted successfully', addressId);
+  sendResponse(res, 200, 'Address deleted successfully', { id: addressId });
 });
 
 // Allows users to set one of their addresses as the default

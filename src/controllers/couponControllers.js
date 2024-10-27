@@ -29,7 +29,7 @@ export const checkCouponValidity = handleAsync(async (req, res) => {
     throw new CustomError('Invalid coupon', 400);
   }
 
-  sendResponse(res, 200, 'Provided coupon is valid');
+  sendResponse(res, 200, 'Provided coupon is valid', { isValid: true });
 });
 
 // Allows admins to fetch a paginated list of coupons
@@ -143,7 +143,7 @@ export const deleteCoupon = handleAsync(async (req, res) => {
     throw new CustomError('Coupon not found', 404);
   }
 
-  sendResponse(res, 200, 'Coupon deleted successfully', couponId);
+  sendResponse(res, 200, 'Coupon deleted successfully', { id: couponId });
 });
 
 // Allows admins to activate a coupon
