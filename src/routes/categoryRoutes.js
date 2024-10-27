@@ -15,6 +15,7 @@ import { ROLES, UPLOAD_FOLDERS, UPLOAD_FILES } from '../constants/common.js';
 const router = express.Router();
 
 router.route('/categories').get(getAllCategories);
+router.route('/categories/listed').get(getListedCategories);
 router.route('/categories/:categoryId').get(validatePathParams(categoryIdSchema), getCategoryById);
 
 router
@@ -38,6 +39,4 @@ router
     updateCategory
   );
 
-router.route('/categories/listed').get(getListedCategories);
-  
 export default router;

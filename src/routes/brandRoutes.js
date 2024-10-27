@@ -15,6 +15,7 @@ import { ROLES, UPLOAD_FOLDERS, UPLOAD_FILES } from '../constants/common.js';
 const router = express.Router();
 
 router.route('/brands').get(getAllBrands);
+router.route('/brands/listed').get(getListedBrands);
 router.route('/brands/:brandId').get(validatePathParams(brandIdSchema), getBrandById);
 
 router
@@ -37,7 +38,5 @@ router
     validatePayload(brandSchema),
     updateBrand
   );
-
-router.route('/brands/listed').get(getListedBrands);
 
 export default router;
