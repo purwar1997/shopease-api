@@ -2,6 +2,15 @@ import mongoose from 'mongoose';
 import config from '../config/env.config.js';
 import { STORAGE } from '../constants/common.js';
 
+mongoose.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function (_doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+  },
+});
+
 const connectToDB = async () => {
   try {
     const response = await mongoose.connect(`${config.database.url}/${STORAGE.DATABASE_NAME}`);
