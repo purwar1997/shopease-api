@@ -32,18 +32,16 @@ export const addNewAddress = handleAsync(async (req, res) => {
   const address = req.body;
   const userId = req.user._id;
 
-  if (address.isDefault) {
+  const addressCount = await Address.countDocuments({ user: userId, isDeleted: false });
+
+  if (!addressCount) {
+    address.isDefault = true;
+  } else if (address.isDefault) {
     await Address.findOneAndUpdate(
       { user: userId, isDefault: true },
       { isDefault: false },
       { runValidators: true }
     );
-  }
-
-  const addressCount = await Address.countDocuments({ user: userId, isDeleted: false });
-
-  if (!addressCount) {
-    address.isDefault = true;
   }
 
   const newAddress = await Address.create({ ...address, user: userId });
@@ -66,18 +64,13 @@ export const updateAddress = handleAsync(async (req, res) => {
     throw new CustomError('Only the user who owns this address can update it', 403);
   }
 
-  if (!updates.isDefault) {
-    const addressCount = await Address.countDocuments({
-      _id: { $ne: addressId },
-      isDeleted: false,
-    });
+  const defaultAddress = await Address.findOne({ user: req.user._id, isDefault: true });
 
-    if (addressCount === 0) {
-      throw new CustomError(
-        'Please set another address as the default before changing this address to non-default',
-        409
-      );
-    }
+  if (defaultAddress._id.toString() === addressId && !updates.isDefault) {
+    throw new CustomError(
+      'Please set another address as the default before changing this address to non-default',
+      409
+    );
   }
 
   if (updates.isDefault) {

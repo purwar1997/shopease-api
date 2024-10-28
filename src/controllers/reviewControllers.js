@@ -56,6 +56,7 @@ export const addProductReview = handleAsync(async (req, res) => {
     items: {
       $elemMatch: { product: productId },
     },
+    isPaid: true,
   });
 
   if (!order) {

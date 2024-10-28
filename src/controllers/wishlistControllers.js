@@ -30,7 +30,7 @@ export const addItemToWishlist = handleAsync(async (req, res) => {
   const wishlistItem = user.wishlist.find(item => item.toString() === productId);
 
   if (wishlistItem) {
-    throw new CustomError('Item already exists in wishlist', 409);
+    throw new CustomError('Item already present in wishlist', 409);
   }
 
   user.wishlist.push(productId);

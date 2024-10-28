@@ -3,31 +3,11 @@ import pluralize from 'pluralize';
 import crypto from 'crypto';
 import { format } from 'date-fns';
 
-export const isPrimitive = value => {
-  return (
-    typeof value === 'string' ||
-    typeof value === 'number' ||
-    typeof value === 'boolean' ||
-    typeof value === 'symbol' ||
-    typeof value === 'bigint' ||
-    typeof value === 'undefined' ||
-    value === null
-  );
-};
-
-export const convertToJSON = data => {
-  if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
-    return data.toJSON();
-  }
-
-  return data.map(doc => doc.toJSON());
-};
-
 export const sendResponse = (res, statusCode, message, data) => {
   res.status(statusCode).json({
     success: true,
     message,
-    data: isPrimitive(data) ? data : convertToJSON(data),
+    data,
   });
 };
 
