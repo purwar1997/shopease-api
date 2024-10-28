@@ -729,7 +729,14 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/CartItem'
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        product:
+                          $ref: '#/components/schemas/Product'
+                        quantity:
+                          type: integer
 
   /cart/add:
     post:
@@ -760,7 +767,12 @@ paths:
                   message:
                     type: string
                   data:
-                    $ref: '#/components/schemas/CartItem'
+                    type: object
+                    properties:
+                      product:
+                        $ref: '#/components/schemas/Product'
+                      quantity:
+                        type: integer
 
   /cart/remove:
     put:
@@ -817,7 +829,12 @@ paths:
                   message:
                     type: string
                   data:
-                    $ref: '#/components/schemas/CartItem'
+                    type: object
+                    properties:
+                      product:
+                        $ref: '#/components/schemas/Product'
+                      quantity:
+                        type: integer
 
   /cart/move:
     put:
@@ -2147,14 +2164,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: string
+                $ref: '#/components/schemas/ID'
 
   /products/{productId}/reviews:
     get:
@@ -2401,6 +2411,8 @@ components:
           items:
             type: object
             properties:
+              id:
+                type: string
               product:
                 type: string
               quantity:
@@ -2493,14 +2505,6 @@ components:
         isDefault:
           type: boolean
           default: false
-
-    CartItem:
-      type: object
-      properties:
-        product:
-          $ref: '#/components/schemas/Product'
-        quantity:
-          type: integer
 
     Product:
       type: object
@@ -2718,6 +2722,8 @@ components:
           items:
             type: object
             properties:
+              id:
+                type: string
               product:
                 $ref: '#/components/schemas/Product'
               quantity:
@@ -2789,6 +2795,8 @@ components:
           items:
             type: object
             properties:
+              id:
+                type: string
               product:
                 $ref: '#/components/schemas/Product'
               quantity:
