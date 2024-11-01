@@ -8,7 +8,7 @@ import { COUPON_STATUS } from '../constants/common.js';
 export const validateProducts = handleAsync(async (req, _res, next) => {
   const { items } = req.body;
 
-  const listOfProducts = await Promise.all(
+  const orderItems = await Promise.all(
     items.map(async item => {
       const { product: id, quantity } = item;
 
@@ -33,7 +33,7 @@ export const validateProducts = handleAsync(async (req, _res, next) => {
     })
   );
 
-  req.products = listOfProducts;
+  req.orderItems = orderItems;
   next();
 });
 
