@@ -13,6 +13,7 @@ import {
   getCurrentDate,
   generateHmacSha256,
   isBoolean,
+  roundOneDecimal,
 } from '../utils/helperFunctions.js';
 import {
   getOrderConfirmationEmail,
@@ -64,7 +65,7 @@ export const createOrder = handleAsync(async (req, res) => {
   const totalAmount = orderAmount - discount + shippingCharges + taxAmount;
 
   const razorpayOrder = await razorpay.orders.create({
-    amount: totalAmount * 100,
+    amount: roundOneDecimal(totalAmount * 100),
     currency: 'INR',
     receipt: uuidv4(),
   });
