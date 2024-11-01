@@ -35,7 +35,7 @@ const router = express.Router();
 
 router
   .route('/orders')
-  .all( isAuthenticated)
+  .all(isAuthenticated)
   .get(validateQueryParams(ordersQuerySchema), getOrders)
   .post(
     validatePayload(orderSchema),
@@ -73,11 +73,7 @@ router
 
 router
   .route('/admin/orders/:orderId')
-  .all(
-    isAuthenticated,
-    authorizeRole(ROLES.ADMIN),
-    validatePathParams(orderIdSchema)
-  )
+  .all(isAuthenticated, authorizeRole(ROLES.ADMIN), validatePathParams(orderIdSchema))
   .get(adminGetOrderById)
   .put(validatePayload(orderStatusSchema), updateOrderStatus)
   .delete(deleteOrder);

@@ -29,10 +29,13 @@ import {
 
 // Allows users to place an order
 export const createOrder = handleAsync(async (req, res) => {
-  const { items, deliveryMode } = req.body;
-  const { user, coupon } = req;
+  const { deliveryMode } = req.body;
+  const { user, products, coupon } = req;
 
-  const orderAmount = items.reduce((total, item) => total + item.price * item.quantity, 0);
+  const orderAmount = products.reduce(
+    (total, product) => total + product.price * product.quantity,
+    0
+  );
 
   let discount = 0;
 
@@ -57,7 +60,7 @@ export const createOrder = handleAsync(async (req, res) => {
     option => option.TYPE === deliveryMode
   );
 
-  const taxAmount = (orderAmount - discount) * GST.RATE + shippingCharges * GST.RATE;
+  const taxAmount = (orderAmount + shippingCharges) * GST.RATE;
   const totalAmount = orderAmount - discount + shippingCharges + taxAmount;
 
   const razorpayOrder = await razorpay.orders.create({

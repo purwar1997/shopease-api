@@ -2728,8 +2728,6 @@ components:
                 $ref: '#/components/schemas/Product'
               quantity:
                 type: integer
-              price:
-                type: number
         orderAmount:
           type: number
         discount:
@@ -2801,8 +2799,6 @@ components:
                 $ref: '#/components/schemas/Product'
               quantity:
                 type: integer
-              price:
-                type: number
         orderAmount:
           type: number
         discount:
@@ -2870,8 +2866,6 @@ components:
                 type: string
               quantity:
                 type: integer
-              price:
-                type: number
         couponCode:
           type: string
         shippingAddress:

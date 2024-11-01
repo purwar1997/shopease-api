@@ -27,13 +27,6 @@ const orderItemSchema = new Schema({
       message: 'Quantity must be an integer',
     },
   },
-  price: {
-    type: Number,
-    required: [true, 'Price is required'],
-    min: [PRICE.MIN, `Price must be at least ₹${PRICE.MIN}`],
-    max: [PRICE.MAX, `Price must be at most ₹${PRICE.MAX}`],
-    set: roundTwoDecimals,
-  },
 });
 
 const orderSchema = new Schema(

@@ -33,8 +33,8 @@ const daysInPastSchema = Joi.number()
 const orderItemSchema = Joi.object({
   product: Joi.string().trim().required().custom(validateObjectId).messages({
     'any.required': 'Product is required',
-    'string.empty': 'Product cannot be empty',
     'string.base': 'Product must be a string',
+    'string.empty': 'Product cannot be empty',
     'any.invalid': 'Invalid value provided for product. Expected a valid objectId',
   }),
 
@@ -51,21 +51,8 @@ const orderItemSchema = Joi.object({
       'number.min': `Quantity must be at least ${QUANTITY.MIN}`,
       'number.max': `Quantity must be at most ${QUANTITY.MAX}`,
     }),
-
-  price: Joi.number()
-    .min(PRICE.MIN)
-    .max(PRICE.MAX)
-    .required()
-    .unsafe()
-    .custom(roundToTwoDecimalPlaces)
-    .messages({
-      'any.required': 'Price is required',
-      'number.base': 'Price must be a number',
-      'number.min': `Price must be at least ₹${PRICE.MIN}`,
-      'number.max': `Price must be at most ₹${PRICE.MAX}`,
-    }),
 }).messages({
-  'object.base': 'Each order item must be an object with product, quantity and price fields',
+  'object.base': 'Each order item must be an object with product and quantity fields',
 });
 
 export const orderSchema = customJoi
