@@ -375,8 +375,18 @@ export const updateOrderStatus = handleAsync(async (req, res) => {
 export const deleteOrder = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 
-  const order = await Order.findOneAndUpdate(
-    { _id: orderId, isDeleted: false },
+  const order = await Order.findOne({ _id: orderId, isDeleted: false });
+
+  if (!order) {
+    throw new CustomError('Order not found', 404);
+  }
+
+  if (!order.isPaid && new Date() < addDays(order.createdAt, 2)) {
+    throw new CustomError('Unpaid orders can only be deleted 2 days after they are placed', 403);
+  }
+
+  const deletedOrder = await Order.findByIdAndUpdate(
+    orderId,
     { isDeleted: true, deletedBy: req.user._id, deletedAt: new Date() },
     { runValidators: true }
   ).populate({
@@ -384,17 +394,14 @@ export const deleteOrder = handleAsync(async (req, res) => {
     select: { firstname: 1, email: 1 },
   });
 
-  if (!order) {
-    throw new CustomError('Order not found', 404);
-  }
-
   if (
-    order.status === ORDER_STATUS.CREATED ||
-    order.status === ORDER_STATUS.PROCESSING ||
-    order.status === ORDER_STATUS.SHIPPED
+    deletedOrder.isPaid &&
+    (deletedOrder.status === ORDER_STATUS.CREATED ||
+      deletedOrder.status === ORDER_STATUS.PROCESSING ||
+      deletedOrder.status === ORDER_STATUS.SHIPPED)
   ) {
     await Promise.all(
-      order.items.map(async item => {
+      deletedOrder.items.map(async item => {
         const product = await Product.findById(item.product);
         product.stock = product.stock + item.quantity;
         product.soldUnits = product.soldUnits - item.quantity;
@@ -402,17 +409,17 @@ export const deleteOrder = handleAsync(async (req, res) => {
       })
     );
 
-    await razorpay.payments.refund(order.paymentId, {
-      amount: order.totalAmount * 100,
+    await razorpay.payments.refund(deletedOrder.paymentId, {
+      amount: deletedOrder.totalAmount * 100,
       speed: 'optimum',
       receipt: uuidv4(),
     });
 
     try {
       const options = {
-        recipient: order.user.email,
+        recipient: deletedOrder.user.email,
         subject: 'Order deletion notification',
-        html: getOrderDeletionEmail(order.user.firstname, order),
+        html: getOrderDeletionEmail(deletedOrder.user.firstname, order),
       };
 
       await sendEmail(options);
