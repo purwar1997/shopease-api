@@ -5,11 +5,29 @@ import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
 import { COUPON_STATUS } from '../constants/common.js';
 
-export const validateProducts = handleAsync(async (req, _res, next) => {
-  const { items } = req.body;
+const removeDuplicateItems = orderItems => {
+  const uniqueItems = {};
 
-  const orderItems = await Promise.all(
-    items.map(async item => {
+  for (const item of orderItems) {
+    const id = item.product;
+
+    if (uniqueItems[id]) {
+      if (item.quantity > uniqueItems[id].quantity) {
+        uniqueItems[id] = item;
+      }
+    } else {
+      uniqueItems[id] = item;
+    }
+  }
+
+  return Object.values(uniqueItems);
+};
+
+export const validateProducts = handleAsync(async (req, _res, next) => {
+  const orderItems = removeDuplicateItems(req.body.items);
+
+  req.orderItems = await Promise.all(
+    orderItems.map(async item => {
       const { product: id, quantity } = item;
 
       const product = await Product.findOne({ _id: id, isDeleted: false });
@@ -33,7 +51,7 @@ export const validateProducts = handleAsync(async (req, _res, next) => {
     })
   );
 
-  req.orderItems = orderItems;
+  req.body.items = orderItems;
   next();
 });
 
