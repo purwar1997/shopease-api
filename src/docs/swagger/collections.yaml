@@ -6,10 +6,10 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:9000/api/v1
-    description: Shopease Development Server
   - url: http://api.shopease.shubhampurwar.in/api/v1
     description: Shopease Production Server
+  - url: http://localhost:9000/api/v1
+    description: Shopease Development Server
 
 tags:
   - name: Authentication

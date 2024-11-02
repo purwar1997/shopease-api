@@ -5,9 +5,15 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "cron": "nodemon src/cron/scheduler.js"
+    "start": "pm2 start process.config.json",
+    "restart": "pm2 restart process.config.json",
+    "stop": "pm2 stop process.config.json",
+    "delete": "pm2 delete process.config.json",
+    "start-process": "pm2 start process.config.json --only",
+    "restart-process": "pm2 restart process.config.json --only",
+    "stop-process": "pm2 stop process.config.json --only",
+    "delete-process": "pm2 delete process.config.json --only",
+    "describe-process": "pm2 describe"
   },
   "author": "Shubham Purwar",
   "license": "ISC",
@@ -18,8 +24,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.1",
+    "express": "^4.19.2",
     "formidable": "^3.5.1",
     "joi": "^17.13.1",
     "jsonwebtoken": "^9.0.2",
@@ -29,12 +34,8 @@
     "nodemailer": "^6.9.13",
     "pluralize": "^8.0.0",
     "razorpay": "^2.9.4",
-    "rotating-file-stream": "^3.2.5",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^10.0.0",
     "yaml": "^2.5.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
   }
 }
