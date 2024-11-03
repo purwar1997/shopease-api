@@ -2,10 +2,7 @@
 node_modules/
 
 # config files
-nodemon.json
-
-# environment variables
-.env
+process.config.json
 
 # file uploads
 src/uploads/
