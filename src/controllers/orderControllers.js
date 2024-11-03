@@ -30,14 +30,10 @@ import {
 
 // Allows users to place an order
 export const createOrder = handleAsync(async (req, res) => {
-  const { deliveryMode } = req.body;
-  const { user, orderItems, coupon } = req;
+  const { items: orderItems, deliveryMode } = req.body;
+  const { user, coupon } = req;
 
-  const orderAmount = orderItems.reduce(
-    (total, item) => total + item.product.price * item.quantity,
-    0
-  );
-
+  const orderAmount = orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
   let discount = 0;
 
   if (coupon) {

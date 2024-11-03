@@ -24,9 +24,9 @@ const removeDuplicateItems = orderItems => {
 };
 
 export const validateProducts = handleAsync(async (req, _res, next) => {
-  const orderItems = removeDuplicateItems(req.body.items);
+  let orderItems = removeDuplicateItems(req.body.items);
 
-  req.orderItems = await Promise.all(
+  orderItems = await Promise.all(
     orderItems.map(async item => {
       const { product: id, quantity } = item;
 
@@ -47,7 +47,7 @@ export const validateProducts = handleAsync(async (req, _res, next) => {
         );
       }
 
-      return { product, quantity };
+      return { ...item, price: product.price };
     })
   );
 
