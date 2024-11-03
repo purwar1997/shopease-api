@@ -4,5 +4,5 @@ export const setCookieOptions = {
 };
 
 export const clearCookieOptions = {
-  expires: new Date(),
+  httpOnly: true,
 };
