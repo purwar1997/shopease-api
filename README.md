@@ -47,7 +47,7 @@ Swagger is used for API documentation. To view API docs, [click here](http://api
 - Scheduled Cron jobs to check the expiry status of coupons
 - Configured PM2 to keep API and Cron jobs running as daemon processes to ensure availability
 - API and Cron jobs are deployed on DigitalOcean droplet using Nginx as a web server
-- Swagger for documentation of APIs
+- Swagger Docs for documentation of APIs
 
 ## 4. Schemas and Routes
 
