@@ -23,30 +23,34 @@
 
 ## 1. Overview
 
-A RESTful API for an ecommerce platform to manage authentication, users, cart, wishlist, addresses, products, categories, brands, coupons, orders and reviews. It is built with Express.js and uses MongoDB as a database.
+A RESTful API for an ecommerce platform that provides multiple endpoints to manage authentication, users, cart, wishlist, addresses, products, categories, brands, coupons, orders and reviews.
+
+This project is built using Express.js and MongoDB; all the APIs are well-documented using Swagger Docs. User authentication has been implemented using JSON Web Tokens and the project is deployed on a DigitalOcean Droplet using Nginx as a web server.
 
 ![preview](./media/header.png)
 
 ## 2. API Documentation
 
-Swagger is used for API documentation. To view API docs, [click here](http://api.shopease.shubhampurwar.in/docs/swagger).
+APIs are documented using Swagger Docs and all of them are live and functional. [Click here](http://api.shopease.shubhampurwar.in/docs/swagger) to view API documentation. Select shopease production server in the dropdown menu and play with any API.
+
+[![Documentation Preview](/media/swagger.png)](http://api.shopease.shubhampurwar.in/docs/swagger)
 
 ## 3. Main Features
 
-- User authentication via JSON Web Tokens
+- Authentication enabled using JSON Web Tokens
 - Database modelling using various Mongoose schemas
 - Centralized error handling using Express middlewares
-- Validation of request payload using Joi
+- Validation of request payload using Joi library
 - Routing using Express middlewares
 - Logging of HTTP requests using Morgan
 - Ability to parse multipart/form-data using Formidable
 - Upload and delete images using Cloudinary APIs
 - Ability to send emails using Nodemailer
-- Integration of Razorpay payment gateway
+- Integration of payment gateway using Razorpay APIs
 - Verification of email addresses and phone numbers using Abstract APIs (third party service)
-- Scheduled Cron jobs to check the expiry status of coupons
-- Configured PM2 to keep API and Cron jobs running as daemon processes to ensure availability
-- API and Cron jobs are deployed on DigitalOcean droplet using Nginx as a web server
+- Scheduled CRON job to check the expiry status of coupons every midnight
+- API and CRON jobs are deployed on a DigitalOcean Droplet using Nginx as a web server
+- Configured PM2 to keep API and CRON jobs running as daemon processes to ensure availability
 - Swagger Docs for documentation of APIs
 
 ## 4. Schemas and Routes
@@ -55,130 +59,130 @@ Shopease API consists of 8 schemas and 70+ routes and controllers.
 
 ### Authentication Routes
 
-| Action          | Method | Route                       |
-| :-------------- | :----- | :-------------------------- |
-| Signup          | POST   | /auth/signup                |
-| Login           | POST   | /auth/login                 |
-| Logout          | POST   | /auth/logout                |
-| Forgot password | POST   | /auth/password/forgot       |
-| Reset password  | PUT    | /auth/password/reset/:token |
+| Action          | Method | Route                       | Access Requirements |
+| :-------------- | :----- | :-------------------------- | :------------------ |
+| Signup          | POST   | /auth/signup                | None                |
+| Login           | POST   | /auth/login                 | None                |
+| Logout          | POST   | /auth/logout                | Authentication      |
+| Forgot password | POST   | /auth/password/forgot       | None                |
+| Reset password  | PUT    | /auth/password/reset/:token | None                |
 
 ### User Routes
 
-| Action               | Method | Route                     |
-| :------------------- | :----- | :------------------------ |
-| Fetch profile        | GET    | /users/self               |
-| Update profile       | PUT    | /users/self               |
-| Delete account       | DELETE | /users/self               |
-| Add profile photo    | POST   | /users/self/avatar        |
-| Remove profile photo | PUT    | /users/self/avatar        |
-| Update profile photo | POST   | /users/self/avatar/update |
-| Fetch users          | GET    | /admin/users              |
-| Fetch user by ID     | GET    | /admin/users/:userId      |
-| Update user role     | PUT    | /admin/users/:userId      |
-| Delete user          | DELETE | /admin/users/:userId      |
-| Fetch other admins   | GET    | /admin/admins             |
-| Admin self demote    | PUT    | /admin/self               |
-| Admin self delete    | DELETE | /admin/self               |
+| Action               | Method | Route                     | Access Requirements            |
+| :------------------- | :----- | :------------------------ | :----------------------------- |
+| Fetch profile        | GET    | /users/self               | Authentication                 |
+| Update profile       | PUT    | /users/self               | Authentication                 |
+| Delete account       | DELETE | /users/self               | Authentication                 |
+| Add profile photo    | POST   | /users/self/avatar        | Authentication                 |
+| Remove profile photo | PUT    | /users/self/avatar        | Authentication                 |
+| Update profile photo | POST   | /users/self/avatar/update | Authentication                 |
+| Fetch users          | GET    | /admin/users              | Authentication + Authorization |
+| Fetch user by ID     | GET    | /admin/users/:userId      | Authentication + Authorization |
+| Update user role     | PUT    | /admin/users/:userId      | Authentication + Authorization |
+| Delete user          | DELETE | /admin/users/:userId      | Authentication + Authorization |
+| Fetch other admins   | GET    | /admin/admins             | Authentication + Authorization |
+| Admin self demote    | PUT    | /admin/self               | Authentication + Authorization |
+| Admin self delete    | DELETE | /admin/self               | Authentication + Authorization |
 
 ### Address Routes
 
-| Action              | Method | Route                         |
-| :------------------ | :----- | :---------------------------- |
-| Fetch addresses     | GET    | /addresses                    |
-| Add new address     | POST   | /addresses                    |
-| Fetch address by ID | GET    | /addresses/:addressId         |
-| Update address      | PUT    | /addresses/:addressId         |
-| Delete address      | DELETE | /addresses/:addressId         |
-| Set default address | PUT    | /addresses/:addressId/default |
+| Action              | Method | Route                         | Access Requirements |
+| :------------------ | :----- | :---------------------------- | :------------------ |
+| Fetch addresses     | GET    | /addresses                    | Authentication      |
+| Add new address     | POST   | /addresses                    | Authentication      |
+| Fetch address by ID | GET    | /addresses/:addressId         | Authentication      |
+| Update address      | PUT    | /addresses/:addressId         | Authentication      |
+| Delete address      | DELETE | /addresses/:addressId         | Authentication      |
+| Set default address | PUT    | /addresses/:addressId/default | Authentication      |
 
 ### Cart Routes
 
-| Action                | Method | Route        |
-| :-------------------- | :----- | :----------- |
-| Fetch cart            | GET    | /cart        |
-| Add item to cart      | POST   | /cart/add    |
-| Remove item from cart | PUT    | /cart/remove |
-| Update item quantity  | PUT    | /cart/update |
-| Move item to wishlist | PUT    | /cart/move   |
-| Clear cart            | PUT    | /cart/clear  |
+| Action                | Method | Route        | Access Requirements |
+| :-------------------- | :----- | :----------- | :------------------ |
+| Fetch cart            | GET    | /cart        | Authentication      |
+| Add item to cart      | POST   | /cart/add    | Authentication      |
+| Remove item from cart | PUT    | /cart/remove | Authentication      |
+| Update item quantity  | PUT    | /cart/update | Authentication      |
+| Move item to wishlist | PUT    | /cart/move   | Authentication      |
+| Clear cart            | PUT    | /cart/clear  | Authentication      |
 
 ### Wishlist Routes
 
-| Action                    | Method | Route            |
-| :------------------------ | :----- | :--------------- |
-| Fetch wishlist            | GET    | /wishlist        |
-| Add item to wishlist      | PUT    | /wishlist/add    |
-| Remove item from wishlist | PUT    | /wishlist/remove |
-| Move item to cart         | PUT    | /wishlist/move   |
-| Clear wishlist            | PUT    | /wishlist/clear  |
+| Action                    | Method | Route            | Access Requirements |
+| :------------------------ | :----- | :--------------- | :------------------ |
+| Fetch wishlist            | GET    | /wishlist        | Authentication      |
+| Add item to wishlist      | PUT    | /wishlist/add    | Authentication      |
+| Remove item from wishlist | PUT    | /wishlist/remove | Authentication      |
+| Move item to cart         | PUT    | /wishlist/move   | Authentication      |
+| Clear wishlist            | PUT    | /wishlist/clear  | Authentication      |
 
 ### Product Routes
 
-| Action                    | Method | Route                              |
-| :------------------------ | :----- | :--------------------------------- |
-| Fetch products            | GET    | /products                          |
-| Fetch product by ID       | GET    | /products/:productId               |
-| Admin fetch products      | GET    | /admin/products                    |
-| Add new product           | POST   | /admin/products                    |
-| Admin fetch product by ID | GET    | /admin/products/:productId         |
-| Update product details    | POST   | /admin/products/:productId         |
-| Delete product            | DELETE | /admin/products/:productId         |
-| Restore deleted product   | PUT    | /admin/products/:productId/restore |
+| Action                    | Method | Route                              | Access Requirements            |
+| :------------------------ | :----- | :--------------------------------- | :----------------------------- |
+| Fetch products            | GET    | /products                          | None                           |
+| Fetch product by ID       | GET    | /products/:productId               | None                           |
+| Admin fetch products      | GET    | /admin/products                    | Authentication + Authorization |
+| Add new product           | POST   | /admin/products                    | Authentication + Authorization |
+| Admin fetch product by ID | GET    | /admin/products/:productId         | Authentication + Authorization |
+| Update product details    | POST   | /admin/products/:productId         | Authentication + Authorization |
+| Delete product            | DELETE | /admin/products/:productId         | Authentication + Authorization |
+| Restore deleted product   | PUT    | /admin/products/:productId/restore | Authentication + Authorization |
 
 ### Category Routes
 
-| Action                  | Method | Route                         |
-| :---------------------- | :----- | :---------------------------- |
-| Fetch all categories    | GET    | /categories                   |
-| Fetch category by ID    | GET    | /categories/:categoryId       |
-| Add new category        | POST   | /admin/categories             |
-| Update category         | POST   | /admin/categories/:categoryId |
-| Fetch listed categories | GET    | /categories/listed            |
+| Action                  | Method | Route                         | Access Requirements            |
+| :---------------------- | :----- | :---------------------------- | :----------------------------- |
+| Fetch all categories    | GET    | /categories                   | None                           |
+| Fetch category by ID    | GET    | /categories/:categoryId       | None                           |
+| Add new category        | POST   | /admin/categories             | Authentication + Authorization |
+| Update category         | POST   | /admin/categories/:categoryId | Authentication + Authorization |
+| Fetch listed categories | GET    | /categories/listed            | None                           |
 
 ### Brand Routes
 
-| Action              | Method | Route                  |
-| :------------------ | :----- | :--------------------- |
-| Fetch all brands    | GET    | /brands                |
-| Fetch brand by ID   | GET    | /brands/:brandId       |
-| Add new brand       | POST   | /admin/brands          |
-| Update brand        | POST   | /admin/brands/:brandId |
-| Fetch listed brands | GET    | /brands/listed         |
+| Action              | Method | Route                  | Access Requirements            |
+| :------------------ | :----- | :--------------------- | :----------------------------- |
+| Fetch all brands    | GET    | /brands                | None                           |
+| Fetch brand by ID   | GET    | /brands/:brandId       | None                           |
+| Add new brand       | POST   | /admin/brands          | Authentication + Authorization |
+| Update brand        | POST   | /admin/brands/:brandId | Authentication + Authorization |
+| Fetch listed brands | GET    | /brands/listed         | None                           |
 
 ### Coupon Routes
 
-| Action                | Method | Route                               |
-| :-------------------- | :----- | :---------------------------------- |
-| Fetch valid coupons   | GET    | /coupons                            |
-| Check coupon validity | GET    | /coupons/validity                   |
-| Admin fetch coupons   | GET    | /admin/coupons                      |
-| Create new coupon     | POST   | /admin/coupons                      |
-| Fetch coupon by ID    | GET    | /admin/coupons/:couponId            |
-| Update coupon details | PUT    | /admin/coupons/:couponId            |
-| Delete coupon         | DELETE | /admin/coupons/:couponId            |
-| Activate coupon       | PUT    | /admin/coupons/:couponId/activate   |
-| Deactivate coupon     | PUT    | /admin/coupons/:couponId/deactivate |
+| Action                | Method | Route                               | Access Requirements            |
+| :-------------------- | :----- | :---------------------------------- | :----------------------------- |
+| Fetch valid coupons   | GET    | /coupons                            | Authentication                 |
+| Check coupon validity | GET    | /coupons/validity                   | Authentication                 |
+| Admin fetch coupons   | GET    | /admin/coupons                      | Authentication + Authorization |
+| Create new coupon     | POST   | /admin/coupons                      | Authentication + Authorization |
+| Fetch coupon by ID    | GET    | /admin/coupons/:couponId            | Authentication + Authorization |
+| Update coupon details | PUT    | /admin/coupons/:couponId            | Authentication + Authorization |
+| Delete coupon         | DELETE | /admin/coupons/:couponId            | Authentication + Authorization |
+| Activate coupon       | PUT    | /admin/coupons/:couponId/activate   | Authentication + Authorization |
+| Deactivate coupon     | PUT    | /admin/coupons/:couponId/deactivate | Authentication + Authorization |
 
 ### Order Routes
 
-| Action                  | Method | Route                    |
-| :---------------------- | :----- | :----------------------- |
-| Fetch orders            | GET    | /orders                  |
-| Create new order        | POST   | /orders                  |
-| Fetch order by ID       | GET    | /orders/:orderId         |
-| Confirm order           | PUT    | /orders/:orderId/confirm |
-| Cancel order            | PUT    | /orders/:orderId/cancel  |
-| Admin fetch orders      | GET    | /admin/orders            |
-| Admin fetch order by ID | GET    | /admin/orders/:orderId   |
-| Update order status     | PUT    | /admin/orders/:orderId   |
-| Delete order            | DELETE | /admin/orders/:orderId   |
+| Action                  | Method | Route                    | Access Requirements            |
+| :---------------------- | :----- | :----------------------- | :----------------------------- |
+| Fetch orders            | GET    | /orders                  | Authentication                 |
+| Create new order        | POST   | /orders                  | Authentication                 |
+| Fetch order by ID       | GET    | /orders/:orderId         | Authentication                 |
+| Confirm order           | PUT    | /orders/:orderId/confirm | Authentication                 |
+| Cancel order            | PUT    | /orders/:orderId/cancel  | Authentication                 |
+| Admin fetch orders      | GET    | /admin/orders            | Authentication + Authorization |
+| Admin fetch order by ID | GET    | /admin/orders/:orderId   | Authentication + Authorization |
+| Update order status     | PUT    | /admin/orders/:orderId   | Authentication + Authorization |
+| Delete order            | DELETE | /admin/orders/:orderId   | Authentication + Authorization |
 
 ### Review Routes
 
-| Action                | Method | Route                        |
-| :-------------------- | :----- | :--------------------------- |
-| Fetch product reviews | GET    | /products/:productId/reviews |
-| Add product review    | POST   | /products/:productId/reviews |
-| Fetch review by ID    | GET    | /reviews/:reviewId           |
-| Update product review | PUT    | /reviews/:reviewId           |
+| Action                | Method | Route                        | Access Requirements |
+| :-------------------- | :----- | :--------------------------- | :------------------ |
+| Fetch product reviews | GET    | /products/:productId/reviews | None                |
+| Add product review    | POST   | /products/:productId/reviews | Authentication      |
+| Fetch review by ID    | GET    | /reviews/:reviewId           | Authentication      |
+| Update product review | PUT    | /reviews/:reviewId           | Authentication      |
