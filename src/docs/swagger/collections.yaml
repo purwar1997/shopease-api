@@ -1290,11 +1290,11 @@ paths:
     get:
       tags:
         - Categories
-      description: Fetches a list of all categories
-      operationId: getAllCategories
+      description: Fetches a list of categories under which products have been listed
+      operationId: getCategories
       responses:
         '200':
-          description: A JSON object containing a list of all categories
+          description: A JSON object containing a list of categories
           content:
             application/json:
               schema:
@@ -1338,6 +1338,28 @@ paths:
                     $ref: '#/components/schemas/Category'
 
   /admin/categories:
+    get:
+      tags:
+        - Categories
+      description: Allows admins to fetch a list of all categories
+      operationId: getAllCategories
+      responses:
+        '200':
+          description: A JSON object containing a list of all categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+
     post:
       tags:
         - Categories
@@ -1406,38 +1428,15 @@ paths:
                   data:
                     $ref: '#/components/schemas/Category'
 
-  /categories/listed:
-    get:
-      tags:
-        - Categories
-      description: Fetches a list of categories under which products have been listed
-      operationId: getListedCategories
-      responses:
-        '200':
-          description: A JSON object containing a list of categories
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Category'
-
   /brands:
     get:
       tags:
         - Brands
-      description: Fetches a list of all brands
-      operationId: getAllBrands
+      description: Fetches a list of brands under which products have been listed
+      operationId: getBrands
       responses:
         '200':
-          description: A JSON object containing a list of all brands
+          description: A JSON object containing a list of brands
           content:
             application/json:
               schema:
@@ -1481,6 +1480,28 @@ paths:
                     $ref: '#/components/schemas/Brand'
 
   /admin/brands:
+    get:
+      tags:
+        - Brands
+      description: Allows admins to fetch a list of all brands
+      operationId: getAllBrands
+      responses:
+        '200':
+          description: A JSON object containing a list of all brands
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Brand'
+
     post:
       tags:
         - Brands
@@ -1548,29 +1569,6 @@ paths:
                     type: string
                   data:
                     $ref: '#/components/schemas/Brand'
-
-  /brands/listed:
-    get:
-      tags:
-        - Brands
-      description: Fetches a list of brands under which products have been listed
-      operationId: getListedBrands
-      responses:
-        '200':
-          description: A JSON object containing a list of brands
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Brand'
 
   /coupons:
     get:

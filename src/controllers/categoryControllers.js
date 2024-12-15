@@ -7,9 +7,18 @@ import { sendResponse, removeDuplicateObjects } from '../utils/helperFunctions.j
 import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { UPLOAD_FOLDERS } from '../constants/common.js';
 
-// Fetches a list of all categories
-export const getAllCategories = handleAsync(async (_req, res) => {
-  const categories = await Category.find();
+// Fetches a list of categories under which products have been listed
+export const getCategories = handleAsync(async (_req, res) => {
+  const products = await Product.find({
+    isDeleted: false,
+  })
+    .select('category')
+    .populate('category');
+
+  let categories = products.map(product => product.category);
+  categories = removeDuplicateObjects(categories, 'id');
+
+  sendResponse(res, 200, 'Categories fetched successfully', categories);
 
   sendResponse(res, 200, 'Categories fetched successfully', categories);
 });
@@ -25,6 +34,13 @@ export const getCategoryById = handleAsync(async (req, res) => {
   }
 
   sendResponse(res, 200, 'Category fetched by ID successfully', category);
+});
+
+// Allows admins to fetch a list of all categories
+export const getAllCategories = handleAsync(async (_req, res) => {
+  const categories = await Category.find();
+
+  sendResponse(res, 200, 'All categories fetched successfully', categories);
 });
 
 // Allows admins to add a new category
@@ -95,14 +111,4 @@ export const updateCategory = handleAsync(async (req, res) => {
   );
 
   sendResponse(res, 200, 'Category updated successfully', updatedCategory);
-});
-
-// Fetches a list of categories under which products have been listed
-export const getListedCategories = handleAsync(async (_req, res) => {
-  const products = await Product.find({ isDeleted: false }).select('category').populate('category');
-
-  let categories = products.map(product => product.category);
-  categories = removeDuplicateObjects(categories, 'id');
-
-  sendResponse(res, 200, 'Listed categories fetched successfully', categories);
 });

@@ -1,10 +1,10 @@
 import express from 'express';
 import {
-  getAllCategories,
+  getCategories,
   getCategoryById,
+  getAllCategories,
   addNewCategory,
   updateCategory,
-  getListedCategories,
 } from '../controllers/categoryControllers.js';
 import { categorySchema, categoryIdSchema } from '../schemas/categorySchemas.js';
 import { isAuthenticated, authorizeRole } from '../middlewares/authMiddlewares.js';
@@ -14,15 +14,14 @@ import { ROLES, UPLOAD_FOLDERS, UPLOAD_FILES } from '../constants/common.js';
 
 const router = express.Router();
 
-router.route('/categories').get(getAllCategories);
-router.route('/categories/listed').get(getListedCategories);
+router.route('/categories').get(getCategories);
 router.route('/categories/:categoryId').get(validatePathParams(categoryIdSchema), getCategoryById);
 
 router
   .route('/admin/categories')
+  .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .get(getAllCategories)
   .post(
-    isAuthenticated,
-    authorizeRole(ROLES.ADMIN),
     parseFormData(UPLOAD_FOLDERS.CATEGORY_IMAGES, UPLOAD_FILES.CATEGORY_IMAGE),
     validatePayload(categorySchema),
     addNewCategory
