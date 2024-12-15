@@ -9,16 +9,33 @@ import { UPLOAD_FOLDERS } from '../constants/common.js';
 
 // Fetches a list of categories under which products have been listed
 export const getCategories = handleAsync(async (_req, res) => {
-  const products = await Product.find({
-    isDeleted: false,
-  })
-    .select('category')
-    .populate('category');
-
-  let categories = products.map(product => product.category);
-  categories = removeDuplicateObjects(categories, 'id');
-
-  sendResponse(res, 200, 'Categories fetched successfully', categories);
+  const categories = await Product.aggregate([
+    { $match: { isDeleted: false } },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'category',
+        foreignField: '_id',
+        as: 'categoryDetails',
+      },
+    },
+    { $unwind: { path: '$categoryDetails' } },
+    { $replaceRoot: { newRoot: '$categoryDetails' } },
+    {
+      $group: {
+        _id: '$_id',
+        document: { $first: '$$ROOT' },
+      },
+    },
+    { $replaceRoot: { newRoot: '$document' } },
+    {
+      $set: {
+        id: '$_id',
+        _id: '$$REMOVE',
+        __v: '$$REMOVE',
+      },
+    },
+  ]);
 
   sendResponse(res, 200, 'Categories fetched successfully', categories);
 });

@@ -9,16 +9,35 @@ import { UPLOAD_FOLDERS } from '../constants/common.js';
 
 // Fetches a list of brands under which products have been listed
 export const getBrands = handleAsync(async (_req, res) => {
-  const products = await Product.find({
-    isDeleted: false,
-  })
-    .select('brand')
-    .populate('brand');
+  const brands = await Product.aggregate([
+    { $match: { isDeleted: false } },
+    {
+      $lookup: {
+        from: 'brands',
+        localField: 'brand',
+        foreignField: '_id',
+        as: 'brandDetails',
+      },
+    },
+    { $unwind: { path: '$brandDetails' } },
+    { $replaceRoot: { newRoot: '$brandDetails' } },
+    {
+      $group: {
+        _id: '$_id',
+        document: { $first: '$$ROOT' },
+      },
+    },
+    { $replaceRoot: { newRoot: '$document' } },
+    {
+      $set: {
+        id: '$_id',
+        _id: '$$REMOVE',
+        __v: '$$REMOVE',
+      },
+    },
+  ]);
 
-  let brands = products.map(product => product.brand);
-  brands = removeDuplicateObjects(brands, 'id');
-
-  sendResponse(res, 200, 'Brands fetched successfully', brands);
+  sendResponse(res, 200, 'Brands fetched succesfully', brands);
 });
 
 // Fetches a brand by ID
