@@ -22,6 +22,7 @@ import {
   validateQueryParams,
   validatePathParams,
 } from '../middlewares/requestValidators.js';
+import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 import { ROLES } from '../constants/common.js';
 
 const router = express.Router();
@@ -34,13 +35,18 @@ router
 
 router
   .route('/admin/coupons')
-  .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
   .get(validateQueryParams(couponsQuerySchema), adminGetCoupons)
   .post(validatePayload(couponSchema), createCoupon);
 
 router
   .route('/admin/coupons/:couponId')
-  .all(isAuthenticated, authorizeRole(ROLES.ADMIN), validatePathParams(couponIdSchema))
+  .all(
+    isHttpMethodAllowed,
+    isAuthenticated,
+    authorizeRole(ROLES.ADMIN),
+    validatePathParams(couponIdSchema)
+  )
   .get(getCouponById)
   .put(validatePayload(couponSchema), updateCoupon)
   .delete(deleteCoupon);

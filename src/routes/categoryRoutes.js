@@ -10,6 +10,7 @@ import { categorySchema, categoryIdSchema } from '../schemas/categorySchemas.js'
 import { isAuthenticated, authorizeRole } from '../middlewares/authMiddlewares.js';
 import { parseFormData } from '../middlewares/parseFormData.js';
 import { validatePayload, validatePathParams } from '../middlewares/requestValidators.js';
+import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 import { ROLES, UPLOAD_FOLDERS, UPLOAD_FILES } from '../constants/common.js';
 
 const router = express.Router();
@@ -19,7 +20,7 @@ router.route('/categories/:categoryId').get(validatePathParams(categoryIdSchema)
 
 router
   .route('/admin/categories')
-  .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
   .get(getAllCategories)
   .post(
     parseFormData(UPLOAD_FOLDERS.CATEGORY_IMAGES, UPLOAD_FILES.CATEGORY_IMAGE),

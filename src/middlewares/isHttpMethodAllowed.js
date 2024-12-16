@@ -3,15 +3,7 @@ import CustomError from '../utils/customError.js';
 import { expectedHttpActions } from '../utils/expectedHttpActions.js';
 
 export const isHttpMethodAllowed = handleAsync((req, res, next) => {
-  const paramKeys = Object.keys(req.params);
-  let requestedPath = req.path;
-
-  if (paramKeys.length > 0) {
-    for (const key of paramKeys) {
-      requestedPath = requestedPath.replace(req.params[key], ':' + key);
-    }
-  }
-
+  const requestedPath = req.route.path;
   const allowedMethods = expectedHttpActions[requestedPath];
 
   if (!allowedMethods || !allowedMethods.length) {

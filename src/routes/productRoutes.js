@@ -23,6 +23,7 @@ import {
   validateQueryParams,
 } from '../middlewares/requestValidators.js';
 import { ROLES, UPLOAD_FOLDERS, UPLOAD_FILES } from '../constants/common.js';
+import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 
 const router = express.Router();
 
@@ -31,7 +32,7 @@ router.route('/products/:productId').get(validatePathParams(productIdSchema), ge
 
 router
   .route('/admin/products')
-  .all( isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
   .get(validateQueryParams(adminProductsQuerySchema), adminGetProducts)
   .post(
     parseFormData(UPLOAD_FOLDERS.PRODUCT_IMAGES, UPLOAD_FILES.PRODUCT_IMAGE),
@@ -42,6 +43,7 @@ router
 router
   .route('/admin/products/:productId')
   .all(
+    isHttpMethodAllowed,
     isAuthenticated,
     authorizeRole(ROLES.ADMIN),
     validatePathParams(productIdSchema)

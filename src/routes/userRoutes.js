@@ -29,20 +29,21 @@ import {
 import { verifyPhone } from '../middlewares/verifyCredentials.js';
 import { parseFormData } from '../middlewares/parseFormData.js';
 import { checkAdminSelfUpdate, checkAdminSelfDelete } from '../middlewares/checkAdmin.js';
+import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 import { ROLES, UPLOAD_FOLDERS, UPLOAD_FILES } from '../constants/common.js';
 
 const router = express.Router();
 
 router
   .route('/users/self')
-  .all(isAuthenticated)
+  .all(isHttpMethodAllowed, isAuthenticated)
   .get(getProfile)
   .put(validatePayload(userSchema), verifyPhone, updateProfile)
   .delete(deleteAccount);
 
 router
   .route('/users/self/avatar')
-  .all(isAuthenticated)
+  .all(isHttpMethodAllowed, isAuthenticated)
   .post(parseFormData(UPLOAD_FOLDERS.USER_AVATARS, UPLOAD_FILES.USER_AVATAR), addProfilePhoto)
   .put(removeProfilePhoto);
 
@@ -65,7 +66,7 @@ router
 
 router
   .route('/admin/users/:userId')
-  .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
   .get(validatePathParams(userIdSchema), getUserById)
   .put(
     checkAdminSelfUpdate,
@@ -79,7 +80,7 @@ router.route('/admin/admins').get(isAuthenticated, authorizeRole(ROLES.ADMIN), g
 
 router
   .route('/admin/self')
-  .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
   .put(adminSelfDemote)
   .delete(adminSelfDelete);
 

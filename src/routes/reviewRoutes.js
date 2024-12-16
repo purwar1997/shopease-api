@@ -13,6 +13,7 @@ import {
   validatePathParams,
   validateQueryParams,
 } from '../middlewares/requestValidators.js';
+import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ router
 
 router
   .route('/reviews/:reviewId')
-  .all( isAuthenticated, validatePathParams(reviewIdSchema))
+  .all(isHttpMethodAllowed, isAuthenticated, validatePathParams(reviewIdSchema))
   .get(getProductReviewById)
   .put(validatePayload(reviewSchema), updateProductReview);
 

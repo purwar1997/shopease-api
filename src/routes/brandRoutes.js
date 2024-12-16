@@ -10,6 +10,7 @@ import { brandSchema, brandIdSchema } from '../schemas/brandSchemas.js';
 import { isAuthenticated, authorizeRole } from '../middlewares/authMiddlewares.js';
 import { parseFormData } from '../middlewares/parseFormData.js';
 import { validatePayload, validatePathParams } from '../middlewares/requestValidators.js';
+import { isHttpMethodAllowed } from '../middlewares/isHttpMethodAllowed.js';
 import { ROLES, UPLOAD_FOLDERS, UPLOAD_FILES } from '../constants/common.js';
 
 const router = express.Router();
@@ -19,7 +20,7 @@ router.route('/brands/:brandId').get(validatePathParams(brandIdSchema), getBrand
 
 router
   .route('/admin/brands')
-  .all(isAuthenticated, authorizeRole(ROLES.ADMIN))
+  .all(isHttpMethodAllowed, isAuthenticated, authorizeRole(ROLES.ADMIN))
   .get(getAllBrands)
   .post(
     parseFormData(UPLOAD_FOLDERS.BRAND_LOGOS, UPLOAD_FILES.BRAND_LOGO),
