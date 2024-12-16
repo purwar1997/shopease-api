@@ -104,34 +104,6 @@ export const isBoolean = str => {
   return str === 'true' || str === 'false';
 };
 
-export const isObject = value => {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-};
-
-export const removeDuplicateObjects = (array, key) => {
-  if (!Array.isArray(array)) {
-    return array;
-  }
-
-  if (!array.length) {
-    return array;
-  }
-
-  if (!array.every(isObject)) {
-    return array;
-  }
-
-  const uniqueObjects = {};
-
-  for (const obj of array) {
-    if (!uniqueObjects[obj[key]]) {
-      uniqueObjects[obj[key]] = obj;
-    }
-  }
-
-  return Object.values(uniqueObjects);
-};
-
 export const generateHmacSha256 = (message, secret) =>
   crypto.createHmac('sha256', secret).update(message).digest('hex');
 
