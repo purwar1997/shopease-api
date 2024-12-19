@@ -130,10 +130,12 @@ export const confirmOrder = handleAsync(async (req, res) => {
 
   await Promise.all(
     order.items.map(async item => {
-      const product = await Product.findById(item.product);
-      product.stock = product.stock - item.quantity;
-      product.soldUnits = product.soldUnits + item.quantity;
-      await product.save();
+      await Product.findByIdAndUpdate(item.product, {
+        $inc: {
+          stock: -item.quantity,
+          soldUnits: item.quantity,
+        },
+      });
     })
   );
 
@@ -232,10 +234,12 @@ export const cancelOrder = handleAsync(async (req, res) => {
 
   await Promise.all(
     order.items.map(async item => {
-      const product = await Product.findById(item.product);
-      product.stock = product.stock + item.quantity;
-      product.soldUnits = product.soldUnits - item.quantity;
-      await product.save();
+      await Product.findByIdAndUpdate(item.product, {
+        $inc: {
+          stock: item.quantity,
+          soldUnits: -item.quantity,
+        },
+      });
     })
   );
 
@@ -399,10 +403,12 @@ export const deleteOrder = handleAsync(async (req, res) => {
   ) {
     await Promise.all(
       deletedOrder.items.map(async item => {
-        const product = await Product.findById(item.product);
-        product.stock = product.stock + item.quantity;
-        product.soldUnits = product.soldUnits - item.quantity;
-        await product.save();
+        await Product.findByIdAndUpdate(item.product, {
+          $inc: {
+            stock: item.quantity,
+            soldUnits: -item.quantity,
+          },
+        });
       })
     );
 
