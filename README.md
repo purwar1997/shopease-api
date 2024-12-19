@@ -39,6 +39,7 @@ APIs are documented using Swagger Docs and all of them are live and functional. 
 
 - Authentication enabled using JSON Web Tokens
 - Database modelling using various Mongoose schemas
+- Used MongoDB aggregation pipelines to perform complex database operations
 - Centralized error handling using Express middlewares
 - Validation of request payload using Joi library
 - Routing using Express middlewares
@@ -132,23 +133,23 @@ Shopease API consists of 8 schemas and 70+ routes and controllers.
 
 ### Category Routes
 
-| Action                  | Method | Route                         | Access Requirements            |
-| :---------------------- | :----- | :---------------------------- | :----------------------------- |
-| Fetch all categories    | GET    | /categories                   | None                           |
-| Fetch category by ID    | GET    | /categories/:categoryId       | None                           |
-| Add new category        | POST   | /admin/categories             | Authentication + Authorization |
-| Update category         | POST   | /admin/categories/:categoryId | Authentication + Authorization |
-| Fetch listed categories | GET    | /categories/listed            | None                           |
+| Action               | Method | Route                         | Access Requirements            |
+| :------------------- | :----- | :---------------------------- | :----------------------------- |
+| Fetch categories     | GET    | /categories                   | None                           |
+| Fetch category by ID | GET    | /categories/:categoryId       | None                           |
+| Fetch all categories | GET    | /admin/categories             | Authentication + Authorization |
+| Add new category     | POST   | /admin/categories             | Authentication + Authorization |
+| Update category      | POST   | /admin/categories/:categoryId | Authentication + Authorization |
 
 ### Brand Routes
 
-| Action              | Method | Route                  | Access Requirements            |
-| :------------------ | :----- | :--------------------- | :----------------------------- |
-| Fetch all brands    | GET    | /brands                | None                           |
-| Fetch brand by ID   | GET    | /brands/:brandId       | None                           |
-| Add new brand       | POST   | /admin/brands          | Authentication + Authorization |
-| Update brand        | POST   | /admin/brands/:brandId | Authentication + Authorization |
-| Fetch listed brands | GET    | /brands/listed         | None                           |
+| Action            | Method | Route                  | Access Requirements            |
+| :---------------- | :----- | :--------------------- | :----------------------------- |
+| Fetch brands      | GET    | /brands                | None                           |
+| Fetch brand by ID | GET    | /brands/:brandId       | None                           |
+| Fetch all brands  | GET    | /admin/brands          | Authentication + Authorization |
+| Add new brand     | POST   | /admin/brands          | Authentication + Authorization |
+| Update brand      | POST   | /admin/brands/:brandId | Authentication + Authorization |
 
 ### Coupon Routes
 
