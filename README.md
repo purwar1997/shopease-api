@@ -25,34 +25,37 @@
 
 A RESTful API for an ecommerce platform that provides multiple endpoints to manage authentication, users, cart, wishlist, addresses, products, categories, brands, coupons, orders and reviews.
 
-This project is built using Express.js and MongoDB; all the APIs are well-documented using Swagger Docs. User authentication has been implemented using JSON Web Tokens and the project is deployed on a DigitalOcean Droplet using Nginx as a web server.
+This project is built using Express.js and MongoDB; all the APIs are well-documented using Swagger specification. User authentication has been implemented via JSON Web Tokens and the project is deployed on a DigitalOcean Droplet using Nginx as a web server.
 
 ![preview](./media/header.png)
 
 ## 2. API Documentation
 
-APIs are documented using Swagger Docs and all of them are live and functional. [Click here](http://api.shopease.shubhampurwar.in/docs/swagger) to view API documentation. Select shopease production server in the dropdown menu and play with any API.
+APIs are documented using Swagger (OpenAPI) specification and all of them are live and functional. [Click here](http://api.shopease.shubhampurwar.in/docs/swagger) to view API docs. Select shopease production server in the dropdown menu and play with any API.
 
 [![Documentation Preview](/media/swagger.png)](http://api.shopease.shubhampurwar.in/docs/swagger)
 
 ## 3. Main Features
 
-- Authentication enabled using JSON Web Tokens
+- Authentication enabled using JSON Web Tokens (signup, login, reset password)
+- Authorization based on role of a user (user or admin)
 - Database modelling using various Mongoose schemas
-- Used MongoDB aggregation pipelines to perform complex database operations
-- Centralized error handling using Express middlewares
-- Validation of request payload using Joi library
-- Routing using Express middlewares
-- Logging of HTTP requests using Morgan
-- Ability to parse multipart/form-data using Formidable
-- Upload and delete images using Cloudinary APIs
-- Ability to send emails using Nodemailer
-- Integration of payment gateway using Razorpay APIs
-- Verification of email addresses and phone numbers using Abstract APIs (third party service)
+- Used MongoDB aggregation pipelines to perform complex database queries
 - Scheduled CRON job to check the expiry status of coupons every midnight
 - API and CRON jobs are deployed on a DigitalOcean Droplet using Nginx as a web server
-- Configured PM2 to keep API and CRON jobs running as daemon processes to ensure availability
-- Swagger Docs for documentation of APIs
+- Configured PM2 to keep API and Cron jobs running as daemon processes to ensure availability
+- Utilized the cluster module to evenly distribute incoming requests across all CPU cores in the server
+- APIs are documented using Swagger (OpenAPI) specification
+- Integration of payment gateway using Razorpay APIs
+- Verification of email addresses and phone numbers using Abstract APIs (third party service)
+- Validation of request payload using Joi library
+- Logging of HTTP requests using Morgan
+- Parsing of multipart/form-data using Formidable library
+- Upload and delete images using Cloudinary APIs
+- Ability to send emails using Nodemailer
+- Routing enabled using Express middlewares
+- Centralized error handling using Express middlewares
+- Project is based on MVC architecture
 
 ## 4. Schemas and Routes
 
