@@ -41,6 +41,7 @@ APIs are documented using Swagger (OpenAPI) specification and all of them are li
 - Authorization based on role of a user (user or admin)
 - Database modelling using various Mongoose schemas
 - Used MongoDB aggregation pipelines to perform complex database queries
+- Applied filters, sorting and pagination on Mongoose documents
 - Scheduled CRON job to check the expiry status of coupons every midnight
 - API and CRON jobs are deployed on a DigitalOcean Droplet using Nginx as a web server
 - Configured PM2 to keep API and Cron jobs running as daemon processes to ensure availability
