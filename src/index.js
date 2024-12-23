@@ -6,13 +6,14 @@ import app from './app.js';
   try {
     await connectToDB();
 
-    app.on('error', error => {
-      throw error;
-    });
-
-    app.listen(config.server.port, () => {
+    const initializeServer = error => {
+      if (error) {
+        throw error;
+      }
       console.log(`Server is running on http://localhost:${config.server.port}`);
-    });
+    };
+
+    app.listen(config.server.port, initializeServer);
   } catch (error) {
     console.error('ERROR:', error);
     process.exit(1);
