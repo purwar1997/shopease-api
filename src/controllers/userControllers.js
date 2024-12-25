@@ -58,10 +58,16 @@ export const deleteAccount = handleAsync(async (req, res) => {
 export const addProfilePhoto = handleAsync(async (req, res) => {
   const { user } = req;
 
+  if (user.avatar?.publicId) {
+    throw new CustomError('Profile photo already exists', 409);
+  }
+
   const response = await uploadImage(UPLOAD_FOLDERS.USER_AVATARS, req.file, user._id);
 
-  user.avatar.url = response.secure_url;
-  user.avatar.publicId = response.public_id;
+  user.avatar = {
+    publicId: response.public_id,
+    url: response.secure_url,
+  };
 
   const updatedUser = await user.save();
 
@@ -72,14 +78,16 @@ export const addProfilePhoto = handleAsync(async (req, res) => {
 export const updateProfilePhoto = handleAsync(async (req, res) => {
   const { user } = req;
 
-  if (user.avatar.publicId) {
+  if (user.avatar?.publicId) {
     await deleteImage(user.avatar.publicId);
   }
 
   const response = await uploadImage(UPLOAD_FOLDERS.USER_AVATARS, req.file, user._id);
 
-  user.avatar.url = response.secure_url;
-  user.avatar.publicId = response.public_id;
+  user.avatar = {
+    publicId: response.public_id,
+    url: response.secure_url,
+  };
 
   const updatedUser = await user.save();
 
@@ -90,14 +98,14 @@ export const updateProfilePhoto = handleAsync(async (req, res) => {
 export const removeProfilePhoto = handleAsync(async (req, res) => {
   const { user } = req;
 
-  if (user.avatar.publicId) {
+  if (user.avatar?.publicId) {
     await deleteImage(user.avatar.publicId);
   }
 
   const updatedUser = await User.findByIdAndUpdate(
     user._id,
     { $unset: { avatar: 1 } },
-    { runValidators: true, new: true }
+    { new: true }
   );
 
   sendResponse(res, 200, 'Profile photo removed successfully', updatedUser);
