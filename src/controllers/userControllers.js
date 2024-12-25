@@ -5,7 +5,7 @@ import { sendResponse } from '../utils/helperFunctions.js';
 import { clearCookieOptions } from '../utils/cookieOptions.js';
 import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { userSortRules } from '../utils/sortRules.js';
-import { UPLOAD_FOLDERS, PAGINATION } from '../constants/common.js';
+import { UPLOAD_FOLDERS, PAGINATION, ROLES } from '../constants/common.js';
 
 // Allows users to fetch their profile
 export const getProfile = handleAsync(async (req, res) => {
@@ -42,6 +42,21 @@ export const updateProfile = handleAsync(async (req, res) => {
 // Allows users to delete their account
 export const deleteAccount = handleAsync(async (req, res) => {
   const userId = req.user._id;
+
+  if (req.user.role === ROLES.ADMIN) {
+    const adminCount = await User.countDocuments({
+      role: ROLES.ADMIN,
+      isDeleted: false,
+      _id: { $ne: userId },
+    });
+
+    if (adminCount === 0) {
+      throw new CustomError(
+        'Currently, you are the only admin. Promote another user to the role of admin before deleting your account',
+        409
+      );
+    }
+  }
 
   await User.findByIdAndUpdate(
     userId,
@@ -183,7 +198,7 @@ export const deleteUser = handleAsync(async (req, res) => {
 // Allows admins to fetch a list of other admins
 export const getOtherAdmins = handleAsync(async (req, res) => {
   const otherAdmins = await User.find({
-    role: 'admin',
+    role: ROLES.ADMIN,
     isDeleted: false,
     _id: { $ne: req.user._id },
   });
@@ -196,14 +211,14 @@ export const adminSelfDemote = handleAsync(async (req, res) => {
   const userId = req.user._id;
 
   const adminCount = await User.countDocuments({
-    role: 'admin',
+    role: ROLES.ADMIN,
     isDeleted: false,
     _id: { $ne: userId },
   });
 
   if (adminCount === 0) {
     throw new CustomError(
-      'You are the only admin. Promote another user before demoting yourself',
+      'Currently, you are the only admin. Promote another user to the role of admin before demoting yourself',
       409
     );
   }
@@ -222,14 +237,14 @@ export const adminSelfDelete = handleAsync(async (req, res) => {
   const userId = req.user._id;
 
   const adminCount = await User.countDocuments({
-    role: 'admin',
+    role: ROLES.ADMIN,
     isDeleted: false,
     _id: { $ne: userId },
   });
 
   if (adminCount === 0) {
     throw new CustomError(
-      'You are the only admin. Promote another user before deleting yourself',
+      'Currently, you are the only admin. Promote another user to the role of admin before deleting yourself',
       409
     );
   }
