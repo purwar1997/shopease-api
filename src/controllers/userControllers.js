@@ -113,9 +113,11 @@ export const updateProfilePhoto = handleAsync(async (req, res) => {
 export const removeProfilePhoto = handleAsync(async (req, res) => {
   const { user } = req;
 
-  if (user.avatar?.publicId) {
-    await deleteImage(user.avatar.publicId);
+  if (!user.avatar?.publicId) {
+    throw new CustomError('Profile photo does not exist', 404);
   }
+
+  await deleteImage(user.avatar.publicId);
 
   const updatedUser = await User.findByIdAndUpdate(
     user._id,
