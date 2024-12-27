@@ -20,12 +20,12 @@ const passwordSchema = Joi.string().pattern(REGEX.PASSWORD).required().messages(
   'string.base': 'Password must be string',
   'string.empty': 'Password cannot be empty',
   'string.pattern.base':
-    'Password must be 6-20 characters long and should contain atleast one digit, one letter and one special character',
+    'Password must be 6-20 characters long and should contain at least one digit, one letter, and one special character',
 });
 
 const confirmPasswordSchema = Joi.any().valid(Joi.ref('password')).required().strip().messages({
   'any.required': 'Confirm password is required',
-  'any.only': "Confirm password doesn't match with password",
+  'any.only': 'Confirm password does not match with password',
 });
 
 export const signupSchema = customJoi.object({

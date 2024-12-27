@@ -26,7 +26,7 @@ export const updateProfile = handleAsync(async (req, res) => {
 
   if (anotherUser) {
     throw new CustomError(
-      'This phone number is being used by another user. Please set a different phone number',
+      'This phone number is being used by another user. Please provide a different phone number',
       409
     );
   }
