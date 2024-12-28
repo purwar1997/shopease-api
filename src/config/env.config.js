@@ -8,7 +8,7 @@ const config = {
   auth: {
     jwtSecretKey: process.env.JWT_SECRET_KEY,
   },
-  gmail: {
+  email: {
     username: process.env.GMAIL_USERNAME,
     password: process.env.GMAIL_PASSWORD,
     senderAddress: process.env.SENDER_ADDRESS,
@@ -31,9 +31,9 @@ const requiredConfig = [
   'server.port',
   'database.url',
   'auth.jwtSecretKey',
-  'gmail.username',
-  'gmail.password',
-  'gmail.senderAddress',
+  'email.username',
+  'email.password',
+  'email.senderAddress',
   'verification.emailKey',
   'verification.phoneKey',
   'cloudinary.apiKey',

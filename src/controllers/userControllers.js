@@ -26,7 +26,7 @@ export const updateProfile = handleAsync(async (req, res) => {
 
   if (anotherUser) {
     throw new CustomError(
-      'This phone number is being used by another user. Please provide a different phone number',
+      'This phone number is linked to another user. Please provide a different phone number',
       409
     );
   }
@@ -74,7 +74,7 @@ export const addProfilePhoto = handleAsync(async (req, res) => {
   const { user } = req;
 
   if (user.avatar?.publicId) {
-    throw new CustomError('Profile photo already exists', 409);
+    await deleteImage(user.avatar.publicId);
   }
 
   const response = await uploadImage(UPLOAD_FOLDERS.USER_AVATARS, req.file, user._id);

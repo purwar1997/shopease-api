@@ -103,7 +103,7 @@ export const forgotPassword = handleAsync(async (req, res) => {
   const resetPasswordToken = user.generateForgotPasswordToken();
   await user.save();
 
-  const resetPasswordUrl = `${req.protocol}://${req.host}/reset-password/${resetPasswordToken}`;
+  const resetPasswordUrl = `${req.protocol}://${req.hostname}/reset-password/${resetPasswordToken}`;
 
   try {
     const options = {
