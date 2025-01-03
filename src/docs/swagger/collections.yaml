@@ -362,7 +362,7 @@ paths:
       parameters:
         - in: query
           name: roles
-          description: Field to filter users based on their role
+          description: Field to filter users by role
           schema:
             type: array
             items:
@@ -380,7 +380,8 @@ paths:
             enum:
               - name_asc
               - name_desc
-        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON object containing a list of users
@@ -1011,12 +1012,12 @@ paths:
       description: Fetches a list of products
       operationId: getProducts
       parameters:
-        - $ref: '#/components/parameters/Categories'
-        - $ref: '#/components/parameters/Brands'
-        - $ref: '#/components/parameters/Rating'
+        - $ref: '#/components/parameters/categoriesParam'
+        - $ref: '#/components/parameters/brandsParam'
+        - $ref: '#/components/parameters/ratingParam'
         - in: query
           name: sort
-          description: Option to sort products by
+          description: Option to sort products
           schema:
             type: string
             enum:
@@ -1025,7 +1026,8 @@ paths:
               - rating
               - price_asc
               - price_desc
-        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON object containing a list of products
@@ -1083,34 +1085,30 @@ paths:
       description: Allows admins to fetch a list of products
       operationId: adminGetProducts
       parameters:
-        - $ref: '#/components/parameters/Categories'
-        - $ref: '#/components/parameters/Brands'
-        - $ref: '#/components/parameters/Rating'
+        - $ref: '#/components/parameters/categoriesParam'
+        - $ref: '#/components/parameters/brandsParam'
+        - $ref: '#/components/parameters/ratingParam'
         - in: query
           name: availability
-          description: Field to filter products based on whether they are in stock or not
+          description: Field to filter products by stock availability
           schema:
-            oneOf:
-              - type: boolean
-              - type: string
+            type: string
             enum:
               - true
               - false
               - all
         - in: query
           name: deleted
-          description: Field to filter products based on whether they are deleted or not
+          description: Field to filter products by deletion status
           schema:
-            oneOf:
-              - type: boolean
-              - type: string
+            type: string
             enum:
               - true
               - false
               - all
         - in: query
           name: sort
-          description: Option to sort products by
+          description: Option to sort products
           schema:
             type: string
             enum:
@@ -1120,7 +1118,8 @@ paths:
               - price_desc
               - stock_asc
               - stock_desc
-        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON object containing a list of products
@@ -1633,14 +1632,14 @@ paths:
       parameters:
         - in: query
           name: daysUntilExpiration
-          description: Number of days until expiration of coupons
+          description: Number of days until coupon expiration
           schema:
             type: integer
             format: int32
-            min: 1
+            minimum: 1
         - in: query
           name: discountType
-          description: Field to filter coupons by their discount type
+          description: Field to filter coupons by discount type
           schema:
             type: array
             items:
@@ -1652,7 +1651,7 @@ paths:
           explode: false
         - in: query
           name: status
-          description: Field to filter coupons by their status
+          description: Field to filter coupons by status
           schema:
             type: array
             items:
@@ -1671,7 +1670,8 @@ paths:
             enum:
               - expiry_asc
               - expiry_desc
-        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON object containing a list of coupons
@@ -1866,8 +1866,9 @@ paths:
       description: Allows users to fetch their orders
       operationId: getOrders
       parameters:
-        - $ref: '#/components/parameters/DaysInPast'
-        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/daysInPastParam'
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON object containing a list of orders
@@ -2013,10 +2014,10 @@ paths:
       description: Allows admins to fetch a list of orders
       operationId: adminGetOrders
       parameters:
-        - $ref: '#/components/parameters/DaysInPast'
+        - $ref: '#/components/parameters/daysInPastParam'
         - in: query
           name: status
-          description: Field to filter orders by their status
+          description: Field to filter orders by status
           schema:
             type: array
             items:
@@ -2031,17 +2032,13 @@ paths:
           explode: false
         - in: query
           name: paid
-          description: Field on filter orders based on whether they are paid or not
+          description: Field on filter orders by paid status
           schema:
-            oneOf:
-              - type: boolean
-              - type: string
+            type: string
             enum:
               - true
               - false
               - all
-          style: form
-          explode: false
         - in: query
           name: sort
           description: Field to sort orders by date or amount in asc|desc order
@@ -2052,7 +2049,8 @@ paths:
               - date_desc
               - amount_asc
               - amount_desc
-        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON object containing a list of orders
@@ -2179,13 +2177,14 @@ paths:
             type: string
         - in: query
           name: sort
-          description: Option to sort reviews by
+          description: Option to sort reviews
           schema:
             type: string
             enum:
               - top
               - recent
-        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON object containing a list of product reviews
@@ -2306,54 +2305,68 @@ paths:
 
 components:
   parameters:
-    Page:
+    pageParam:
       in: query
       name: page
-      description: Number of records to skip
+      description: Page number for paginated results
       schema:
         type: integer
         format: int32
         minimum: 1
+        maximum: 1000
 
-    Categories:
+    limitParam:
       in: query
-      name: categories
-      description: Field to filter products based on the categories they belong to
-      schema:
-        type: array
-        items:
-          type: string
-      style: form
-      explode: false
-
-    Brands:
-      in: query
-      name: brands
-      description: Field to filter products based on the brands they belong to
-      schema:
-        type: array
-        items:
-          type: string
-      style: form
-      explode: false
-
-    Rating:
-      in: query
-      name: rating
-      description: Field to filter products by their rating
+      name: limit
+      description: Number of items per page
       schema:
         type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+
+    categoriesParam:
+      in: query
+      name: categories
+      description: Field to filter products by categories
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+      style: form
+      explode: false
+
+    brandsParam:
+      in: query
+      name: brands
+      description: Field to filter products by brands
+      schema:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+      style: form
+      explode: false
+
+    ratingParam:
+      in: query
+      name: rating
+      description: Field to filter products by average rating
+      schema:
+        type: integer
+        format: int32
         minimum: 1
         maximum: 5
 
-    DaysInPast:
+    daysInPastParam:
       in: query
       name: daysInPast
       description: Number of days to fetch past orders
       schema:
         type: integer
         format: int32
-        min: 1
+        minimum: 1
 
   schemas:
     Success:
