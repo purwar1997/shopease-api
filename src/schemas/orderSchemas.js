@@ -1,16 +1,16 @@
 import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
-import { getPathParamSchema, pageSchema } from './commonSchemas.js';
+import { pageSchema } from './commonSchemas.js';
 import { formatOptions } from '../utils/helperFunctions.js';
-import { roundToTwoDecimalPlaces, stripEmptyKeys } from '../utils/joiSanitizers.js';
+import { stripEmptyKeys } from '../utils/joiSanitizers.js';
 import {
   validateObjectId,
   validateOption,
   validateCommaSeparatedValues,
 } from '../utils/joiValidators.js';
-import { QUANTITY, PRICE, ORDER_STATUS, DELIVERY_MODES } from '../constants/common.js';
+import { QUANTITY, ORDER_STATUS, DELIVERY_MODES } from '../constants/common.js';
 import { ORDER_SORT_OPTIONS } from '../constants/sortOptions.js';
-import { ORDER_DURATION, FILTER_OPTIONS } from '../constants/filterOptions.js';
+import { ORDER_DURATION, ACTIVE_FILTER } from '../constants/filterOptions.js';
 
 const allowedStatusForUpdate = { ...ORDER_STATUS };
 delete allowedStatusForUpdate.CREATED;
@@ -126,11 +126,11 @@ export const adminOrdersQuerySchema = Joi.object({
     .trim()
     .lowercase()
     .allow('')
-    .custom(validateOption(FILTER_OPTIONS))
+    .custom(validateOption(ACTIVE_FILTER))
     .messages({
       'string.base': 'Paid must be a string',
       'any.invalid': `Provided an invalid value for paid. Valid options are: ${formatOptions(
-        FILTER_OPTIONS
+        ACTIVE_FILTER
       )}`,
     }),
 
@@ -167,5 +167,8 @@ export const orderStatusSchema = customJoi.object({
 });
 
 export const orderIdSchema = Joi.object({
-  orderId: getPathParamSchema('Order ID', ':orderId'),
+  orderId: Joi.string().trim().empty(':orderId').required().messages({
+    'any.required': 'Order ID is required',
+    'string.empty': 'Order ID cannot be empty',
+  }),
 });

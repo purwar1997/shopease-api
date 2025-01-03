@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
 import { removeExtraInnerSpaces } from '../utils/joiSanitizers.js';
-import { getPathIDSchema } from './commonSchemas.js';
+import { validateObjectId } from '../utils/joiValidators.js';
 import { REGEX } from '../constants/regexPatterns.js';
 
 export const addressSchema = customJoi.object({
@@ -74,5 +74,9 @@ export const addressSchema = customJoi.object({
 });
 
 export const addressIdSchema = Joi.object({
-  addressId: getPathIDSchema('Address ID', ':addressId'),
+  addressId: Joi.string().trim().empty(':addressId').custom(validateObjectId).required().messages({
+    'any.required': 'Address ID is required',
+    'string.empty': 'Address ID cannot be empty',
+    'any.invalid': 'Address ID is invalid. Expected a valid objectId',
+  }),
 });

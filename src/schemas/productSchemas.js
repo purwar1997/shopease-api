@@ -7,10 +7,10 @@ import {
   sanitizeCommaSeparatedValues,
 } from '../utils/joiSanitizers.js';
 import { validateObjectId, validateOption } from '../utils/joiValidators.js';
-import { pageSchema, getPathIDSchema } from './commonSchemas.js';
+import { pageSchema } from './commonSchemas.js';
 import { PRICE, STOCK, RATING } from '../constants/common.js';
 import { PRODUCT_SORT_OPTIONS, ADMIN_PRODUCT_SORT_OPTIONS } from '../constants/sortOptions.js';
-import { FILTER_OPTIONS } from '../constants/filterOptions.js';
+import { ACTIVE_FILTER } from '../constants/filterOptions.js';
 
 const categoriesSchema = Joi.string()
   .trim()
@@ -130,11 +130,11 @@ export const adminProductsQuerySchema = Joi.object({
     .trim()
     .lowercase()
     .allow('')
-    .custom(validateOption(FILTER_OPTIONS))
+    .custom(validateOption(ACTIVE_FILTER))
     .messages({
       'string.base': 'Availability must be a string',
       'any.invalid': `Provided an invalid value for availability. Valid options are: ${formatOptions(
-        FILTER_OPTIONS
+        ACTIVE_FILTER
       )}`,
     }),
 
@@ -142,11 +142,11 @@ export const adminProductsQuerySchema = Joi.object({
     .trim()
     .lowercase()
     .allow('')
-    .custom(validateOption(FILTER_OPTIONS))
+    .custom(validateOption(ACTIVE_FILTER))
     .messages({
       'string.base': 'Deleted must be a string',
       'any.invalid': `Provided an invalid value for deleted. Valid options are: ${formatOptions(
-        FILTER_OPTIONS
+        ACTIVE_FILTER
       )}`,
     }),
 
@@ -167,5 +167,9 @@ export const adminProductsQuerySchema = Joi.object({
 });
 
 export const productIdSchema = Joi.object({
-  productId: getPathIDSchema('Product ID', ':productId'),
+  productId: Joi.string().trim().empty(':productId').custom(validateObjectId).required().messages({
+    'any.required': 'Product ID is required',
+    'string.empty': 'Product ID cannot be empty',
+    'any.invalid': 'Product ID is invalid. Expected a valid objectId',
+  }),
 });

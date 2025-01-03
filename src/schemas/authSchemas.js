@@ -1,6 +1,5 @@
 import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
-import { getPathParamSchema } from './commonSchemas.js';
 import { REGEX } from '../constants/regexPatterns.js';
 
 const emailSchema = Joi.string()
@@ -76,5 +75,8 @@ export const resetPasswordSchema = customJoi.object({
 });
 
 export const tokenSchema = Joi.object({
-  token: getPathParamSchema('Reset password token', ':token'),
+  token: Joi.string().trim().empty(':token').required().messages({
+    'any.required': 'Reset password token is required',
+    'string.empty': 'Reset password token cannot be empty',
+  }),
 });

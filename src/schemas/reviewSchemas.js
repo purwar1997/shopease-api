@@ -2,8 +2,8 @@ import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
 import { formatOptions } from '../utils/helperFunctions.js';
 import { removeExtraInnerSpaces } from '../utils/joiSanitizers.js';
-import { validateOption } from '../utils/joiValidators.js';
-import { getPathIDSchema, pageSchema } from './commonSchemas.js';
+import { validateOption, validateObjectId } from '../utils/joiValidators.js';
+import { pageSchema } from './commonSchemas.js';
 import { RATING } from '../constants/common.js';
 import { REVIEW_SORT_OPTIONS } from '../constants/sortOptions.js';
 
@@ -55,5 +55,9 @@ export const reviewsQuerySchema = Joi.object({
 });
 
 export const reviewIdSchema = Joi.object({
-  reviewId: getPathIDSchema('Review ID', ':reviewId'),
+  reviewId: Joi.string().trim().empty(':reviewId').custom(validateObjectId).required().messages({
+    'any.required': 'Review ID is required',
+    'string.empty': 'Review ID cannot be empty',
+    'any.invalid': 'Review ID is invalid. Expected a valid objectId',
+  }),
 });

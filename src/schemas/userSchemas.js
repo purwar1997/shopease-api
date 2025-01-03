@@ -1,9 +1,13 @@
 import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
 import { formatOptions } from '../utils/helperFunctions.js';
-import { validateOption, validateCommaSeparatedValues } from '../utils/joiValidators.js';
+import {
+  validateOption,
+  validateObjectId,
+  validateCommaSeparatedValues,
+} from '../utils/joiValidators.js';
 import { stripObjectKeys } from '../utils/joiSanitizers.js';
-import { getPathIDSchema, pageSchema } from './commonSchemas.js';
+import { pageSchema } from './commonSchemas.js';
 import { ROLES } from '../constants/common.js';
 import { USER_SORT_OPTIONS } from '../constants/sortOptions.js';
 import { REGEX } from '../constants/regexPatterns.js';
@@ -88,5 +92,9 @@ export const usersQuerySchema = Joi.object({
 });
 
 export const userIdSchema = Joi.object({
-  userId: getPathIDSchema('User ID', ':userId'),
+  userId: Joi.string().trim().empty(':userId').custom(validateObjectId).required().messages({
+    'any.required': 'User ID is required',
+    'string.empty': 'User ID cannot be empty',
+    'any.invalid': 'User ID is invalid. Expected a valid objectId',
+  }),
 });

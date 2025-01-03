@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
 import { removeExtraInnerSpaces } from '../utils/joiSanitizers.js';
-import { getPathIDSchema } from './commonSchemas.js';
+import { validateObjectId } from '../utils/joiValidators.js';
 
 export const brandSchema = customJoi.object({
   name: Joi.string().trim().max(50).required().custom(removeExtraInnerSpaces).messages({
@@ -13,5 +13,9 @@ export const brandSchema = customJoi.object({
 });
 
 export const brandIdSchema = Joi.object({
-  brandId: getPathIDSchema('Brand ID', ':brandId'),
+  brandId: Joi.string().trim().empty(':brandId').custom(validateObjectId).required().messages({
+    'any.required': 'Brand ID is required',
+    'string.empty': 'Brand ID cannot be empty',
+    'any.invalid': 'Brand ID is invalid. Expected a valid objectId',
+  }),
 });

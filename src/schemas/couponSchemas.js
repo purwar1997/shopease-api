@@ -1,9 +1,13 @@
 import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
 import { formatOptions } from '../utils/helperFunctions.js';
-import { validateCommaSeparatedValues, validateOption } from '../utils/joiValidators.js';
+import {
+  validateCommaSeparatedValues,
+  validateOption,
+  validateObjectId,
+} from '../utils/joiValidators.js';
 import { stripDiscountValue } from '../utils/joiSanitizers.js';
-import { pageSchema, getPathIDSchema } from './commonSchemas.js';
+import { pageSchema } from './commonSchemas.js';
 import { DISCOUNT_TYPES, DISCOUNT, COUPON_STATUS } from '../constants/common.js';
 import { COUPON_SORT_OPTIONS } from '../constants/sortOptions.js';
 import { COUPON_EXPIRATION } from '../constants/filterOptions.js';
@@ -134,5 +138,9 @@ export const couponsQuerySchema = Joi.object({
 });
 
 export const couponIdSchema = Joi.object({
-  couponId: getPathIDSchema('Coupon ID', ':couponId'),
+  couponId: Joi.string().trim().empty(':couponId').custom(validateObjectId).required().messages({
+    'any.required': 'Coupon ID is required',
+    'string.empty': 'Coupon ID cannot be empty',
+    'any.invalid': 'Coupon ID is invalid. Expected a valid objectId',
+  }),
 });
