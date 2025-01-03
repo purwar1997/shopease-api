@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import pluralize from 'pluralize';
 import crypto from 'crypto';
 import { format } from 'date-fns';
+import { ACTIVE_FILTER } from '../constants/filterOptions.js';
 
 export const sendResponse = (res, statusCode, message, data) => {
   res.status(statusCode).json({
@@ -99,10 +100,7 @@ export const getCurrentDate = () => {
   return new Date(year, month, date);
 };
 
-export const isBoolean = str => {
-  str = str.trim().toLowerCase();
-  return str === 'true' || str === 'false';
-};
+export const isBoolean = value => value === ACTIVE_FILTER.TRUE || value === ACTIVE_FILTER.FALSE;
 
 export const generateHmacSha256 = (message, secret) =>
   crypto.createHmac('sha256', secret).update(message).digest('hex');

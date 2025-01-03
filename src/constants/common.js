@@ -52,6 +52,11 @@ export const UPLOAD_FILES = Object.freeze({
   PRODUCT_IMAGE: 'image',
 });
 
+export const FILE_UPLOAD = Object.freeze({
+  MAX_FILES: 1,
+  MAX_FILE_SIZE: 20 * 1024 * 1024,
+});
+
 export const PAGINATION = Object.freeze({
   PRODUCTS_PER_PAGE: 15,
   ORDERS_PER_PAGE: 10,
@@ -96,11 +101,6 @@ export const DISCOUNT = Object.freeze({
   MAX_PERCENTAGE: 100,
 });
 
-export const FILE_UPLOAD = Object.freeze({
-  MAX_FILES: 1,
-  MAX_FILE_SIZE: 20 * 1024 * 1024,
-});
-
 export const SAFE_INTEGER = Object.freeze({
   MIN: Number.MIN_SAFE_INTEGER,
   MAX: Number.MAX_SAFE_INTEGER,
@@ -124,6 +124,18 @@ export const DELIVERY_OPTIONS = deepFreeze([
     },
   },
 ]);
+
+export const PAGE = Object.freeze({
+  MIN: 1,
+  MAX: 1000,
+  DEFAULT: 1,
+});
+
+export const LIMIT = Object.freeze({
+  MIN: 1,
+  MAX: 100,
+  DEFAULT: 10,
+});
 
 export const CRON_OPTIONS = Object.freeze({
   TIMEZONE: 'Asia/Kolkata',

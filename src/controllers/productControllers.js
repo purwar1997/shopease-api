@@ -8,7 +8,7 @@ import { sendResponse, isBoolean } from '../utils/helperFunctions.js';
 import { productSortRules, adminProductSortRules } from '../utils/sortRules.js';
 import { deleteImage, uploadImage } from '../services/cloudinaryAPIs.js';
 import { PAGINATION, UPLOAD_FOLDERS } from '../constants/common.js';
-import { FILTER_OPTIONS } from '../constants/filterOptions.js';
+import { ACTIVE_FILTER } from '../constants/filterOptions.js';
 
 // Fetches a paginated list of products
 export const getProducts = handleAsync(async (req, res) => {
@@ -78,7 +78,7 @@ export const adminGetProducts = handleAsync(async (req, res) => {
   }
 
   if (availability && isBoolean(availability)) {
-    filters.stock = availability === FILTER_OPTIONS.TRUE ? { $gt: 0 } : 0;
+    filters.stock = availability === ACTIVE_FILTER.TRUE ? { $gt: 0 } : 0;
   }
 
   if (deleted && isBoolean(deleted)) {

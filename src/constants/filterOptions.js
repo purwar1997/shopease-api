@@ -1,4 +1,4 @@
-export const FILTER_OPTIONS = Object.freeze({
+export const ACTIVE_FILTER = Object.freeze({
   TRUE: 'true',
   FALSE: 'false',
   ALL: 'all',
