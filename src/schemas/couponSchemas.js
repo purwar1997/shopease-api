@@ -7,7 +7,7 @@ import {
   validateObjectId,
 } from '../utils/joiValidators.js';
 import { stripDiscountValue } from '../utils/joiSanitizers.js';
-import { pageSchema } from './commonSchemas.js';
+import { limitSchema, pageSchema } from './commonSchemas.js';
 import { DISCOUNT_TYPES, DISCOUNT, COUPON_STATUS } from '../constants/common.js';
 import { COUPON_SORT_OPTIONS } from '../constants/sortOptions.js';
 import { COUPON_EXPIRATION } from '../constants/filterOptions.js';
@@ -135,6 +135,7 @@ export const couponsQuerySchema = Joi.object({
     }),
 
   page: pageSchema,
+  limit: limitSchema,
 });
 
 export const couponIdSchema = Joi.object({

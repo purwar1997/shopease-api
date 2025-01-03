@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import customJoi from '../utils/customJoi.js';
-import { pageSchema } from './commonSchemas.js';
+import { limitSchema, pageSchema } from './commonSchemas.js';
 import { formatOptions } from '../utils/helperFunctions.js';
 import { stripEmptyKeys } from '../utils/joiSanitizers.js';
 import {
@@ -105,6 +105,7 @@ export const paymentInfoSchema = customJoi.object({
 export const ordersQuerySchema = Joi.object({
   daysInPast: daysInPastSchema,
   page: pageSchema,
+  limit: limitSchema,
 });
 
 export const adminOrdersQuerySchema = Joi.object({
@@ -148,6 +149,7 @@ export const adminOrdersQuerySchema = Joi.object({
     }),
 
   page: pageSchema,
+  limit: limitSchema,
 });
 
 export const orderStatusSchema = customJoi.object({

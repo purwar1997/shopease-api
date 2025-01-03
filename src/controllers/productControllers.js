@@ -7,21 +7,21 @@ import CustomError from '../utils/customError.js';
 import { sendResponse, isBoolean } from '../utils/helperFunctions.js';
 import { productSortRules, adminProductSortRules } from '../utils/sortRules.js';
 import { deleteImage, uploadImage } from '../services/cloudinaryAPIs.js';
-import { PAGINATION, UPLOAD_FOLDERS } from '../constants/common.js';
+import { UPLOAD_FOLDERS } from '../constants/common.js';
 import { ACTIVE_FILTER } from '../constants/filterOptions.js';
 
 // Fetches a paginated list of products
 export const getProducts = handleAsync(async (req, res) => {
-  const { categories, brands, rating, sort, page } = req.query;
+  const { categories, brands, rating, sort, page, limit } = req.query;
   const filters = { isDeleted: false };
 
-  if (categories.length > 0) {
+  if (categories.length) {
     const categoryList = await Category.find({ title: { $in: categories } });
     const categoryIDs = categoryList.map(category => category._id);
     filters.category = { $in: categoryIDs };
   }
 
-  if (brands.length > 0) {
+  if (brands.length) {
     const brandList = await Brand.find({ name: { $in: brands } });
     const brandIDs = brandList.map(brand => brand._id);
     filters.brand = { $in: brandIDs };
@@ -32,10 +32,12 @@ export const getProducts = handleAsync(async (req, res) => {
   }
 
   const sortRule = productSortRules[sort];
-  const offset = (page - 1) * PAGINATION.PRODUCTS_PER_PAGE;
-  const limit = PAGINATION.PRODUCTS_PER_PAGE;
 
-  const products = await Product.find(filters).sort(sortRule).skip(offset).limit(limit);
+  const products = await Product.find(filters)
+    .sort(sortRule)
+    .skip((page - 1) * limit)
+    .limit(limit);
+
   const productCount = await Product.countDocuments(filters);
 
   res.set('X-Total-Count', productCount);
@@ -58,16 +60,16 @@ export const getProductById = handleAsync(async (req, res) => {
 
 // Allows admins to fetch a paginated list of products
 export const adminGetProducts = handleAsync(async (req, res) => {
-  const { categories, brands, rating, availability, deleted, sort, page } = req.query;
+  const { categories, brands, rating, availability, deleted, sort, page, limit } = req.query;
   const filters = {};
 
-  if (categories.length > 0) {
+  if (categories.length) {
     const categoryList = await Category.find({ title: { $in: categories } });
     const categoryIDs = categoryList.map(category => category._id);
     filters.category = { $in: categoryIDs };
   }
 
-  if (brands.length > 0) {
+  if (brands.length) {
     const brandList = await Brand.find({ name: { $in: brands } });
     const brandIDs = brandList.map(brand => brand._id);
     filters.brand = { $in: brandIDs };
@@ -86,10 +88,12 @@ export const adminGetProducts = handleAsync(async (req, res) => {
   }
 
   const sortRule = adminProductSortRules[sort];
-  const offset = (page - 1) * PAGINATION.PRODUCTS_PER_PAGE;
-  const limit = PAGINATION.PRODUCTS_PER_PAGE;
 
-  const products = await Product.find(filters).sort(sortRule).skip(offset).limit(limit);
+  const products = await Product.find(filters)
+    .sort(sortRule)
+    .skip((page - 1) * limit)
+    .limit(limit);
+
   const productCount = await Product.countDocuments(filters);
 
   res.set('X-Total-Count', productCount);

@@ -7,7 +7,7 @@ import {
   validateCommaSeparatedValues,
 } from '../utils/joiValidators.js';
 import { stripObjectKeys } from '../utils/joiSanitizers.js';
-import { pageSchema } from './commonSchemas.js';
+import { limitSchema, pageSchema } from './commonSchemas.js';
 import { ROLES } from '../constants/common.js';
 import { USER_SORT_OPTIONS } from '../constants/sortOptions.js';
 import { REGEX } from '../constants/regexPatterns.js';
@@ -89,6 +89,7 @@ export const usersQuerySchema = Joi.object({
     }),
 
   page: pageSchema,
+  limit: limitSchema,
 });
 
 export const userIdSchema = Joi.object({

@@ -5,12 +5,12 @@ import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
 import { sendResponse } from '../utils/helperFunctions.js';
 import { reviewSortRules } from '../utils/sortRules.js';
-import { PAGINATION, ORDER_STATUS } from '../constants/common.js';
+import { ORDER_STATUS } from '../constants/common.js';
 
 // Fetches a paginated list of product reviews
 export const getProductReviews = handleAsync(async (req, res) => {
   const { productId } = req.params;
-  const { sort, page } = req.query;
+  const { sort, page, limit } = req.query;
 
   const product = await Product.findById(productId);
 
@@ -19,12 +19,10 @@ export const getProductReviews = handleAsync(async (req, res) => {
   }
 
   const sortRule = reviewSortRules[sort];
-  const offset = (page - 1) * PAGINATION.REVIEWS_PER_PAGE;
-  const limit = PAGINATION.REVIEWS_PER_PAGE;
 
   const reviews = await Review.find({ product: productId })
     .sort(sortRule)
-    .skip(offset)
+    .skip((page - 1) * limit)
     .limit(limit);
 
   const reviewCount = await Review.countDocuments({ product: productId });

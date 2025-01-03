@@ -3,7 +3,7 @@ import customJoi from '../utils/customJoi.js';
 import { formatOptions } from '../utils/helperFunctions.js';
 import { removeExtraInnerSpaces } from '../utils/joiSanitizers.js';
 import { validateOption, validateObjectId } from '../utils/joiValidators.js';
-import { pageSchema } from './commonSchemas.js';
+import { limitSchema, pageSchema } from './commonSchemas.js';
 import { RATING } from '../constants/common.js';
 import { REVIEW_SORT_OPTIONS } from '../constants/sortOptions.js';
 
@@ -52,6 +52,7 @@ export const reviewsQuerySchema = Joi.object({
     }),
 
   page: pageSchema,
+  limit: limitSchema,
 });
 
 export const reviewIdSchema = Joi.object({

@@ -5,7 +5,7 @@ import { sendResponse } from '../utils/helperFunctions.js';
 import { clearCookieOptions } from '../utils/cookieOptions.js';
 import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { userSortRules } from '../utils/sortRules.js';
-import { UPLOAD_FOLDERS, PAGINATION, ROLES } from '../constants/common.js';
+import { UPLOAD_FOLDERS, ROLES } from '../constants/common.js';
 
 // Allows users to fetch their profile
 export const getProfile = handleAsync(async (req, res) => {
@@ -130,18 +130,20 @@ export const removeProfilePhoto = handleAsync(async (req, res) => {
 
 // Allows admins to fetch a paginated list of users
 export const getUsers = handleAsync(async (req, res) => {
-  const { roles, sort, page } = req.query;
+  const { roles, sort, page, limit } = req.query;
   const filters = { isDeleted: false };
 
-  if (roles.length > 0) {
+  if (roles.length) {
     filters.role = { $in: roles };
   }
 
   const sortRule = sort ? userSortRules[sort] : { createdAt: -1 };
-  const offset = (page - 1) * PAGINATION.USERS_PER_PAGE;
-  const limit = PAGINATION.USERS_PER_PAGE;
 
-  const users = await User.find(filters).sort(sortRule).skip(offset).limit(limit);
+  const users = await User.find(filters)
+    .sort(sortRule)
+    .skip((page - 1) * limit)
+    .limit(limit);
+
   const userCount = await User.countDocuments(filters);
 
   res.set('X-Total-Count', userCount);

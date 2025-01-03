@@ -57,14 +57,6 @@ export const FILE_UPLOAD = Object.freeze({
   MAX_FILE_SIZE: 20 * 1024 * 1024,
 });
 
-export const PAGINATION = Object.freeze({
-  PRODUCTS_PER_PAGE: 15,
-  ORDERS_PER_PAGE: 10,
-  USERS_PER_PAGE: 10,
-  COUPONS_PER_PAGE: 10,
-  REVIEWS_PER_PAGE: 5,
-});
-
 export const PRICE = Object.freeze({
   MIN: 10,
   MAX: 100000,

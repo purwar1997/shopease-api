@@ -20,13 +20,7 @@ import {
   getOrderCancellationEmail,
   getOrderDeletionEmail,
 } from '../utils/emailTemplates.js';
-import {
-  GST,
-  DISCOUNT_TYPES,
-  PAGINATION,
-  ORDER_STATUS,
-  DELIVERY_OPTIONS,
-} from '../constants/common.js';
+import { GST, DISCOUNT_TYPES, ORDER_STATUS, DELIVERY_OPTIONS } from '../constants/common.js';
 
 // Allows users to place an order
 export const createOrder = handleAsync(async (req, res) => {
@@ -156,7 +150,7 @@ export const confirmOrder = handleAsync(async (req, res) => {
 
 // Allows users to fetch a paginated list of their orders
 export const getOrders = handleAsync(async (req, res) => {
-  const { daysInPast, page } = req.query;
+  const { daysInPast, page, limit } = req.query;
 
   const filters = {
     user: req.user._id,
@@ -168,14 +162,12 @@ export const getOrders = handleAsync(async (req, res) => {
   };
 
   const sortRule = { createdAt: -1 };
-  const offset = (page - 1) * PAGINATION.ORDERS_PER_PAGE;
-  const limit = PAGINATION.ORDERS_PER_PAGE;
 
   const orders = await Order.find(filters)
+    .populate('items.product')
     .sort(sortRule)
-    .skip(offset)
-    .limit(limit)
-    .populate('items.product');
+    .skip((page - 1) * limit)
+    .limit(limit);
 
   const orderCount = await Order.countDocuments(filters);
 
@@ -266,14 +258,14 @@ export const cancelOrder = handleAsync(async (req, res) => {
 
 // Allows admins to fetch a paginated list of orders
 export const adminGetOrders = handleAsync(async (req, res) => {
-  const { daysInPast, status, paid, sort, page } = req.query;
+  const { daysInPast, status, paid, sort, page, limit } = req.query;
 
   const filters = {
     createdAt: { $gt: getCurrentDate().getTime() - (daysInPast - 1) * 24 * 60 * 60 * 1000 },
     isDeleted: false,
   };
 
-  if (status.length > 0) {
+  if (status.length) {
     filters.status = { $in: status };
   }
 
@@ -282,15 +274,13 @@ export const adminGetOrders = handleAsync(async (req, res) => {
   }
 
   const sortRule = orderSortRules[sort];
-  const offset = (page - 1) * PAGINATION.ORDERS_PER_PAGE;
-  const limit = PAGINATION.ORDERS_PER_PAGE;
 
   const orders = await Order.find(filters)
-    .sort(sortRule)
-    .skip(offset)
-    .limit(limit)
     .populate('items.product')
-    .populate('shippingAddress');
+    .populate('shippingAddress')
+    .sort(sortRule)
+    .skip((page - 1) * limit)
+    .limit(limit);
 
   const orderCount = await Order.countDocuments(filters);
 

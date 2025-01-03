@@ -7,7 +7,7 @@ import {
   sanitizeCommaSeparatedValues,
 } from '../utils/joiSanitizers.js';
 import { validateObjectId, validateOption } from '../utils/joiValidators.js';
-import { pageSchema } from './commonSchemas.js';
+import { limitSchema, pageSchema } from './commonSchemas.js';
 import { PRICE, STOCK, RATING } from '../constants/common.js';
 import { PRODUCT_SORT_OPTIONS, ADMIN_PRODUCT_SORT_OPTIONS } from '../constants/sortOptions.js';
 import { ACTIVE_FILTER } from '../constants/filterOptions.js';
@@ -119,6 +119,7 @@ export const productsQuerySchema = Joi.object({
     }),
 
   page: pageSchema,
+  limit: limitSchema,
 });
 
 export const adminProductsQuerySchema = Joi.object({
@@ -164,6 +165,7 @@ export const adminProductsQuerySchema = Joi.object({
     }),
 
   page: pageSchema,
+  limit: limitSchema,
 });
 
 export const productIdSchema = Joi.object({
