@@ -19,4 +19,10 @@ app.use(cors(corsOptions));
 app.use('/api/v1', apiRouter);
 app.use(errorHandler);
 
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    message: 'Server is up and running',
+  });
+});
+
 export default app;

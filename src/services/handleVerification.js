@@ -9,7 +9,6 @@ export const handleEmailVerification = async email => {
     );
 
     const { is_valid_format, is_disposable_email, deliverability } = response.data;
-
     const result = { emailToVerify: email };
 
     if (is_valid_format.value && !is_disposable_email.value && deliverability === 'DELIVERABLE') {
@@ -30,11 +29,9 @@ export const handlePhoneVerification = async phone => {
       `https://phonevalidation.abstractapi.com/v1/?api_key=${config.verification.phoneKey}&phone=${phone}&country=IN`
     );
 
-    const { valid } = response.data;
-
     const result = {
       phoneToVerify: phone,
-      isPhoneValid: valid,
+      isPhoneValid: response.data.valid,
     };
 
     return result;
