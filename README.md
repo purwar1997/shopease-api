@@ -31,13 +31,15 @@ This project is built using Express.js and MongoDB; all the APIs are well-docume
 
 ## 2. API Documentation
 
+This project is deployed on a DigitalOcean Droplet and linked to a custom domain. To visit the live deployment, [click here](http://api.shopease.shubhampurwar.in).
+
 APIs are documented using Swagger (OpenAPI) specification and all of them are live and functional. [Click here](http://api.shopease.shubhampurwar.in/docs/swagger) to view API docs. Select shopease production server in the dropdown menu and play with any API.
 
 [![Documentation Preview](/media/swagger.png)](http://api.shopease.shubhampurwar.in/docs/swagger)
 
 ## 3. Main Features
 
-- Authentication enabled using JSON Web Tokens (signup, login, reset password)
+- Authentication using JSON Web Tokens (signup, login, reset password)
 - Authorization based on role of a user (user or admin)
 - Database modelling using various Mongoose schemas
 - Used MongoDB aggregation pipelines to perform complex database queries
