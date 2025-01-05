@@ -152,7 +152,7 @@ export const deleteCoupon = handleAsync(async (req, res) => {
 export const activateCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
 
-  let coupon = await Coupon.findById(couponId);
+  const coupon = await Coupon.findById(couponId);
 
   if (!coupon) {
     throw new CustomError('Coupon not found', 404);
@@ -168,17 +168,16 @@ export const activateCoupon = handleAsync(async (req, res) => {
 
   coupon.status = COUPON_STATUS.ACTIVE;
   coupon.activeStatusLastUpdatedBy = req.user._id;
+  const activeCoupon = await coupon.save();
 
-  coupon = await coupon.save();
-
-  sendResponse(res, 200, 'Coupon activated successfully', coupon);
+  sendResponse(res, 200, 'Coupon activated successfully', activeCoupon);
 });
 
 // Allows admins to deactivate a coupon
 export const deactivateCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
 
-  let coupon = await Coupon.findById(couponId);
+  const coupon = await Coupon.findById(couponId);
 
   if (!coupon) {
     throw new CustomError('Coupon not found', 404);
@@ -194,8 +193,7 @@ export const deactivateCoupon = handleAsync(async (req, res) => {
 
   coupon.status = COUPON_STATUS.INACTIVE;
   coupon.activeStatusLastUpdatedBy = req.user._id;
+  const inactiveCoupon = await coupon.save();
 
-  coupon = await coupon.save();
-
-  sendResponse(res, 200, 'Coupon deactivated successfully', coupon);
+  sendResponse(res, 200, 'Coupon deactivated successfully', inactiveCoupon);
 });
