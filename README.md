@@ -6,7 +6,7 @@
 ## 0. Table of Contents
 
 1. [Overview](#1-overview)
-2. [API Documentation](#2-api-documentation)
+2. [Deployment and Documentation](#2-deployment-and-documentation)
 3. [Main Features](#3-main-features)
 4. [Schemas and Routes](#4-schemas-and-routes)
    - [Authentication Routes](#authentication-routes)
@@ -29,7 +29,7 @@ This project is built using Express.js and MongoDB; all the APIs are well-docume
 
 ![preview](./media/header.png)
 
-## 2. API Documentation
+## 2. Deployment and Documentation
 
 This project is deployed on a DigitalOcean Droplet and linked to a custom domain. To visit the live deployment, [click here](http://api.shopease.shubhampurwar.in).
 
