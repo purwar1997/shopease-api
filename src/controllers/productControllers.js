@@ -16,13 +16,21 @@ export const getProducts = handleAsync(async (req, res) => {
   const filters = { isDeleted: false };
 
   if (categories.length) {
-    const categoryList = await Category.find({ title: { $in: categories } });
+    const categoryList = await Category.find({ title: { $in: categories } }).collation({
+      locale: 'en',
+      strength: 2,
+    });
+
     const categoryIDs = categoryList.map(category => category._id);
     filters.category = { $in: categoryIDs };
   }
 
   if (brands.length) {
-    const brandList = await Brand.find({ name: { $in: brands } });
+    const brandList = await Brand.find({ name: { $in: brands } }).collation({
+      locale: 'en',
+      strength: 2,
+    });
+
     const brandIDs = brandList.map(brand => brand._id);
     filters.brand = { $in: brandIDs };
   }
@@ -64,13 +72,21 @@ export const adminGetProducts = handleAsync(async (req, res) => {
   const filters = {};
 
   if (categories.length) {
-    const categoryList = await Category.find({ title: { $in: categories } });
+    const categoryList = await Category.find({ title: { $in: categories } }).collation({
+      locale: 'en',
+      strength: 2,
+    });
+
     const categoryIDs = categoryList.map(category => category._id);
     filters.category = { $in: categoryIDs };
   }
 
   if (brands.length) {
-    const brandList = await Brand.find({ name: { $in: brands } });
+    const brandList = await Brand.find({ name: { $in: brands } }).collation({
+      locale: 'en',
+      strength: 2,
+    });
+
     const brandIDs = brandList.map(brand => brand._id);
     filters.brand = { $in: brandIDs };
   }
@@ -130,9 +146,12 @@ export const addNewProduct = handleAsync(async (req, res) => {
     throw new CustomError('Provided category does not exist', 404);
   }
 
-  const existingProduct = await Product.findOne({ title, brand, category });
+  const productByTitle = await Product.findOne({ title, brand, category }).collation({
+    locale: 'en',
+    strength: 2,
+  });
 
-  if (existingProduct) {
+  if (productByTitle) {
     throw new CustomError(
       'Product title must be unique within the same brand and category. To proceed, please change either the product title, category or brand',
       409
@@ -179,14 +198,14 @@ export const updateProduct = handleAsync(async (req, res) => {
     throw new CustomError('Provided category does not exist', 404);
   }
 
-  const existingProduct = await Product.findOne({
+  const productByTitle = await Product.findOne({
     title,
     brand,
     category,
     _id: { $ne: productId },
-  });
+  }).collation({ locale: 'en', strength: 2 });
 
-  if (existingProduct) {
+  if (productByTitle) {
     throw new CustomError(
       'Product title must be unique within the same brand and category. To proceed, please change either the product title, category or brand',
       409

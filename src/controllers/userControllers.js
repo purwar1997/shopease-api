@@ -22,9 +22,9 @@ export const updateProfile = handleAsync(async (req, res) => {
     delete updates.password;
   }
 
-  const anotherUser = await User.findOne({ phone: updates.phone, _id: { $ne: req.user._id } });
+  const userByPhone = await User.findOne({ phone: updates.phone, _id: { $ne: req.user._id } });
 
-  if (anotherUser) {
+  if (userByPhone) {
     throw new CustomError(
       'This phone number is linked to another user. Please provide a different phone number',
       409

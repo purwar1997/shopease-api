@@ -20,9 +20,9 @@ export const signup = handleAsync(async (req, res) => {
   user = await User.findOne({ email, isDeleted: true });
 
   if (user) {
-    const anotherUser = await User.findOne({ phone, _id: { $ne: user._id } });
+    const userByPhone = await User.findOne({ phone, _id: { $ne: user._id } });
 
-    if (anotherUser) {
+    if (userByPhone) {
       throw new CustomError(
         'This phone number is linked to another user. Please provide a different phone number',
         409

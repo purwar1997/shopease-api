@@ -64,9 +64,9 @@ export const getAllBrands = handleAsync(async (_req, res) => {
 export const addNewBrand = handleAsync(async (req, res) => {
   const { name } = req.body;
 
-  const existingBrand = await Brand.findOne({ name });
+  const brandByName = await Brand.findOne({ name }).collation({ locale: 'en', strength: 2 });
 
-  if (existingBrand) {
+  if (brandByName) {
     throw new CustomError(
       'Brand by this name already exists. Please provide a different brand name',
       409
@@ -101,9 +101,12 @@ export const updateBrand = handleAsync(async (req, res) => {
     throw new CustomError('Brand not found', 404);
   }
 
-  const existingBrand = await Brand.findOne({ name, _id: { $ne: brandId } });
+  const brandByName = await Brand.findOne({ name, _id: { $ne: brandId } }).collation({
+    locale: 'en',
+    strength: 2,
+  });
 
-  if (existingBrand) {
+  if (brandByName) {
     throw new CustomError(
       'Brand by this name already exists. Please provide a different brand name',
       409

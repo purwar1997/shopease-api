@@ -64,9 +64,12 @@ export const getAllCategories = handleAsync(async (_req, res) => {
 export const addNewCategory = handleAsync(async (req, res) => {
   const { title } = req.body;
 
-  const category = await Category.findOne({ title });
+  const categoryByTitle = await Category.findOne({ title }).collation({
+    locale: 'en',
+    strength: 2,
+  });
 
-  if (category) {
+  if (categoryByTitle) {
     throw new CustomError(
       'Category by this title already exists. Please provide a different category title',
       409
@@ -101,9 +104,12 @@ export const updateCategory = handleAsync(async (req, res) => {
     throw new CustomError('Category not found', 404);
   }
 
-  const existingCategory = await Category.findOne({ title, _id: { $ne: categoryId } });
+  const categoryByTitle = await Category.findOne({ title, _id: { $ne: categoryId } }).collation({
+    locale: 'en',
+    strength: 2,
+  });
 
-  if (existingCategory) {
+  if (categoryByTitle) {
     throw new CustomError(
       'Category by this title already exists. Please provide a different category title',
       409

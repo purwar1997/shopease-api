@@ -70,9 +70,9 @@ export const adminGetCoupons = handleAsync(async (req, res) => {
 export const createCoupon = handleAsync(async (req, res) => {
   const { code } = req.body;
 
-  const existingCoupon = await Coupon.findOne({ code });
+  const couponByCode = await Coupon.findOne({ code });
 
-  if (existingCoupon) {
+  if (couponByCode) {
     throw new CustomError(
       'Coupon by this code already exists. Please provide a different a coupon code',
       409
@@ -108,9 +108,9 @@ export const updateCoupon = handleAsync(async (req, res) => {
     throw new CustomError('Coupon not found', 404);
   }
 
-  const existingCoupon = await Coupon.findOne({ code, _id: { $ne: couponId } });
+  const couponByCode = await Coupon.findOne({ code, _id: { $ne: couponId } });
 
-  if (existingCoupon) {
+  if (couponByCode) {
     throw new CustomError(
       'Coupon by this code already exists. Please provide a different coupon code',
       409
