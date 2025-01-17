@@ -57,11 +57,17 @@ const orderItemSchema = Joi.object({
 
 export const orderSchema = customJoi
   .object({
-    items: Joi.array().items(orderItemSchema).min(1).required().messages({
-      'any.required': 'Order items are required',
-      'array.base': 'Order items must be an array',
-      'array.min': 'Items array must have at least one order item',
-    }),
+    items: Joi.array()
+      .items(orderItemSchema)
+      .min(1)
+      .required()
+      .messages({
+        'any.required': 'Order items are required',
+        'array.base': 'Order items must be an array',
+        'array.min': 'Items array must have at least one order item',
+        'array.sparse': 'Undefined values are not allowed in items array',
+      })
+      .options({ abortEarly: true }),
 
     couponCode: Joi.string().trim().uppercase().allow('').messages({
       'string.base': 'Coupon code must be a string',
