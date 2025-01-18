@@ -40,7 +40,7 @@ export const couponSortRules = {
 
 export const reviewSortRules = {
   [TOP_REVIEWS]: { rating: -1 },
-  [MOST_RECENT]: { updatedAt: -1 },
+  [MOST_RECENT]: { createdAt: -1 },
 };
 
 export const userSortRules = {

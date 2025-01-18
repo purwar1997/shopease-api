@@ -19,7 +19,7 @@ const cartItemSchema = new Schema({
     type: Number,
     required: [true, 'Quantity is required'],
     min: [QUANTITY.MIN, `Quantity must be at least ${QUANTITY.MIN}`],
-    max: [QUANTITY.MAX, `Quantity must be at most ${QUANTITY.MAX}`],
+    max: [QUANTITY.MAX, `Quantity cannot exceed ${QUANTITY.MAX}`],
     validate: {
       validator: Number.isInteger,
       message: 'Quantity must be an integer',

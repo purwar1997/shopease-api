@@ -40,12 +40,21 @@ export const removeExtraInnerSpaces = (value, helpers) => {
   return value.replace(/\s+/g, ' ');
 };
 
-export const sanitizeCommaSeparatedValues = (value, helpers) => {
+export const parseCommaSeparatedValues = (value, helpers) => {
   if (typeof value !== 'string') {
     return helpers.error('string.base');
   }
 
-  return value.split(',').map(str => str.trim());
+  const valuesArray = [
+    ...new Set(
+      value
+        .split(',')
+        .map(val => val.trim())
+        .filter(Boolean)
+    ),
+  ];
+
+  return valuesArray;
 };
 
 export const stripDiscountValue = (value, _helpers) => {

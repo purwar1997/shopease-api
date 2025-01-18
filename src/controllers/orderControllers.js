@@ -269,7 +269,7 @@ export const adminGetOrders = handleAsync(async (req, res) => {
     filters.status = { $in: status };
   }
 
-  if (paid && isBoolean(paid)) {
+  if (isBoolean(paid)) {
     filters.isPaid = paid;
   }
 

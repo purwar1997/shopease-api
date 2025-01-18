@@ -21,7 +21,7 @@ const orderItemSchema = new Schema({
     type: Number,
     required: [true, 'Quantity is required'],
     min: [QUANTITY.MIN, `Quantity must be at least ${QUANTITY.MIN}`],
-    max: [QUANTITY.MAX, `Quantity must be at most ${QUANTITY.MAX}`],
+    max: [QUANTITY.MAX, `Quantity cannot exceed ${QUANTITY.MAX}`],
     validate: {
       validator: Number.isInteger,
       message: 'Quantity must be an integer',
@@ -31,7 +31,7 @@ const orderItemSchema = new Schema({
     type: Number,
     required: [true, 'Price is required'],
     min: [PRICE.MIN, `Price must be at least ₹${PRICE.MIN}`],
-    max: [PRICE.MAX, `Price must be at most ₹${PRICE.MAX}`],
+    max: [PRICE.MAX, `Price cannot exceed ₹${PRICE.MAX}`],
     set: roundTwoDecimals,
   },
 });

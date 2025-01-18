@@ -24,20 +24,24 @@ export const validateOption = options => (value, helpers) => {
   return value;
 };
 
-export const validateCommaSeparatedValues = options => (value, helpers) => {
+export const validateCommaSeparatedValues = targetValue => (value, helpers) => {
   if (typeof value !== 'string') {
     return helpers.error('string.base');
   }
 
-  let valuesArray = value.split(',').map(str => str.trim().toLowerCase());
-  valuesArray = [...new Set(valuesArray)];
+  targetValue = Object.values(targetValue);
 
-  options = Object.values(options);
+  const valuesArray = [
+    ...new Set(
+      value
+        .split(',')
+        .map(val => val.trim().toLowerCase())
+        .filter(Boolean)
+    ),
+  ];
 
-  for (const value of valuesArray) {
-    if (!options.includes(value)) {
-      return helpers.error('any.invalid');
-    }
+  if (!valuesArray.every(value => targetValue.includes(value))) {
+    return helpers.error('any.invalid');
   }
 
   return valuesArray;

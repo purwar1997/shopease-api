@@ -67,25 +67,21 @@ export const userRoleSchema = customJoi.object({
 
 export const usersQuerySchema = Joi.object({
   roles: Joi.string()
-    .trim()
     .empty('')
     .default([])
     .custom(validateCommaSeparatedValues(ROLES))
     .messages({
-      'string.base': 'Roles must be a string',
-      'any.invalid': `Provided an invalid role. Valid options are: ${formatOptions(ROLES)}`,
+      'any.invalid': `One or more roles are invalid. Valid roles are: ${formatOptions(ROLES)}`,
     }),
 
   sort: Joi.string()
     .trim()
     .lowercase()
+    .valid(...Object.values(USER_SORT_OPTIONS))
     .allow('')
-    .custom(validateOption(USER_SORT_OPTIONS))
     .messages({
       'string.base': 'Sort option must be a string',
-      'any.invalid': `Provided an invalid sort value. Valid options are: ${formatOptions(
-        USER_SORT_OPTIONS
-      )}`,
+      'any.only': `Invalid value for sort. Valid options are: ${formatOptions(USER_SORT_OPTIONS)}`,
     }),
 
   page: pageSchema,
@@ -96,6 +92,6 @@ export const userIdSchema = Joi.object({
   userId: Joi.string().trim().empty(':userId').custom(validateObjectId).required().messages({
     'any.required': 'User ID is required',
     'string.empty': 'User ID cannot be empty',
-    'any.invalid': 'User ID is invalid. Expected a valid objectId',
+    'any.invalid': 'User ID is invalid. Expected a valid ObjectId',
   }),
 });

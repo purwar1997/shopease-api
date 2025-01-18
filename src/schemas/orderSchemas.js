@@ -19,15 +19,13 @@ delete allowedStatusForUpdate.CANCELLED;
 const daysInPastSchema = Joi.number()
   .integer()
   .min(ORDER_DURATION.MIN)
-  .max(ORDER_DURATION.MAX)
   .empty('')
   .default(ORDER_DURATION.DEFAULT)
-  .unsafe()
   .messages({
     'number.base': 'Days in past must be a number',
     'number.integer': 'Days in past must be an integer',
     'number.min': `Days in past must be at least ${ORDER_DURATION.MIN}`,
-    'number.max': `Days in past must be less than or equal to ${ORDER_DURATION.MAX}`,
+    'number.unsafe': `Days in past must be within a range of ${ORDER_DURATION.MIN} and ${ORDER_DURATION.MAX}`,
   });
 
 const orderItemSchema = Joi.object({
@@ -35,7 +33,7 @@ const orderItemSchema = Joi.object({
     'any.required': 'Product is required',
     'string.base': 'Product must be a string',
     'string.empty': 'Product cannot be empty',
-    'any.invalid': 'Invalid value provided for product. Expected a valid objectId',
+    'any.invalid': 'Invalid value for product. Expected a valid ObjectId',
   }),
 
   quantity: Joi.number()
@@ -43,13 +41,13 @@ const orderItemSchema = Joi.object({
     .min(QUANTITY.MIN)
     .max(QUANTITY.MAX)
     .required()
-    .unsafe()
     .messages({
       'any.required': 'Quantity is required',
       'number.base': 'Quantity must be a number',
       'number.integer': 'Quantity must be an integer',
       'number.min': `Quantity must be at least ${QUANTITY.MIN}`,
-      'number.max': `Quantity must be at most ${QUANTITY.MAX}`,
+      'number.max': `Quantity cannot exceed ${QUANTITY.MAX}`,
+      'number.unsafe': `Quantity must be within a range of ${QUANTITY.MIN} and ${QUANTITY.MAX}`,
     }),
 }).messages({
   'object.base': 'Each order item must be an object with product and quantity fields',
@@ -77,7 +75,7 @@ export const orderSchema = customJoi
       'any.required': 'Shipping address is required',
       'string.base': 'Shipping address must be a string',
       'string.empty': 'Shipping address cannot be empty',
-      'any.invalid': 'Invalid value provided for address. Expected a valid objectId',
+      'any.invalid': 'Invalid value for shipping address. Expected a valid ObjectId',
     }),
 
     deliveryMode: Joi.string()
@@ -118,13 +116,11 @@ export const adminOrdersQuerySchema = Joi.object({
   daysInPast: daysInPastSchema,
 
   status: Joi.string()
-    .trim()
     .empty('')
     .default([])
     .custom(validateCommaSeparatedValues(ORDER_STATUS))
     .messages({
-      'string.base': 'Order status must be a string',
-      'any.invalid': `Provided an invalid order status. Valid options are: ${formatOptions(
+      'any.invalid': `One or more order statuses are invalid. Valid statuses are: ${formatOptions(
         ORDER_STATUS
       )}`,
     }),
@@ -132,26 +128,23 @@ export const adminOrdersQuerySchema = Joi.object({
   paid: Joi.string()
     .trim()
     .lowercase()
-    .allow('')
-    .custom(validateOption(ACTIVE_FILTER))
+    .valid(...Object.values(ACTIVE_FILTER))
+    .empty('')
+    .default(ACTIVE_FILTER.ALL)
     .messages({
       'string.base': 'Paid must be a string',
-      'any.invalid': `Provided an invalid value for paid. Valid options are: ${formatOptions(
-        ACTIVE_FILTER
-      )}`,
+      'any.only': `Invalid value for paid. Valid options are: ${formatOptions(ACTIVE_FILTER)}`,
     }),
 
   sort: Joi.string()
     .trim()
     .lowercase()
+    .valid(...Object.values(ORDER_SORT_OPTIONS))
     .empty('')
     .default(ORDER_SORT_OPTIONS.DATE_DESC)
-    .custom(validateOption(ORDER_SORT_OPTIONS))
     .messages({
       'string.base': 'Sort option must be a string',
-      'any.invalid': `Provided an invalid sort value. Valid options are: ${formatOptions(
-        ORDER_SORT_OPTIONS
-      )}`,
+      'any.only': `Invalid value for sort. Valid options are: ${formatOptions(ORDER_SORT_OPTIONS)}`,
     }),
 
   page: pageSchema,

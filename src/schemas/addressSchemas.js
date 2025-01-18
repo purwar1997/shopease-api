@@ -77,6 +77,6 @@ export const addressIdSchema = Joi.object({
   addressId: Joi.string().trim().empty(':addressId').custom(validateObjectId).required().messages({
     'any.required': 'Address ID is required',
     'string.empty': 'Address ID cannot be empty',
-    'any.invalid': 'Address ID is invalid. Expected a valid objectId',
+    'any.invalid': 'Address ID is invalid. Expected a valid ObjectId',
   }),
 });

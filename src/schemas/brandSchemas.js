@@ -16,6 +16,6 @@ export const brandIdSchema = Joi.object({
   brandId: Joi.string().trim().empty(':brandId').custom(validateObjectId).required().messages({
     'any.required': 'Brand ID is required',
     'string.empty': 'Brand ID cannot be empty',
-    'any.invalid': 'Brand ID is invalid. Expected a valid objectId',
+    'any.invalid': 'Brand ID is invalid. Expected a valid ObjectId',
   }),
 });

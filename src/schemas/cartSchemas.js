@@ -8,7 +8,7 @@ export const productIdSchema = customJoi.object({
     'any.required': 'Product ID is required',
     'string.base': 'Product ID must be a string',
     'string.empty': 'Product ID cannot be empty',
-    'any.invalid': 'Invalid ID format. Expected a valid objectId',
+    'any.invalid': 'Product ID is invalid. Expected a valid ObjectId',
   }),
 });
 
@@ -17,20 +17,20 @@ export const updateQuantitySchema = customJoi.object({
     'any.required': 'Product ID is required',
     'string.base': 'Product ID must be a string',
     'string.empty': 'Product ID cannot be empty',
-    'any.invalid': 'Invalid ID format. Expected a valid objectId',
+    'any.invalid': 'Product ID is invalid. Expected a valid ObjectId',
   }),
 
   quantity: Joi.number()
     .integer()
     .min(QUANTITY.MIN)
     .max(QUANTITY.MAX)
-    .unsafe()
     .required()
     .messages({
       'any.required': 'Quantity is required',
       'number.base': 'Quantity must be a number',
       'number.integer': 'Quantity must be an integer',
       'number.min': `Quantity must be at least ${QUANTITY.MIN}`,
-      'number.max': `Quantity must be at most ${QUANTITY.MAX}`,
+      'number.max': `Quantity cannot exceed ${QUANTITY.MAX}`,
+      'number.unsafe': `Quantity must be within a range of ${QUANTITY.MIN} and ${QUANTITY.MAX}`,
     }),
 });

@@ -9,7 +9,7 @@ const reviewSchema = new Schema(
       type: Number,
       required: [true, 'Rating is required'],
       min: [RATING.MIN, `Rating must be at least ${RATING.MIN}`],
-      max: [RATING.MAX, `Rating must be at most ${RATING.MAX}`],
+      max: [RATING.MAX, `Rating cannot exceed ${RATING.MAX}`],
       validate: {
         validator: Number.isInteger,
         message: 'Rating must be an integer',

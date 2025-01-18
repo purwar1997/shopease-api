@@ -41,14 +41,14 @@ export const couponSchema = customJoi
         .min(DISCOUNT.MIN_FLAT)
         .max(DISCOUNT.MAX_FLAT)
         .multiple(DISCOUNT.FLAT_MULTIPLE)
-        .unsafe()
         .required(),
     }).messages({
       'any.required': 'Flat discount is required when discount type is flat',
       'number.base': 'Flat discount must be a number',
       'number.min': `Flat discount must be at least ₹${DISCOUNT.MIN_FLAT}`,
-      'number.max': `Flat discount must be at most ₹${DISCOUNT.MAX_FLAT}`,
-      'number.multiple': `Flat discount must be an integer multiple of ${DISCOUNT.FLAT_MULTIPLE}`,
+      'number.max': `Flat discount cannot exceed ₹${DISCOUNT.MAX_FLAT}`,
+      'number.multiple': `Flat discount must be a multiple of ${DISCOUNT.FLAT_MULTIPLE}`,
+      'number.unsafe': `Flat discount must be within a range of ₹${DISCOUNT.MIN_FLAT} and ₹${DISCOUNT.MAX_FLAT}`,
     }),
 
     percentageDiscount: Joi.when('discountType', {
@@ -57,14 +57,14 @@ export const couponSchema = customJoi
         .integer()
         .min(DISCOUNT.MIN_PERCENTAGE)
         .max(DISCOUNT.MAX_PERCENTAGE)
-        .unsafe()
         .required(),
     }).messages({
       'any.required': 'Percentage discount is required when discount type is percentage',
       'number.base': 'Percentage discount must be a number',
       'number.integer': 'Percentage discount must be an integer',
       'number.min': `Percentage discount must be at least ${DISCOUNT.MIN_PERCENTAGE}%`,
-      'number.max': `Percentage discount must be at most ${DISCOUNT.MAX_PERCENTAGE}%`,
+      'number.max': `Percentage discount cannot exceed ${DISCOUNT.MAX_PERCENTAGE}%`,
+      'number.unsafe': `Percentage discount must be within a range of ${DISCOUNT.MIN_PERCENTAGE}% and ${DISCOUNT.MAX_PERCENTAGE}%`,
     }),
 
     expiryDate: Joi.date().iso().greater('now').required().messages({
@@ -88,36 +88,31 @@ export const couponsQuerySchema = Joi.object({
   daysUntilExpiration: Joi.number()
     .integer()
     .min(COUPON_EXPIRATION.MIN)
-    .max(COUPON_EXPIRATION.MAX)
     .empty('')
-    .unsafe()
+    .default(COUPON_EXPIRATION.DEFAULT)
     .messages({
       'number.base': 'Days until expiration must be a number',
       'number.integer': 'Days until expiration must be an integer',
       'number.min': `Days until expiration must be at least ${COUPON_EXPIRATION.MIN}`,
-      'number.max': `Days until expiration must be less than or equal to ${COUPON_EXPIRATION.MAX}`,
+      'number.unsafe': `Days until expiration must be within a range of ${COUPON_EXPIRATION.MIN} and ${COUPON_EXPIRATION.MAX}`,
     }),
 
   discountType: Joi.string()
-    .trim()
     .empty('')
     .default([])
     .custom(validateCommaSeparatedValues(DISCOUNT_TYPES))
     .messages({
-      'string.base': 'Discount type must be a string',
-      'any.invalid': `Provided an invalid discount type. Valid options are: ${formatOptions(
+      'any.invalid': `One or more discount types are invalid. Valid discount types are: ${formatOptions(
         DISCOUNT_TYPES
       )}`,
     }),
 
   status: Joi.string()
-    .trim()
     .empty('')
     .default([])
     .custom(validateCommaSeparatedValues(COUPON_STATUS))
     .messages({
-      'string.base': 'Coupon status must be a string',
-      'any.invalid': `Provided an invalid coupon status. Valid options are: ${formatOptions(
+      'any.invalid': `One or more coupon statuses are invalid. Valid statuses are: ${formatOptions(
         COUPON_STATUS
       )}`,
     }),
@@ -125,11 +120,11 @@ export const couponsQuerySchema = Joi.object({
   sort: Joi.string()
     .trim()
     .lowercase()
+    .valid(...Object.values(COUPON_SORT_OPTIONS))
     .allow('')
-    .custom(validateOption(COUPON_SORT_OPTIONS))
     .messages({
       'string.base': 'Sort option must be a string',
-      'any.invalid': `Provided an invalid sort value. Valid options are: ${formatOptions(
+      'any.only': `Invalid value for sort. Valid options are: ${formatOptions(
         COUPON_SORT_OPTIONS
       )}`,
     }),
@@ -142,6 +137,6 @@ export const couponIdSchema = Joi.object({
   couponId: Joi.string().trim().empty(':couponId').custom(validateObjectId).required().messages({
     'any.required': 'Coupon ID is required',
     'string.empty': 'Coupon ID cannot be empty',
-    'any.invalid': 'Coupon ID is invalid. Expected a valid objectId',
+    'any.invalid': 'Coupon ID is invalid. Expected a valid ObjectId',
   }),
 });

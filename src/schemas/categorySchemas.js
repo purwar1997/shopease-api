@@ -21,6 +21,6 @@ export const categoryIdSchema = Joi.object({
     .messages({
       'any.required': 'Category ID is required',
       'string.empty': 'Category ID cannot be empty',
-      'any.invalid': 'Category ID is invalid. Expected a valid objectId',
+      'any.invalid': 'Category ID is invalid. Expected a valid ObjectId',
     }),
 });

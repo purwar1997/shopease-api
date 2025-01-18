@@ -95,11 +95,11 @@ export const adminGetProducts = handleAsync(async (req, res) => {
     filters.avgRating = { $gte: rating };
   }
 
-  if (availability && isBoolean(availability)) {
+  if (isBoolean(availability)) {
     filters.stock = availability === ACTIVE_FILTER.TRUE ? { $gt: 0 } : 0;
   }
 
-  if (deleted && isBoolean(deleted)) {
+  if (isBoolean(deleted)) {
     filters.isDeleted = deleted;
   }
 

@@ -37,12 +37,10 @@ export const adminGetCoupons = handleAsync(async (req, res) => {
   const { daysUntilExpiration, discountType, status, sort, page, limit } = req.query;
   const filters = {};
 
-  if (daysUntilExpiration) {
-    filters.expiryDate = {
-      $gt: new Date(),
-      $lt: new Date(getCurrentDate().getTime() + daysUntilExpiration * 24 * 60 * 60 * 1000),
-    };
-  }
+  filters.expiryDate = {
+    $gt: new Date(),
+    $lt: new Date(getCurrentDate().getTime() + daysUntilExpiration * 24 * 60 * 60 * 1000),
+  };
 
   if (discountType.length) {
     filters.discountType = { $in: discountType };

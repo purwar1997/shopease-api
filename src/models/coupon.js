@@ -33,10 +33,10 @@ const couponSchema = new Schema(
         'Flat discount is required when discount type is flat',
       ],
       min: [DISCOUNT.MIN_FLAT, `Flat discount must be at least ₹${DISCOUNT.MIN_FLAT}`],
-      max: [DISCOUNT.MAX_FLAT, `Flat discount must be at most ₹${DISCOUNT.MAX_FLAT}`],
+      max: [DISCOUNT.MAX_FLAT, `Flat discount cannot exceed ₹${DISCOUNT.MAX_FLAT}`],
       validate: {
         validator: discount => discount % DISCOUNT.FLAT_MULTIPLE === 0,
-        message: `Flat discount must be an integer multiple of ${DISCOUNT.FLAT_MULTIPLE}`,
+        message: `Flat discount must be a multiple of ${DISCOUNT.FLAT_MULTIPLE}`,
       },
     },
     percentageDiscount: {
@@ -53,7 +53,7 @@ const couponSchema = new Schema(
       ],
       max: [
         DISCOUNT.MAX_PERCENTAGE,
-        `Percentage discount must be at most ${DISCOUNT.MAX_PERCENTAGE}%`,
+        `Percentage discount cannot exceed ${DISCOUNT.MAX_PERCENTAGE}%`,
       ],
       validate: {
         validator: Number.isInteger,
