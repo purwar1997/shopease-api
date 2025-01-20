@@ -442,7 +442,7 @@ paths:
         - in: path
           name: userId
           required: true
-          description: ID of the user whose role needs to be updated
+          description: ID of the user whose role is to be updated
           schema:
             type: string
       requestBody:
@@ -641,7 +641,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: A JSON object containing new address info
+        description: A JSON object containing address updates
         required: true
         content:
           application/json:
@@ -856,7 +856,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: A JSON object containing an item that was moved to wishlist
+          description: A JSON object containing an item that was moved from cart to wishlist
           content:
             application/json:
               schema:
@@ -979,7 +979,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: A JSON object containing an item that was moved to cart
+          description: A JSON object containing an item that was moved from wishlist to cart
           content:
             application/json:
               schema:
@@ -1216,7 +1216,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: Payload containing new product info along with an image
+        description: Payload containing product updates along with an image
         required: true
         content:
           multipart/form-data:
@@ -1580,7 +1580,7 @@ paths:
       operationId: getValidCoupons
       responses:
         '200':
-          description: A JSON object containing a list of valid coupons
+          description: A JSON object containing a list of all valid coupons
           content:
             application/json:
               schema:
@@ -1605,7 +1605,7 @@ paths:
         - in: query
           name: couponCode
           required: true
-          description: Coupon code that needs to be verified
+          description: Coupon code to be verified
           schema:
             type: string
       responses:
@@ -1766,7 +1766,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: A JSON object containing new coupon info
+        description: A JSON object containing coupon updates
         required: true
         content:
           application/json:
@@ -2116,7 +2116,7 @@ paths:
         - in: path
           name: orderId
           required: true
-          description: ID of the order whose status needs to be updated
+          description: ID of the order whose status is to be updated
           schema:
             type: string
       requestBody:
@@ -2289,7 +2289,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: A JSON object containing review info
+        description: A JSON object containing review updates
         required: true
         content:
           application/json:
