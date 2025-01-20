@@ -40,7 +40,7 @@ paths:
     post:
       tags:
         - Authentication
-      description: Creates an account or restores a deleted one
+      description: Allows users to create an account or restore a deleted one
       operationId: signup
       requestBody:
         description: A JSON object containing signup info
@@ -191,7 +191,7 @@ paths:
     get:
       tags:
         - Users
-      description: Allows users to fetch their profile
+      description: Allows users to retrieve their profile
       operationId: getProfile
       responses:
         '200':
@@ -357,7 +357,7 @@ paths:
     get:
       tags:
         - Users
-      description: Allows admins to fetch a list of users
+      description: Allows admins to retrieve a paginated list of users
       operationId: getUsers
       parameters:
         - in: query
@@ -403,18 +403,19 @@ paths:
               description: Total number of users
               schema:
                 type: integer
+                format: int32
 
   /admin/users/{userId}:
     get:
       tags:
         - Users
-      description: Allows admins to fetch a user by ID
+      description: Allows admins to retrieve a user by ID
       operationId: getUserbyId
       parameters:
         - in: path
           name: userId
           required: true
-          description: ID of the user to be fetched
+          description: ID of the user to be retrieved
           schema:
             type: string
       responses:
@@ -496,7 +497,7 @@ paths:
     get:
       tags:
         - Users
-      description: Allows admins to fetch a list of other admins
+      description: Allows admins to retrieve a list of other admins
       operationId: getOtherAdmins
       responses:
         '200':
@@ -553,11 +554,11 @@ paths:
     get:
       tags:
         - Addresses
-      description: Allows users to fetch their addresses
+      description: Allows users to retrieve all their addresses
       operationId: getAddresses
       responses:
         '200':
-          description: A JSON object containing a list of addresses
+          description: A JSON object containing a list of user's addresses
           content:
             application/json:
               schema:
@@ -603,13 +604,13 @@ paths:
     get:
       tags:
         - Addresses
-      description: Allows users to fetch one of their addresses by ID
+      description: Allows users to retrieve one of their addresses by ID
       operationId: getAddressById
       parameters:
         - in: path
           name: addressId
           required: true
-          description: ID of the address to be fetched
+          description: ID of the address to be retrieved
           schema:
             type: string
       responses:
@@ -713,7 +714,7 @@ paths:
     get:
       tags:
         - Cart
-      description: Allows users to fetch their cart
+      description: Allows users to retrieve their cart
       operationId: getCart
       responses:
         '200':
@@ -746,7 +747,7 @@ paths:
       description: Allows users to add an item to their cart
       operationId: addItemToCart
       requestBody:
-        description: ID of the item that is to be added to cart
+        description: ID of the item to be added to cart
         required: true
         content:
           application/json:
@@ -782,7 +783,7 @@ paths:
       description: Allows users to remove an item from their cart
       operationId: removeItemFromCart
       requestBody:
-        description: ID of the item that is to be removed from cart
+        description: ID of the item to be removed from cart
         required: true
         content:
           application/json:
@@ -844,7 +845,7 @@ paths:
       description: Alows users to move an item from their cart to wishlist
       operationId: moveItemToWishlist
       requestBody:
-        description: ID of the item that is to be moved to wishlist
+        description: ID of the item to be moved from cart to wishlist
         required: true
         content:
           application/json:
@@ -886,11 +887,11 @@ paths:
     get:
       tags:
         - Wishlist
-      description: Allows users to fetch their wishlist
+      description: Allows users to retrieve their wishlist
       operationId: getWishlist
       responses:
         '200':
-          description: A JSON object containing user's wishlist
+          description: A JSON object containing a user's wishlist
           content:
             application/json:
               schema:
@@ -912,7 +913,7 @@ paths:
       description: Allows users to add an item to their wishlist
       operationId: addItemTowWishlist
       requestBody:
-        description: ID of the item that is to be added to wishlist
+        description: ID of the item to be added to wishlist
         required: true
         content:
           application/json:
@@ -967,7 +968,7 @@ paths:
       description: Allows users to move an item from their wishlist to cart
       operationId: moveItemToCart
       requestBody:
-        description: ID of the item that is to be moved to cart
+        description: ID of the item to be moved from wishlist to cart
         required: true
         content:
           application/json:
@@ -1009,7 +1010,7 @@ paths:
     get:
       tags:
         - Products
-      description: Fetches a list of products
+      description: Retrieves a paginated list of products
       operationId: getProducts
       parameters:
         - $ref: '#/components/parameters/categoriesParam'
@@ -1049,18 +1050,19 @@ paths:
               description: Total number of products
               schema:
                 type: integer
+                format: int32
 
   /products/{productId}:
     get:
       tags:
         - Products
-      description: Fetches a product by ID
+      description: Retrieves a product by ID
       operationId: getProductById
       parameters:
         - in: path
           name: productId
           required: true
-          description: ID of the product to be fetched
+          description: ID of the product to be retrieved
           schema:
             type: string
       responses:
@@ -1082,7 +1084,7 @@ paths:
     get:
       tags:
         - Products
-      description: Allows admins to fetch a list of products
+      description: Allows admins to retrieve a paginated list of products
       operationId: adminGetProducts
       parameters:
         - $ref: '#/components/parameters/categoriesParam'
@@ -1141,6 +1143,7 @@ paths:
               description: Total number of products
               schema:
                 type: integer
+                format: int32
 
     post:
       tags:
@@ -1176,13 +1179,13 @@ paths:
     get:
       tags:
         - Products
-      description: Allows admins to fetch a product by ID
+      description: Allows admins to retrieve a product by ID
       operationId: adminGetProductById
       parameters:
         - in: path
           name: productId
           required: true
-          description: ID of the product to be fetched
+          description: ID of the product to be retrieved
           schema:
             type: string
       responses:
@@ -1203,7 +1206,7 @@ paths:
     post:
       tags:
         - Products
-      description: Allows admins to update a product
+      description: Allows admins to update an existing product
       operationId: updateProduct
       parameters:
         - in: path
@@ -1267,7 +1270,7 @@ paths:
         - in: path
           name: productId
           required: true
-          description: ID of the deleted product that is to be restored
+          description: ID of the deleted product to be restored
           schema:
             type: string
       responses:
@@ -1289,7 +1292,7 @@ paths:
     get:
       tags:
         - Categories
-      description: Fetches a list of categories under which products have been listed
+      description: Retrieves a list of categories under which products have been listed
       operationId: getCategories
       responses:
         '200':
@@ -1312,13 +1315,13 @@ paths:
     get:
       tags:
         - Categories
-      description: Fetches a category by ID
+      description: Retrieves a category by ID
       operationId: getCategoryById
       parameters:
         - in: path
           name: categoryId
           required: true
-          description: ID of the category to be fetched
+          description: ID of the category to be retrieved
           schema:
             type: string
       responses:
@@ -1340,7 +1343,7 @@ paths:
     get:
       tags:
         - Categories
-      description: Allows admins to fetch a list of all categories
+      description: Allows admins to retrieve a list of all categories
       operationId: getAllCategories
       responses:
         '200':
@@ -1393,7 +1396,7 @@ paths:
     post:
       tags:
         - Categories
-      description: Allows admins to update a category
+      description: Allows admins to update an existing category
       operationId: updateCategory
       parameters:
         - in: path
@@ -1431,7 +1434,7 @@ paths:
     get:
       tags:
         - Brands
-      description: Fetches a list of brands under which products have been listed
+      description: Retrieves a list of brands under which products have been listed
       operationId: getBrands
       responses:
         '200':
@@ -1454,13 +1457,13 @@ paths:
     get:
       tags:
         - Brands
-      description: Fetches a brand by ID
+      description: Retrieves a brand by ID
       operationId: getBrandById
       parameters:
         - in: path
           name: brandId
           required: true
-          description: ID of the brand to be fetched
+          description: ID of the brand to be retrieved
           schema:
             type: string
       responses:
@@ -1482,7 +1485,7 @@ paths:
     get:
       tags:
         - Brands
-      description: Allows admins to fetch a list of all brands
+      description: Allows admins to retrieve a list of all brands
       operationId: getAllBrands
       responses:
         '200':
@@ -1535,7 +1538,7 @@ paths:
     post:
       tags:
         - Brands
-      description: Allows admins to update a brand
+      description: Allows admins to update an existing brand
       operationId: updateBrand
       parameters:
         - in: path
@@ -1573,7 +1576,7 @@ paths:
     get:
       tags:
         - Coupons
-      description: Fetches a list of all valid coupons
+      description: Retrieves a list of all valid coupons
       operationId: getValidCoupons
       responses:
         '200':
@@ -1627,7 +1630,7 @@ paths:
     get:
       tags:
         - Coupons
-      description: Allows admins to fetch a list of coupons
+      description: Allows admins to retrieve a paginated list of coupons
       operationId: adminGetCoupons
       parameters:
         - in: query
@@ -1693,6 +1696,7 @@ paths:
               description: Total number of coupons
               schema:
                 type: integer
+                format: int32
 
     post:
       tags:
@@ -1725,13 +1729,13 @@ paths:
     get:
       tags:
         - Coupons
-      description: Allows admins to fetch a coupon by ID
+      description: Allows admins to retrieve a coupon by ID
       operationId: getCouponById
       parameters:
         - in: path
           name: couponId
           required: true
-          description: ID of the coupon to be fetched
+          description: ID of the coupon to be retrieved
           schema:
             type: string
       responses:
@@ -1752,7 +1756,7 @@ paths:
     put:
       tags:
         - Coupons
-      description: Allows admins to update a coupon
+      description: Allows admins to update an existing coupon
       operationId: updateCoupon
       parameters:
         - in: path
@@ -1863,7 +1867,7 @@ paths:
     get:
       tags:
         - Orders
-      description: Allows users to fetch their orders
+      description: Allows users to retrieve a paginated list of their orders
       operationId: getOrders
       parameters:
         - $ref: '#/components/parameters/daysInPastParam'
@@ -1890,11 +1894,12 @@ paths:
               description: Total number of orders that belong to a user
               schema:
                 type: integer
+                format: int32
 
     post:
       tags:
         - Orders
-      description: Allows users to place an order
+      description: Handles creation of a new order
       operationId: createOrder
       requestBody:
         description: A JSON object containing order info
@@ -1905,7 +1910,7 @@ paths:
               $ref: '#/components/schemas/OrderBody'
       responses:
         '201':
-          description: A JSON object containing ID of a newly created order
+          description: A JSON object containing ID of a new order
           content:
             application/json:
               schema:
@@ -1915,13 +1920,13 @@ paths:
     get:
       tags:
         - Orders
-      description: Allows users to fetch one of their orders by ID
+      description: Allows users to retrieve one of their orders by ID
       operationId: getOrderById
       parameters:
         - in: path
           name: orderId
           required: true
-          description: ID of the order to be fetched
+          description: ID of the order to be retrieved
           schema:
             type: string
       responses:
@@ -1949,7 +1954,7 @@ paths:
         - in: path
           name: orderId
           required: true
-          description: ID of the order that is to be confirmed upon payment success
+          description: ID of the order to confirm upon payment success
           schema:
             type: string
       requestBody:
@@ -2011,7 +2016,7 @@ paths:
     get:
       tags:
         - Orders
-      description: Allows admins to fetch a list of orders
+      description: Allows admins to retrieve a paginated list of orders
       operationId: adminGetOrders
       parameters:
         - $ref: '#/components/parameters/daysInPastParam'
@@ -2072,18 +2077,19 @@ paths:
               description: Total number of orders
               schema:
                 type: integer
+                format: int32
 
   /admin/orders/{orderId}:
     get:
       tags:
         - Orders
-      description: Allows admins to fetch an order by ID
+      description: Allows admins to retrieve an order by ID
       operationId: adminGetOrderById
       parameters:
         - in: path
           name: orderId
           required: true
-          description: ID of the order to be fetched
+          description: ID of the order to be retrieved
           schema:
             type: string
       responses:
@@ -2166,13 +2172,13 @@ paths:
     get:
       tags:
         - Reviews
-      description: Fetches reviews of a product
+      description: Retrieves a paginated list of reviews for a product
       operationId: getProductReviews
       parameters:
         - in: path
           name: productId
           required: true
-          description: ID of the product whose reviews need to be fetched
+          description: ID of the product whose reviews are to be retrieved
           schema:
             type: string
         - in: query
@@ -2187,7 +2193,7 @@ paths:
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
-          description: A JSON object containing a list of product reviews
+          description: A JSON object containing a list of reviews for a product
           content:
             application/json:
               schema:
@@ -2203,9 +2209,10 @@ paths:
                       $ref: '#/components/schemas/Review'
           headers:
             X-Total-Count:
-              description: Total number of product reviews
+              description: Total number of reviews for a product
               schema:
                 type: integer
+                format: int32
 
     post:
       tags:
@@ -2216,7 +2223,7 @@ paths:
         - in: path
           name: productId
           required: true
-          description: ID of the product that needs to be reviewed
+          description: ID of the product to be reviewed
           schema:
             type: string
       requestBody:
@@ -2245,13 +2252,13 @@ paths:
     get:
       tags:
         - Reviews
-      description: Allows users to fetch one of their reviews by ID
+      description: Allows users to retrieve one of their reviews by ID
       operationId: getProductReviewById
       parameters:
         - in: path
           name: reviewId
           required: true
-          description: ID of the review to be fetched
+          description: ID of the review to be retrieved
           schema:
             type: string
       responses:
@@ -2362,7 +2369,7 @@ components:
     daysInPastParam:
       in: query
       name: daysInPast
-      description: Number of days to fetch past orders
+      description: Number of days to retrieve past orders
       schema:
         type: integer
         format: int32
@@ -2385,10 +2392,7 @@ components:
         message:
           type: string
         data:
-          type: object
-          properties:
-            id:
-              type: string
+          type: string
 
     User:
       type: object
