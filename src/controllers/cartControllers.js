@@ -5,7 +5,7 @@ import CustomError from '../utils/customError.js';
 import { sendResponse } from '../utils/helperFunctions.js';
 import { QUANTITY } from '../constants/common.js';
 
-// Allows users to fetch their cart
+// Allows users to retrieve their cart
 export const getCart = handleAsync(async (req, res) => {
   const user = await User.findById(req.user._id).populate({
     path: 'cart.product',
@@ -15,7 +15,7 @@ export const getCart = handleAsync(async (req, res) => {
     },
   });
 
-  sendResponse(res, 200, 'Cart fetched successfully', user.cart);
+  sendResponse(res, 200, 'Cart retrieved successfully', user.cart);
 });
 
 // Allows users to add an item to their cart
@@ -81,7 +81,7 @@ export const removeItemFromCart = handleAsync(async (req, res) => {
   user.cart = user.cart.filter(item => item.product.toString() !== productId);
   await user.save();
 
-  sendResponse(res, 200, 'Item removed from cart successfully', { id: productId });
+  sendResponse(res, 200, 'Item removed from cart successfully', productId);
 });
 
 // Allows users to update quantity of a cart item

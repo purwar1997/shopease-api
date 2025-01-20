@@ -4,7 +4,7 @@ import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
 import { sendResponse } from '../utils/helperFunctions.js';
 
-// Allows users to fetch their wishlist
+// Allows users to retrieve their wishlist
 export const getWishlist = handleAsync(async (req, res) => {
   const user = await User.findById(req.user._id).populate({
     path: 'wishlist',
@@ -13,7 +13,7 @@ export const getWishlist = handleAsync(async (req, res) => {
     },
   });
 
-  sendResponse(res, 200, 'Wishlist fetched successfully', user.wishlist);
+  sendResponse(res, 200, 'Wishlist retrieved successfully', user.wishlist);
 });
 
 // Allows users to add an item to their wishlist
@@ -53,7 +53,7 @@ export const removeItemFromWishlist = handleAsync(async (req, res) => {
   user.wishlist = user.wishlist.filter(item => item.toString() !== productId);
   await user.save();
 
-  sendResponse(res, 200, 'Item removed from wishlist successfully', { id: productId });
+  sendResponse(res, 200, 'Item removed from wishlist successfully', productId);
 });
 
 // Allows users to move an item from their wishlist to cart

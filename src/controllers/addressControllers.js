@@ -3,14 +3,14 @@ import handleAsync from '../utils/handleAsync.js';
 import CustomError from '../utils/customError.js';
 import { sendResponse } from '../utils/helperFunctions.js';
 
-// Allows users to fetch their addresses
+// Allows users to retrieve all their addresses
 export const getAddresses = handleAsync(async (req, res) => {
   const addresses = await Address.find({ user: req.user._id, isDeleted: false });
 
-  sendResponse(res, 200, 'Addresses fetched successfully', addresses);
+  sendResponse(res, 200, 'Addresses retrieved successfully', addresses);
 });
 
-// Allows users to fetch one of their addresses by ID
+// Allows users to retrieve one of their addresses by ID
 export const getAddressById = handleAsync(async (req, res) => {
   const { addressId } = req.params;
 
@@ -24,7 +24,7 @@ export const getAddressById = handleAsync(async (req, res) => {
     throw new CustomError('Only the user who owns this address can view it', 403);
   }
 
-  sendResponse(res, 200, 'Address fetched by ID successfully', address);
+  sendResponse(res, 200, 'Address retrieved by ID successfully', address);
 });
 
 // Allows users to add a new address
@@ -113,7 +113,7 @@ export const deleteAddress = handleAsync(async (req, res) => {
   address.isDeleted = true;
   await address.save();
 
-  sendResponse(res, 200, 'Address deleted successfully', { id: addressId });
+  sendResponse(res, 200, 'Address deleted successfully', addressId);
 });
 
 // Allows users to set one of their addresses as the default

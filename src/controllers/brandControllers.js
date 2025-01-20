@@ -7,7 +7,7 @@ import { sendResponse } from '../utils/helperFunctions.js';
 import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { UPLOAD_FOLDERS } from '../constants/common.js';
 
-// Fetches a list of brands under which products have been listed
+// Retrieves a list of brands under which products have been listed
 export const getBrands = handleAsync(async (_req, res) => {
   const brands = await Product.aggregate([
     { $match: { isDeleted: false } },
@@ -37,10 +37,10 @@ export const getBrands = handleAsync(async (_req, res) => {
     },
   ]);
 
-  sendResponse(res, 200, 'Brands fetched succesfully', brands);
+  sendResponse(res, 200, 'Brands retrieved succesfully', brands);
 });
 
-// Fetches a brand by ID
+// Retrieves a brand by ID
 export const getBrandById = handleAsync(async (req, res) => {
   const { brandId } = req.params;
 
@@ -50,14 +50,14 @@ export const getBrandById = handleAsync(async (req, res) => {
     throw new CustomError('Brand not found', 404);
   }
 
-  sendResponse(res, 200, 'Brand fetched by ID successfully', brand);
+  sendResponse(res, 200, 'Brand retrieved by ID successfully', brand);
 });
 
-// Fetches a list of all brands
+// Allows admins to retrieve a list of all brands
 export const getAllBrands = handleAsync(async (_req, res) => {
   const brands = await Brand.find();
 
-  sendResponse(res, 200, 'All brands fetched successfully', brands);
+  sendResponse(res, 200, 'All brands retrieved successfully', brands);
 });
 
 // Allows admins to add a new brand
@@ -90,7 +90,7 @@ export const addNewBrand = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Brand added successfully', newBrand);
 });
 
-// Allows admins to update a brand
+// Allows admins to update an existing brand
 export const updateBrand = handleAsync(async (req, res) => {
   const { brandId } = req.params;
   const { name } = req.body;

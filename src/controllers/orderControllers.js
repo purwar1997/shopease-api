@@ -22,7 +22,7 @@ import {
 } from '../utils/emailTemplates.js';
 import { GST, DISCOUNT_TYPES, ORDER_STATUS, DELIVERY_OPTIONS } from '../constants/common.js';
 
-// Allows users to place an order
+// Handles creation of a new order
 export const createOrder = handleAsync(async (req, res) => {
   const { items: orderItems, deliveryMode } = req.body;
   const { user, coupon } = req;
@@ -71,7 +71,7 @@ export const createOrder = handleAsync(async (req, res) => {
     user: user._id,
   });
 
-  sendResponse(res, 201, 'Order created successfully', { id: order._id });
+  sendResponse(res, 201, 'Order created successfully', order._id);
 });
 
 // Confirms an order upon payment success
@@ -148,7 +148,7 @@ export const confirmOrder = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order placed successfully', confirmedOrder);
 });
 
-// Allows users to fetch a paginated list of their orders
+// Allows users to retrieve a paginated list of their orders
 export const getOrders = handleAsync(async (req, res) => {
   const { daysInPast, page, limit } = req.query;
 
@@ -173,10 +173,10 @@ export const getOrders = handleAsync(async (req, res) => {
 
   res.set('X-Total-Count', orderCount);
 
-  sendResponse(res, 200, 'Orders fetched successfully', orders);
+  sendResponse(res, 200, 'Orders retrieved successfully', orders);
 });
 
-// Allows users to fetch one of their orders by ID
+// Allows users to retrieve one of their orders by ID
 export const getOrderById = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 
@@ -192,7 +192,7 @@ export const getOrderById = handleAsync(async (req, res) => {
     throw new CustomError('Only the user who placed this order can view it', 403);
   }
 
-  sendResponse(res, 200, 'Order fetched by ID successfully', order);
+  sendResponse(res, 200, 'Order retrieved by ID successfully', order);
 });
 
 // Allows users to cancel their order
@@ -256,7 +256,7 @@ export const cancelOrder = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Order cancelled successfully', cancelledOrder);
 });
 
-// Allows admins to fetch a paginated list of orders
+// Allows admins to retrieve a paginated list of orders
 export const adminGetOrders = handleAsync(async (req, res) => {
   const { daysInPast, status, paid, sort, page, limit } = req.query;
 
@@ -286,10 +286,10 @@ export const adminGetOrders = handleAsync(async (req, res) => {
 
   res.set('X-Total-Count', orderCount);
 
-  sendResponse(res, 200, 'Orders fetched successfully', orders);
+  sendResponse(res, 200, 'Orders retrieved successfully', orders);
 });
 
-// Allows admins to fetch an order by ID
+// Allows admins to retrieve an order by ID
 export const adminGetOrderById = handleAsync(async (req, res) => {
   const { orderId } = req.params;
 
@@ -301,7 +301,7 @@ export const adminGetOrderById = handleAsync(async (req, res) => {
     throw new CustomError('Order not found', 404);
   }
 
-  sendResponse(res, 200, 'Order fetched by ID successfully', order);
+  sendResponse(res, 200, 'Order retrieved by ID successfully', order);
 });
 
 // Allows admins to update the status of an order
@@ -421,5 +421,5 @@ export const deleteOrder = handleAsync(async (req, res) => {
     }
   }
 
-  sendResponse(res, 200, 'Order deleted successfully', { id: orderId });
+  sendResponse(res, 200, 'Order deleted successfully', orderId);
 });

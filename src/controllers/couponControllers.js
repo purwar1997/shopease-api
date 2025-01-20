@@ -5,14 +5,14 @@ import { sendResponse, getCurrentDate } from '../utils/helperFunctions.js';
 import { couponSortRules } from '../utils/sortRules.js';
 import { DISCOUNT_TYPES, COUPON_STATUS } from '../constants/common.js';
 
-// Fetches a list of all valid coupons
+// Retrieves a list of all valid coupons
 export const getValidCoupons = handleAsync(async (_req, res) => {
   const coupons = await Coupon.find({
     expiryDate: { $gt: new Date() },
     status: COUPON_STATUS.ACTIVE,
   });
 
-  sendResponse(res, 200, 'Valid coupons fetched successfully', coupons);
+  sendResponse(res, 200, 'Valid coupons retrieved successfully', coupons);
 });
 
 // Allows users to check the validity of a coupon
@@ -32,7 +32,7 @@ export const checkCouponValidity = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Provided coupon is valid', { isValid: true });
 });
 
-// Allows admins to fetch a paginated list of coupons
+// Allows admins to retrieve a paginated list of coupons
 export const adminGetCoupons = handleAsync(async (req, res) => {
   const { daysUntilExpiration, discountType, status, sort, page, limit } = req.query;
   const filters = {};
@@ -61,7 +61,7 @@ export const adminGetCoupons = handleAsync(async (req, res) => {
 
   res.set('X-Total-Count', couponCount);
 
-  sendResponse(res, 200, 'Coupons fetched successfully', coupons);
+  sendResponse(res, 200, 'Coupons retrieved successfully', coupons);
 });
 
 // Allows admins to create a new coupon
@@ -82,7 +82,7 @@ export const createCoupon = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Coupon created successfully', newCoupon);
 });
 
-// Allows admins to fetch a coupon by ID
+// Allows admins to retrieve a coupon by ID
 export const getCouponById = handleAsync(async (req, res) => {
   const { couponId } = req.params;
 
@@ -92,10 +92,10 @@ export const getCouponById = handleAsync(async (req, res) => {
     throw new CustomError('Coupon not found', 404);
   }
 
-  sendResponse(res, 200, 'Coupon fetched by ID successfully', coupon);
+  sendResponse(res, 200, 'Coupon retrieved by ID successfully', coupon);
 });
 
-// Allows admins to update a coupon
+// Allows admins to update an existing coupon
 export const updateCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
   const { code, discountType, expiryDate } = req.body;
@@ -143,7 +143,7 @@ export const deleteCoupon = handleAsync(async (req, res) => {
     throw new CustomError('Coupon not found', 404);
   }
 
-  sendResponse(res, 200, 'Coupon deleted successfully', { id: couponId });
+  sendResponse(res, 200, 'Coupon deleted successfully', couponId);
 });
 
 // Allows admins to activate a coupon

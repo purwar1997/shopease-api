@@ -7,11 +7,11 @@ import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { userSortRules } from '../utils/sortRules.js';
 import { UPLOAD_FOLDERS, ROLES } from '../constants/common.js';
 
-// Allows users to fetch their profile
+// Allows users to retrieve their profile
 export const getProfile = handleAsync(async (req, res) => {
   const { user } = req;
 
-  sendResponse(res, 200, 'Profile fetched successfully', user);
+  sendResponse(res, 200, 'Profile retrieved successfully', user);
 });
 
 // Allows users to update their profile
@@ -128,7 +128,7 @@ export const removeProfilePhoto = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Profile photo removed successfully', updatedUser);
 });
 
-// Allows admins to fetch a paginated list of users
+// Allows admins to retrieve a paginated list of users
 export const getUsers = handleAsync(async (req, res) => {
   const { roles, sort, page, limit } = req.query;
   const filters = { isDeleted: false };
@@ -148,10 +148,10 @@ export const getUsers = handleAsync(async (req, res) => {
 
   res.set('X-Total-Count', userCount);
 
-  sendResponse(res, 200, 'Users fetched successfully', users);
+  sendResponse(res, 200, 'Users retrieved successfully', users);
 });
 
-// Allows admins to fetch a user by ID
+// Allows admins to retrieve a user by ID
 export const getUserById = handleAsync(async (req, res) => {
   const { userId } = req.params;
 
@@ -161,7 +161,7 @@ export const getUserById = handleAsync(async (req, res) => {
     throw new CustomError('User not found', 404);
   }
 
-  sendResponse(res, 200, 'User fetched by ID successfully', user);
+  sendResponse(res, 200, 'User retrieved by ID successfully', user);
 });
 
 // Allows admins to update the role of a user
@@ -196,10 +196,10 @@ export const deleteUser = handleAsync(async (req, res) => {
     throw new CustomError('User not found', 404);
   }
 
-  sendResponse(res, 200, 'User deleted successfully', { id: userId });
+  sendResponse(res, 200, 'User deleted successfully', userId);
 });
 
-// Allows admins to fetch a list of other admins
+// Allows admins to retrieve a list of other admins
 export const getOtherAdmins = handleAsync(async (req, res) => {
   const otherAdmins = await User.find({
     role: ROLES.ADMIN,
@@ -207,7 +207,7 @@ export const getOtherAdmins = handleAsync(async (req, res) => {
     _id: { $ne: req.user._id },
   });
 
-  sendResponse(res, 200, 'Admins other than current admin fetched successfully', otherAdmins);
+  sendResponse(res, 200, 'Admins other than current admin retrieved successfully', otherAdmins);
 });
 
 // Allows admins to demote themselves to the role of a user

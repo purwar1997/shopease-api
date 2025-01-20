@@ -7,7 +7,7 @@ import { sendResponse } from '../utils/helperFunctions.js';
 import { reviewSortRules } from '../utils/sortRules.js';
 import { ORDER_STATUS } from '../constants/common.js';
 
-// Fetches a paginated list of product reviews
+// Retrieves a paginated list of reviews for a product
 export const getProductReviews = handleAsync(async (req, res) => {
   const { productId } = req.params;
   const { sort, page, limit } = req.query;
@@ -29,7 +29,7 @@ export const getProductReviews = handleAsync(async (req, res) => {
 
   res.set('X-Total-Count', reviewCount);
 
-  sendResponse(res, 200, 'Reviews fetched successfully', reviews);
+  sendResponse(res, 200, 'Reviews retrieved successfully', reviews);
 });
 
 // Allows users to add a review for a purchased product
@@ -80,7 +80,7 @@ export const addProductReview = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Review added successfully', addedReview);
 });
 
-// Allows users to fetch one of their reviews by ID
+// Allows users to retrieve one of their reviews by ID
 export const getProductReviewById = handleAsync(async (req, res) => {
   const { reviewId } = req.params;
 
@@ -94,7 +94,7 @@ export const getProductReviewById = handleAsync(async (req, res) => {
     throw new CustomError('Only the user who has added this review can view it', 403);
   }
 
-  sendResponse(res, 200, 'Review fetched by ID successfully', review);
+  sendResponse(res, 200, 'Review retrieved by ID successfully', review);
 });
 
 // Allows users to update their review

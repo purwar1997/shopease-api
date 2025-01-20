@@ -10,7 +10,7 @@ import { deleteImage, uploadImage } from '../services/cloudinaryAPIs.js';
 import { UPLOAD_FOLDERS } from '../constants/common.js';
 import { ACTIVE_FILTER } from '../constants/filterOptions.js';
 
-// Fetches a paginated list of products
+// Retrieves a paginated list of products
 export const getProducts = handleAsync(async (req, res) => {
   const { categories, brands, rating, sort, page, limit } = req.query;
   const filters = { isDeleted: false };
@@ -50,10 +50,10 @@ export const getProducts = handleAsync(async (req, res) => {
 
   res.set('X-Total-Count', productCount);
 
-  sendResponse(res, 200, 'Products fetched successfully', products);
+  sendResponse(res, 200, 'Products retrieved successfully', products);
 });
 
-// Fetches a product by ID
+// Retrieves a product by ID
 export const getProductById = handleAsync(async (req, res) => {
   const { productId } = req.params;
 
@@ -63,10 +63,10 @@ export const getProductById = handleAsync(async (req, res) => {
     throw new CustomError('Product not found', 404);
   }
 
-  sendResponse(res, 200, 'Product fetched by ID successfully', product);
+  sendResponse(res, 200, 'Product retrieved by ID successfully', product);
 });
 
-// Allows admins to fetch a paginated list of products
+// Allows admins to retrieve a paginated list of products
 export const adminGetProducts = handleAsync(async (req, res) => {
   const { categories, brands, rating, availability, deleted, sort, page, limit } = req.query;
   const filters = {};
@@ -114,10 +114,10 @@ export const adminGetProducts = handleAsync(async (req, res) => {
 
   res.set('X-Total-Count', productCount);
 
-  sendResponse(res, 200, 'Products fetched successfully', products);
+  sendResponse(res, 200, 'Products retrieved successfully', products);
 });
 
-// Allows admins to fetch a product by ID
+// Allows admins to retrieve a product by ID
 export const adminGetProductById = handleAsync(async (req, res) => {
   const { productId } = req.params;
 
@@ -127,7 +127,7 @@ export const adminGetProductById = handleAsync(async (req, res) => {
     throw new CustomError('Product not found', 404);
   }
 
-  sendResponse(res, 200, 'Product fetched by ID successfully', product);
+  sendResponse(res, 200, 'Product retrieved by ID successfully', product);
 });
 
 // Allows admins to add a new product
@@ -175,7 +175,7 @@ export const addNewProduct = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Product added successfully', newProduct);
 });
 
-// Allows admins to update a product
+// Allows admins to update an existing product
 export const updateProduct = handleAsync(async (req, res) => {
   const { productId } = req.params;
   const { title, brand, category } = req.body;
@@ -250,7 +250,7 @@ export const deleteProduct = handleAsync(async (req, res) => {
     throw new CustomError('Product not found', 404);
   }
 
-  sendResponse(res, 200, 'Product deleted successfully', { id: productId });
+  sendResponse(res, 200, 'Product deleted successfully', productId);
 });
 
 // Allows admins to restore a deleted product

@@ -7,7 +7,7 @@ import { sendResponse } from '../utils/helperFunctions.js';
 import { uploadImage, deleteImage } from '../services/cloudinaryAPIs.js';
 import { UPLOAD_FOLDERS } from '../constants/common.js';
 
-// Fetches a list of categories under which products have been listed
+// Retrieves a list of categories under which products have been listed
 export const getCategories = handleAsync(async (_req, res) => {
   const categories = await Product.aggregate([
     { $match: { isDeleted: false } },
@@ -37,10 +37,10 @@ export const getCategories = handleAsync(async (_req, res) => {
     },
   ]);
 
-  sendResponse(res, 200, 'Categories fetched successfully', categories);
+  sendResponse(res, 200, 'Categories retrieved successfully', categories);
 });
 
-// Fetches a category by ID
+// Retrieves a category by ID
 export const getCategoryById = handleAsync(async (req, res) => {
   const { categoryId } = req.params;
 
@@ -50,14 +50,14 @@ export const getCategoryById = handleAsync(async (req, res) => {
     throw new CustomError('Category not found', 404);
   }
 
-  sendResponse(res, 200, 'Category fetched by ID successfully', category);
+  sendResponse(res, 200, 'Category retrieved by ID successfully', category);
 });
 
-// Allows admins to fetch a list of all categories
+// Allows admins to retrieve a list of all categories
 export const getAllCategories = handleAsync(async (_req, res) => {
   const categories = await Category.find();
 
-  sendResponse(res, 200, 'All categories fetched successfully', categories);
+  sendResponse(res, 200, 'All categories retrieved successfully', categories);
 });
 
 // Allows admins to add a new category
@@ -93,7 +93,7 @@ export const addNewCategory = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Category added successfully', newCategory);
 });
 
-// Allows admins to update a category
+// Allows admins to update an existing category
 export const updateCategory = handleAsync(async (req, res) => {
   const { categoryId } = req.params;
   const { title } = req.body;
