@@ -1,5 +1,5 @@
 node_modules/
 src/uploads/
 src/logs/
-
 process.config.json
+.env

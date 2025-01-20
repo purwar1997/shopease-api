@@ -53,6 +53,7 @@ APIs are documented using Swagger (OpenAPI) specification and all of them are li
 - Verification of email addresses and phone numbers using Abstract APIs (third party service)
 - Validation of request payload using Joi library
 - Logging of HTTP requests using Morgan
+- Separate loggers for development and production environments
 - Parsing of multipart/form-data using Formidable library
 - Upload and delete images using Cloudinary APIs
 - Ability to send emails using Nodemailer
