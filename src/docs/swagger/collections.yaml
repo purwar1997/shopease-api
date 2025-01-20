@@ -558,7 +558,7 @@ paths:
       operationId: getAddresses
       responses:
         '200':
-          description: A JSON object containing a list of user's addresses
+          description: A JSON object containing a list of addresses that belong to a user
           content:
             application/json:
               schema:
@@ -891,7 +891,7 @@ paths:
       operationId: getWishlist
       responses:
         '200':
-          description: A JSON object containing a user's wishlist
+          description: A JSON object containing an array of wishlist items
           content:
             application/json:
               schema:
@@ -1875,7 +1875,7 @@ paths:
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
-          description: A JSON object containing a list of orders
+          description: A JSON object containing a list of orders that belong to a user
           content:
             application/json:
               schema:
