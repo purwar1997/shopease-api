@@ -1811,7 +1811,7 @@ paths:
     put:
       tags:
         - Coupons
-      description: Allows admins to activate a coupon
+      description: Allows admins to activate an inactive coupon
       operationId: activateCoupon
       parameters:
         - in: path
@@ -1839,7 +1839,7 @@ paths:
     put:
       tags:
         - Coupons
-      description: Allows admins to deactivate a coupon
+      description: Allows admins to deactivate an active coupon
       operationId: deactivateCoupon
       parameters:
         - in: path
@@ -2252,7 +2252,7 @@ paths:
     get:
       tags:
         - Reviews
-      description: Allows users to retrieve one of their reviews by ID
+      description: Allows users to retrieve their review for a product by ID
       operationId: getProductReviewById
       parameters:
         - in: path
@@ -2279,7 +2279,7 @@ paths:
     put:
       tags:
         - Reviews
-      description: Allows users to update their review
+      description: Allows users to update their review of a product
       operationId: updateProductReview
       parameters:
         - in: path

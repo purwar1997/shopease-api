@@ -146,7 +146,7 @@ export const deleteCoupon = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Coupon deleted successfully', couponId);
 });
 
-// Allows admins to activate a coupon
+// Allows admins to activate an inactive coupon
 export const activateCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
 
@@ -171,7 +171,7 @@ export const activateCoupon = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Coupon activated successfully', activeCoupon);
 });
 
-// Allows admins to deactivate a coupon
+// Allows admins to deactivate an active coupon
 export const deactivateCoupon = handleAsync(async (req, res) => {
   const { couponId } = req.params;
 

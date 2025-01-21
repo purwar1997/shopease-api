@@ -80,7 +80,7 @@ export const addProductReview = handleAsync(async (req, res) => {
   sendResponse(res, 201, 'Review added successfully', addedReview);
 });
 
-// Allows users to retrieve one of their reviews by ID
+// Allows users to retrieve their review for a product by ID
 export const getProductReviewById = handleAsync(async (req, res) => {
   const { reviewId } = req.params;
 
@@ -97,7 +97,7 @@ export const getProductReviewById = handleAsync(async (req, res) => {
   sendResponse(res, 200, 'Review retrieved by ID successfully', review);
 });
 
-// Allows users to update their review
+// Allows users to update their review of a product
 export const updateProductReview = handleAsync(async (req, res) => {
   const { reviewId } = req.params;
   const updates = req.body;
