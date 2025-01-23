@@ -7,6 +7,8 @@
 
 1. [Overview](#1-overview)
 2. [Deployment and Documentation](#2-deployment-and-documentation)
+   - [Swagger Docs](#swagger-docs)
+   - [Postman Docs](#postman-docs)
 3. [Main Features](#3-main-features)
 4. [Schemas and Routes](#4-schemas-and-routes)
    - [Authentication Routes](#authentication-routes)
@@ -23,19 +25,27 @@
 
 ## 1. Overview
 
-A RESTful API for an ecommerce platform that provides multiple endpoints to manage authentication, users, cart, wishlist, addresses, products, categories, brands, coupons, orders and reviews.
+A RESTful API for an e-commerce platform that provides multiple endpoints to manage authentication, users, cart, wishlist, addresses, products, categories, brands, coupons, orders and reviews.
 
 This project is built using Express.js and MongoDB; all the APIs are well-documented using Swagger specification. User authentication has been implemented via JSON Web Tokens and the project is deployed on a DigitalOcean Droplet using Nginx as a web server.
 
-![preview](./media/header.png)
+![Header](./media/header.png)
 
 ## 2. Deployment and Documentation
 
 This project is deployed on a DigitalOcean Droplet and linked to a custom domain. To visit the live deployment, [click here](http://api.shopease.shubhampurwar.in).
 
-APIs are documented using Swagger (OpenAPI) specification and all of them are live and functional. [Click here](http://api.shopease.shubhampurwar.in/docs/swagger) to view API docs. Select shopease production server in the dropdown menu and play with any API.
+### Swagger Docs
 
-[![Documentation Preview](/media/swagger.png)](http://api.shopease.shubhampurwar.in/docs/swagger)
+APIs are documented using Swagger (OpenAPI) specification and all of them are live and functional. To view Swagger docs, [click here](http://api.shopease.shubhampurwar.in/docs/swagger). Select Shopease production server in the dropdown menu and play with any API.
+
+[![Swagger Docs](./media/swagger-docs.png)](http://api.shopease.shubhampurwar.in/docs/swagger)
+
+### Postman Docs
+
+Postman is used to prototype, develop and test API endpoints. It is also used to document those APIs. To view Postman docs, [click here](https://documenter.getpostman.com/view/24544020/2sAYQcFAkx).
+
+[![Postman Docs](./media/postman-docs.png)](https://documenter.getpostman.com/view/24544020/2sAYQcFAkx)
 
 ## 3. Main Features
 
@@ -60,6 +70,7 @@ APIs are documented using Swagger (OpenAPI) specification and all of them are li
 - Routing enabled using Express middlewares
 - Centralized error handling using Express middlewares
 - Project is based on MVC architecture
+- Used Postman to prototype, develop, test and document APIs
 
 ## 4. Schemas and Routes
 
