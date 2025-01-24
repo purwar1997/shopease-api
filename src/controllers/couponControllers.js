@@ -34,20 +34,22 @@ export const checkCouponValidity = handleAsync(async (req, res) => {
 
 // Allows admins to retrieve a paginated list of coupons
 export const adminGetCoupons = handleAsync(async (req, res) => {
-  const { daysUntilExpiration, discountType, status, sort, page, limit } = req.query;
+  const { daysUntilExpiration, discountTypes, statuses, sort, page, limit } = req.query;
   const filters = {};
 
-  filters.expiryDate = {
-    $gt: new Date(),
-    $lt: new Date(getCurrentDate().getTime() + daysUntilExpiration * 24 * 60 * 60 * 1000),
-  };
-
-  if (discountType.length) {
-    filters.discountType = { $in: discountType };
+  if (daysUntilExpiration) {
+    filters.expiryDate = {
+      $gt: new Date(),
+      $lt: new Date(getCurrentDate().getTime() + daysUntilExpiration * 24 * 60 * 60 * 1000),
+    };
   }
 
-  if (status.length) {
-    filters.status = { $in: status };
+  if (discountTypes.length) {
+    filters.discountType = { $in: discountTypes };
+  }
+
+  if (statuses.length) {
+    filters.status = { $in: statuses };
   }
 
   const sortRule = sort ? couponSortRules[sort] : { createdAt: -1 };

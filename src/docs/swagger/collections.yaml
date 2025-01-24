@@ -362,7 +362,7 @@ paths:
       parameters:
         - in: query
           name: roles
-          description: Field to filter users by role
+          description: Field to filter users by roles
           schema:
             type: array
             items:
@@ -1641,8 +1641,8 @@ paths:
             format: int32
             minimum: 1
         - in: query
-          name: discountType
-          description: Field to filter coupons by discount type
+          name: discountTypes
+          description: Field to filter coupons by discount types
           schema:
             type: array
             items:
@@ -1653,8 +1653,8 @@ paths:
           style: form
           explode: false
         - in: query
-          name: status
-          description: Field to filter coupons by status
+          name: statuses
+          description: Field to filter coupons by statuses
           schema:
             type: array
             items:
@@ -2021,8 +2021,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/daysInPastParam'
         - in: query
-          name: status
-          description: Field to filter orders by status
+          name: statuses
+          description: Field to filter orders by statuses
           schema:
             type: array
             items:

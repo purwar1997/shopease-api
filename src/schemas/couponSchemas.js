@@ -89,7 +89,6 @@ export const couponsQuerySchema = Joi.object({
     .integer()
     .min(COUPON_EXPIRATION.MIN)
     .empty('')
-    .default(COUPON_EXPIRATION.DEFAULT)
     .messages({
       'number.base': 'Days until expiration must be a number',
       'number.integer': 'Days until expiration must be an integer',
@@ -97,7 +96,7 @@ export const couponsQuerySchema = Joi.object({
       'number.unsafe': `Days until expiration must be within a range of ${COUPON_EXPIRATION.MIN} and ${COUPON_EXPIRATION.MAX}`,
     }),
 
-  discountType: Joi.string()
+  discountTypes: Joi.string()
     .empty('')
     .default([])
     .custom(validateCommaSeparatedValues(DISCOUNT_TYPES))
@@ -107,7 +106,7 @@ export const couponsQuerySchema = Joi.object({
       )}`,
     }),
 
-  status: Joi.string()
+  statuses: Joi.string()
     .empty('')
     .default([])
     .custom(validateCommaSeparatedValues(COUPON_STATUS))

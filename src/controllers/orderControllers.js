@@ -258,15 +258,15 @@ export const cancelOrder = handleAsync(async (req, res) => {
 
 // Allows admins to retrieve a paginated list of orders
 export const adminGetOrders = handleAsync(async (req, res) => {
-  const { daysInPast, status, paid, sort, page, limit } = req.query;
+  const { daysInPast, statuses, paid, sort, page, limit } = req.query;
 
   const filters = {
     createdAt: { $gt: getCurrentDate().getTime() - (daysInPast - 1) * 24 * 60 * 60 * 1000 },
     isDeleted: false,
   };
 
-  if (status.length) {
-    filters.status = { $in: status };
+  if (statuses.length) {
+    filters.status = { $in: statuses };
   }
 
   if (isBoolean(paid)) {

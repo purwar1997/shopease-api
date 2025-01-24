@@ -115,7 +115,7 @@ export const ordersQuerySchema = Joi.object({
 export const adminOrdersQuerySchema = Joi.object({
   daysInPast: daysInPastSchema,
 
-  status: Joi.string()
+  statuses: Joi.string()
     .empty('')
     .default([])
     .custom(validateCommaSeparatedValues(ORDER_STATUS))
