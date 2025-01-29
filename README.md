@@ -67,7 +67,7 @@ Postman is used to prototype, develop and test API endpoints. It is also used to
 - Parsing of multipart/form-data using Formidable library
 - Upload and delete images using Cloudinary APIs
 - Ability to send emails using Nodemailer
-- Routing enabled using Express middlewares
+- Setup routing using Express middlewares
 - Centralized error handling using Express middlewares
 - Project is based on MVC architecture
 - Used Postman to prototype, develop, test and document APIs

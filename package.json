@@ -1,7 +1,7 @@
 {
   "name": "shopease-api",
   "version": "1.0.0",
-  "description": "A RESTful API for an ecommerce platform",
+  "description": "A RESTful API for an e-commerce platform",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
